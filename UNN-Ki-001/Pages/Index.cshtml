@@ -1,10 +1,19 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "打刻登録";
+}
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+    @if (!SignInManager.IsSignedIn(User))
+{
+    <script>
+        location.assign("/Identity/Account/Login")
+    </script>    
 }
 
 <div class="text-center">
-    <h1 class="display-4">HelloWorld</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="text-danger">打刻登録</h1>
 </div>
