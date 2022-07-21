@@ -15,8 +15,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 //.AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Stores.MaxLengthForKeys = 128)
     .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders()
-    .AddErrorDescriber<IdentityErrorDescriberJP>();
+    .AddDefaultTokenProviders();
 
 builder.Services.AddRazorPages();
 
