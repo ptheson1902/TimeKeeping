@@ -12,9 +12,13 @@ namespace UNN_Ki_001.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                return RedirectToPage("/Dakoku", new { area = "Kintai" });
+            }
+            return RedirectToPage("/Account/Login", new { area = "Identity"});
         }
     }
 }
