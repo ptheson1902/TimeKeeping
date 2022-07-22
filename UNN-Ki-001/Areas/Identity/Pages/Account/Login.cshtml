@@ -2,7 +2,7 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "ログイン";
 }
 <section class="vh-100">
   <div class="container-fluid h-custom">
@@ -12,7 +12,7 @@
           class="img-fluid" alt="Sample image">
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-        <h1 class="lead fw-normal mb-3 me-3 text-center text-success">勤怠管理システム</h1>
+        <h1 class="lead fw-normal mb-3 me-3 text-center text-success">@ViewData["Title"]</h1>
         <form id="account" method="post">
           <!-- Username input -->
           <div class="form-outline mb-4">
