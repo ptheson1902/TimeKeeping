@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace UNN_Ki_001.Areas.Identity.Pages.Account.Manage
 {
+    [Authorize]
     public class ChangePasswordModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
