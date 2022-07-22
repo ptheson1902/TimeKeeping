@@ -7,13 +7,6 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-    @if (!SignInManager.IsSignedIn(User))
-{
-    <script>
-        location.assign("/Identity/Account/Login")
-    </script>    
-}
-
 <div class="text-center">
     <h1 class="text-danger">@ViewData["Title"]</h1>
 </div>
