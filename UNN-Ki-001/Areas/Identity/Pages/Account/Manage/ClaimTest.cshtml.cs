@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 
 namespace UNN_Ki_001.Areas.Identity.Pages.Account.Manage
 {
+    [Authorize(Roles = "Admin")]
     public class ClaimTestModel : PageModel
     {
         public void OnGet()
