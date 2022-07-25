@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 namespace UNN_Ki_001.Areas.Identity.Pages.Account.Manage
 {
     [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Manager")]
     public class ClaimTestModel : PageModel
     {
         public void OnGet()

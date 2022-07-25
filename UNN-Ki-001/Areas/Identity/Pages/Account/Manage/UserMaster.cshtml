@@ -1,0 +1,24 @@
+﻿@page
+@model UNN_Ki_001.Areas.Identity.Pages.Account.Manage.UserMasterModel
+@{
+	 ViewData["Title"] = "ユーザーマスタ";
+}
+<h1>@ViewData["Title"]</h1>
+
+
+ <asp:GridView id="gv" runat="server" AllowPaging="false" AutoGenerateColumns="false" ShowHeader="true" Visible="true" ShowFooter="false">
+                <Columns>
+                    <asp:TemplateField>
+                        <HeaderTemplate>ユーザー名</HeaderTemplate>
+                        <ItemTemplate>
+                            <p><asp:Label ID="lblNengetu" Text='<%# DataBinder.Eval(Container.DataItem, "Nengetu")%>' runat="server" /></p>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <HeaderTemplate>ユーザーID</HeaderTemplate>
+                        <ItemTemplate>
+                            <p><asp:Label ID="lblPerson" Text='<%# DataBinder.Eval(Container.DataItem, "Person")%>' runat="server" /></p>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+ </asp:GridView>
