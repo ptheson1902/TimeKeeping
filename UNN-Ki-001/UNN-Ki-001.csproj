@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Class\" />
+    <Folder Include="Areas\Identity\新しいフォルダー\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

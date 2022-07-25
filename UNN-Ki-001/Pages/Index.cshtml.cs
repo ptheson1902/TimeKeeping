@@ -20,7 +20,7 @@ namespace UNN_Ki_001.Pages
             {
                 return RedirectToPage("/Dakoku", new { area = "Kintai" });
             }
-            return RedirectToPage("/Account/Login", new { area = "Identity"});
+            return RedirectToPage("/Account/Login", new { area = "Identity" });
         }
     }
 }
