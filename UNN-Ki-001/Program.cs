@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using UNN_Ki_001;
 using UNN_Ki_001.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,12 +18,25 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Stor
     .AddDefaultTokenProviders()
     .AddErrorDescriber<IdentityErrorDescriberJP>();
 
-// 全てのページでログイン済みユーザーを強制する
+// 承認設定
 builder.Services.AddAuthorization(options =>
 {
+    // 全てのページでログイン済みユーザーを強制する
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
+
+    // Admin許可用のポリシー
+    options.AddPolicy("Admin", builder =>
+    {
+        builder.RequireRole("Admin", "Manager");
+    });
+
+    // ついでにManager用も用意しておく
+    options.AddPolicy("Manager", builder =>
+    {
+        builder.RequireRole("Manager");
+    });
 });
 
 // Cookie設定

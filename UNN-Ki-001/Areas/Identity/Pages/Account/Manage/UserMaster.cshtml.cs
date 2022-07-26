@@ -1,11 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data;
+using System.Security.Claims;
 
 namespace UNN_Ki_001.Areas.Identity.Pages.Account.Manage
 {
-    public class UserMasterModel : PageModel
+    [Authorize(Policy = "Admin")]
+    public partial class UserMasterModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
 
@@ -14,21 +15,20 @@ namespace UNN_Ki_001.Areas.Identity.Pages.Account.Manage
             _userManager = userManager;
         }
 
-        public IQueryable<IdentityUser> getUsers()
+        public List<IdentityUser> GetUsers()
         {
-            return _userManager.Users.OrderBy(user => user.UserName);
+            return _userManager.Users.ToList();
+        }
+
+        public IEnumerable<Claim> GetClaims()
+        {
+            
+            return User.Claims;
         }
 
         public void OnGet()
         {
-            DataTable dt = new DataTable(@"Table");
-            dt.Columns.Add("UserName");
-            dt.Columns.Add("UserId");
 
-            foreach(var user in getUsers())
-            {
-                dt.Rows.Add(new object[] { user.UserName, user.Id });
-            }
         }
     }
 }

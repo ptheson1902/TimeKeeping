@@ -5,20 +5,43 @@
 }
 <h1>@ViewData["Title"]</h1>
 
+<br /><br />
+@foreach(var obj in Model.GetClaims())
+{
+	<p>type=@obj.ToString</p>
+	<p>value=@obj.Value</p><br />
+}
 
- <asp:GridView id="gv" runat="server" AllowPaging="false" AutoGenerateColumns="false" ShowHeader="true" Visible="true" ShowFooter="false">
-                <Columns>
-                    <asp:TemplateField>
-                        <HeaderTemplate>ユーザー名</HeaderTemplate>
-                        <ItemTemplate>
-                            <p><asp:Label ID="lblNengetu" Text='<%# DataBinder.Eval(Container.DataItem, "Nengetu")%>' runat="server" /></p>
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                    <asp:TemplateField>
-                        <HeaderTemplate>ユーザーID</HeaderTemplate>
-                        <ItemTemplate>
-                            <p><asp:Label ID="lblPerson" Text='<%# DataBinder.Eval(Container.DataItem, "Person")%>' runat="server" /></p>
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                </Columns>
- </asp:GridView>
+<br /><br />
+<table>
+	<thead>
+		<tr>
+			<th>
+				ユーザー名
+			</th>
+			<th>
+				ユーザーID
+			</th>
+			<th>
+				セキュリティスタンプ
+			</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		@foreach(var user in Model.GetUsers())
+		{
+			<tr>
+				<td>
+					@user.UserName
+				</td>
+				<td>
+					@user.Id
+				</td>
+				<td>
+					@user.SecurityStamp
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
