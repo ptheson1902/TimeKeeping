@@ -21,9 +21,10 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Stor
 // 承認設定
 builder.Services.AddAuthorization(options =>
 {
-    // 全てのページでログイン済みユーザーを強制する
+    // フォールバックポリシーの設定
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
+        .RequireRole("Admin")
         .Build();
 
     // Admin許可用のポリシー
@@ -36,6 +37,12 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Manager", builder =>
     {
         builder.RequireRole("Manager");
+    });
+
+    // 一般ユーザー用
+    options.AddPolicy("Rookie", builder =>
+    {
+        builder.RequireAuthenticatedUser();
     });
 });
 
