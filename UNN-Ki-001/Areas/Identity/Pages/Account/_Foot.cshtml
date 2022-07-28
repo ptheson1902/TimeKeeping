@@ -1,0 +1,78 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+     <div class="phone phone-wrapper fixed-bottom">
+        <svg
+            class="hump"
+            id="hump"
+            viewBox="0 0 100 25"
+            xmlns="http://www.w3.org/2000/svg"
+            width="100"
+            height="25"
+        >
+            <path
+                d="M0 25h100c-20 0-25-25-50-25s-30 25-50 25z"
+                fill="#E5E5E5"
+            />
+        </svg>
+
+        <nav class="nav">
+            <a
+                class="nav-item-icon WorkSchedule text-center"
+                asp-area="Kintai"
+                asp-page="/WorkSchedule"
+                data-color="#5b37b7"
+            >
+                <span class="icon-WorkSchedule">
+                    <i class="fa-solid fa-business-time"></i>
+                </span>
+
+                <div class="title">勤務表</div>
+            </a>
+
+            <a
+                class="nav-item-icon Perforation text-center"
+                asp-area="Kintai"
+                asp-page="/Perforation"
+                data-color="#c9379d"
+            >
+                <span class="icon-Perforation">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </span>
+                <div class="title">打刻登録</div>
+            </a>
+
+            <form
+                class="nav-item-icon text-center"
+                asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post"
+                data-color="#e5a919"
+            >
+                <button type="submit" class="btn btn-link nav-link text-dark">
+                    <span class="icon-search">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </span>
+
+                    <div class="title">ログアウト</div>
+                </button>
+            </form>
+        </nav>
+    </div>
+
+    <div class="footer fixed-bottom bg-white py-2">
+        <div class="logo d-flex align-items-end justify-content-center">
+            <img
+                src="~/images/logo.svg"
+                alt="ロゴ"
+                class="img-fluid mx-3"
+                width="100"
+            />
+            <small class="mx-3"
+                >Copyright © 2022 株式会社ユニノワール All rights reserved.
+                Designed by Uninoir Teams</small
+            >
+        </div>
+    </div>
+}
