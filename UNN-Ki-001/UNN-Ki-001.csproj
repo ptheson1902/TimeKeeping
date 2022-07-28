@@ -20,6 +20,8 @@
 
   <ItemGroup>
     <Folder Include="Areas\Class\" />
+    <Folder Include="Pages\Employee\" />
+    <Folder Include="Pages\Attendance\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
