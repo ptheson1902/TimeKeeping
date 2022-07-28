@@ -65,7 +65,7 @@ namespace UNN_Ki_001.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required　(ErrorMessage ="ユーザーが入力されていません。")]
             [DataType(DataType.Text)]
             public string UserName { get; set; }
 
@@ -73,7 +73,7 @@ namespace UNN_Ki_001.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "パスワードが入力されていません。")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -81,7 +81,7 @@ namespace UNN_Ki_001.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Display(Name = "Remember me?")]
+            [Display(Name = "ログインしたままにする？")]
             public bool RememberMe { get; set; }
         }
 
@@ -129,7 +129,7 @@ namespace UNN_Ki_001.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "ユーザー、パスワードが正しくありません。");
                     return Page();
                 }
             }
