@@ -9,7 +9,6 @@
             <div class="container-fluid">
                 <a
                     id="logo"
-                    asp-area=""
                     asp-page="/Index"
                     class="text-decoration-none text-dark mx-5"
                 >
@@ -26,16 +25,16 @@
                     >
                         <div class="navbar-nav col-9">
                             <div class="nav-item mx-2">
-                                <a class="nav-link" asp-area="Kintai" asp-page="/Perforation">打刻登録</a>
+                                <a class="nav-link" asp-page="/Attendance/Index">打刻登録</a>
                             </div>
                             <div class="nav-item mx-2">
-                                <a class="nav-link" asp-area="Kintai" asp-page="/WorkSchedule">勤務表</a>
+                                <a class="nav-link" asp-page="/WorkSchedule">勤務表</a>
                             </div>
                             <div class="nav-item mx-2">
-                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">ユーザー登録</a>
+                                <a class="nav-link" asp-page="/Account/Register">ユーザー登録</a>
                             </div>
                             <div class="nav-item mx-2">
-                                <a class="nav-link" asp-area="Kintai" asp-page="/Setting">基本設定</a>
+                                <a class="nav-link" asp-page="/Setting">基本設定</a>
                             </div>
                             <div class="nav-item dropdown hidden ms-2">
                                 <div
@@ -50,27 +49,27 @@
                                     class="dropdown-menu dropdown-menu-end border-0 rounded-4"
                                 >
                                     <li>
-                                        <a class="dropdown-item" asp-area="Kintai" asp-page="/VariousMaster/Employee"
+                                        <a class="dropdown-item" asp-page="/VariousMaster/Employee"
                                             >社員マスタ</a
                                         >
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="Kintai" asp-page="/VariousMaster/Affiliation"
+                                        <a class="dropdown-item" asp-page="/VariousMaster/Affiliation"
                                             >所属マスタ</a
                                         >
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="Kintai" asp-page="/VariousMaster/Job"
+                                        <a class="dropdown-item" asp-page="/VariousMaster/Job"
                                             >職種マスタ</a
                                         >
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="Kintai" asp-page="/VariousMaster/EmploymentForm"
+                                        <a class="dropdown-item" asp-page="/VariousMaster/EmploymentForm"
                                             >雇用形態マスタ</a
                                         >
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="Kintai" asp-page="/VariousMaster/Work"
+                                        <a class="dropdown-item" asp-page="/VariousMaster/Work"
                                             >勤務</a
                                         >
                                     </li>
@@ -93,12 +92,12 @@
                                 class="dropdown-menu dropdown-menu-end border-0 rounded-5"
                             >
                                 <li>
-                                    <form class="dropdown-item my-2" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                    <form class="dropdown-item my-2" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
                                         <button type="submit" class="nav-link btn btn-link"><i class="fa-solid fa-right-from-bracket me-2"></i>ログアウト</button>
                                     </form>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-page="/Help">
+                                    <a class="dropdown-item" asp-page="/Help">
                                         <div class="nav-link btn btn-link text-start"><i class="fa-solid fa-circle-info me-2"></i>ヘルプ</div>
                                     </a>
                                 </li>
@@ -150,16 +149,16 @@
                         </div>
                         <div class="navbar-nav">
                             <div class="nav-item mx-2">
-                                <a class="nav-link" asp-area="Kintai" asp-page="/Perforation">打刻登録</a>
+                                <a class="nav-link" asp-page="/Attendance/Index">打刻登録</a>
                             </div>
                             <div class="nav-item mx-2">
-                                <a class="nav-link" asp-area="Kintai" asp-page="/WorkSchedule">勤務表</a>
+                                <a class="nav-link"  asp-page="/WorkSchedule">勤務表</a>
                             </div>
                             <div class="nav-item mx-2">
-                                <a class="nav-link" asp-area="Identity" asp-page="/Register">ユーザー登録</a>
+                                <a class="nav-link" asp-page="/Register">ユーザー登録</a>
                             </div>
                             <div class="nav-item mx-2">
-                                <a class="nav-link" asp-area="Kintai" asp-page="/Setting">基本設定</a>
+                                <a class="nav-link" asp-page="/Setting">基本設定</a>
                             </div>
                             <div class="nav-item dropdown ms-2">
                                 <div
@@ -174,27 +173,27 @@
                                     class="dropdown-menu dropdown-menu-end border-0 rounded-4"
                                 >
                                     <li>
-                                        <a class="dropdown-item" asp-area="Kintai" asp-page="/VariousMaster/Employee"
+                                        <a class="dropdown-item" asp-page="/VariousMaster/Employee"
                                             >社員マスタ</a
                                         >
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="Kintai" asp-page="/VariousMaster/Affiliation"
+                                        <a class="dropdown-item" asp-page="/VariousMaster/Affiliation"
                                             >所属マスタ</a
                                         >
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="Kintai" asp-page="/VariousMaster/Job"
+                                        <a class="dropdown-item" asp-page="/VariousMaster/Job"
                                             >職種マスタ</a
                                         >
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="Kintai" asp-page="/VariousMaster/EmploymentForm"
+                                        <a class="dropdown-item" asp-page="/VariousMaster/EmploymentForm"
                                             >雇用形態マスタ</a
                                         >
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="Kintai" asp-page="/VariousMaster/Work"
+                                        <a class="dropdown-item" asp-page="/VariousMaster/Work"
                                             >勤務</a
                                         >
                                     </li>
@@ -216,12 +215,12 @@
                                     class="dropdown-menu dropdown-menu-end border-0 rounded-5"
                                 >
                                     <li>
-                                        <form class="dropdown-item my-2" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                        <form class="dropdown-item my-2" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
                                             <button type="submit" class="nav-link btn btn-link"><i class="fa-solid fa-right-from-bracket me-2"></i>ログアウト</button>
                                         </form>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" asp-area="" asp-page="/Help">
+                                        <a class="dropdown-item" asp-page="/Help">
                                             <div class="nav-link btn btn-link text-start"><i class="fa-solid fa-circle-info me-2"></i>ヘルプ</div>
                                         </a>
                                     </li>
@@ -237,7 +236,6 @@
             <div class="container-fluid my-2 align-items-center">
                 <a
                     id="logo"
-                    asp-area=""
                     asp-page="/Index"
                     class="text-decoration-none text-dark"
                 >
@@ -245,7 +243,7 @@
                 </a>
                 <div class="loginInfo">@User.Identity?.Name</div>
                 <div>
-                    <a class="" asp-area="" asp-page="/Help"
+                    <a class="" asp-page="/Help"
                         ><i class="fa-solid fa-circle-info mx-2"></i
                         >ヘルプ</a
                     >

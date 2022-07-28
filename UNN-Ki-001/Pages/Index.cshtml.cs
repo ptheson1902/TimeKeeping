@@ -18,9 +18,9 @@ namespace UNN_Ki_001.Pages
         {
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                return RedirectToPage("/Perforation", new { area = "Kintai" });
+                return RedirectToPage("/Attendance/Index");
             }
-            return RedirectToPage("/Account/Login", new { area = "Identity" });
+            return RedirectToPage("/Account/Login");
         }
     }
 }
