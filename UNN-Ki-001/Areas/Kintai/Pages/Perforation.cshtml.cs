@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 namespace UNN_Ki_001.Areas.Kintai
 {
     [Authorize(Policy = "Rookie")]
-    public class DakokuModel : PageModel
+    public class PerforationModel : PageModel
     {
         public void OnGet()
         {

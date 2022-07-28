@@ -18,7 +18,7 @@ namespace UNN_Ki_001.Pages
         {
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                return RedirectToPage("/Dakoku", new { area = "Kintai" });
+                return RedirectToPage("/Perforation", new { area = "Kintai" });
             }
             return RedirectToPage("/Account/Login", new { area = "Identity" });
         }
