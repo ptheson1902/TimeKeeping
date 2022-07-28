@@ -1,5 +1,5 @@
 body {
-    background-color: #E5E5E5;
+    background-color: #FFF;
 }
 
 .dropdown-menu {
@@ -62,14 +62,14 @@ body {
 
     .main .left .date {
         font-weight: 400;
-        font-size: 32px;
+        font-size: 1.6rem;
         line-height: 39px;
         color: #000000;
     }
 
     .main .left .time {
         font-weight: 500;
-        font-size: 10rem;
+        font-size: 7.6rem;
         line-height: 155px;
         color: #000000;
     }
