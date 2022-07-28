@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas.backup\**" />
+    <Content Remove="Areas.backup\**" />
+    <EmbeddedResource Remove="Areas.backup\**" />
+    <None Remove="Areas.backup\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.7" />
@@ -19,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Class\" />
     <Folder Include="Pages\Employee\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>

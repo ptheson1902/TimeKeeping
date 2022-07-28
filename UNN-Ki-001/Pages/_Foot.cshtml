@@ -22,7 +22,6 @@
         <nav class="nav">
             <a
                 class="nav-item-icon WorkSchedule text-center"
-                asp-area="Kintai"
                 asp-page="/WorkSchedule"
                 data-color="#5b37b7"
             >
@@ -35,7 +34,6 @@
 
             <a
                 class="nav-item-icon Perforation text-center"
-                asp-area="Kintai"
                 asp-page="/Perforation"
                 data-color="#c9379d"
             >
@@ -47,7 +45,7 @@
 
             <form
                 class="nav-item-icon text-center"
-                asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post"
+                asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/")" method="post"
                 data-color="#e5a919"
             >
                 <button type="submit" class="btn btn-link nav-link text-dark">

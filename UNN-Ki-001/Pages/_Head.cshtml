@@ -92,7 +92,7 @@
                                 class="dropdown-menu dropdown-menu-end border-0 rounded-5"
                             >
                                 <li>
-                                    <form class="dropdown-item my-2" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                    <form class="dropdown-item my-2" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/")" method="post">
                                         <button type="submit" class="nav-link btn btn-link"><i class="fa-solid fa-right-from-bracket me-2"></i>ログアウト</button>
                                     </form>
                                 </li>
@@ -112,7 +112,6 @@
             <div class="container-fluid">
                 <a
                     id="logo"
-                    asp-area=""
                     asp-page="/Index"
                     class="text-decoration-none text-dark mx-5"
                 >
@@ -215,7 +214,7 @@
                                     class="dropdown-menu dropdown-menu-end border-0 rounded-5"
                                 >
                                     <li>
-                                        <form class="dropdown-item my-2" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                        <form class="dropdown-item my-2" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/")" method="post">
                                             <button type="submit" class="nav-link btn btn-link"><i class="fa-solid fa-right-from-bracket me-2"></i>ログアウト</button>
                                         </form>
                                     </li>
