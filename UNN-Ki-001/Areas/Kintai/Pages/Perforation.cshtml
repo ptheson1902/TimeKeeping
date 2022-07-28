@@ -1,0 +1,622 @@
+﻿@page
+@model UNN_Ki_001.Areas.Kintai.PerforationModel
+@{
+    ViewData["Title"] = "打刻登録";
+}
+<div class="main d-flex justify-content-center align-items-center">
+    <div
+        class="container-fluid d-flex align-items-center my-5 justify-content-center"
+    >
+        <div
+            class="left mt-5 d-flex flex-column align-items-center justify-content-between mx-5"
+        >
+            <div class="date">2022/01/01(月曜日)</div>
+            <div class="time my-3">09:00</div>
+            <div class="button my-5">
+                <button type="button" class="border-0 in me-3">出勤</button>
+                <button type="button" class="border-0 out">退勤</button>
+            </div>
+        </div>
+        <div class="right mx-5" style="min-width: 25rem; max-width: 25rem;">
+            <div
+                id="calendar"
+                class="animated animated-sm bounceInUp"
+            >
+                <div class="panel panel-default">
+                    <h4 class="text-center text-danger mb-3 title">-- 打刻状況 --</h4>
+                    <div class="panel-body">
+                        <div class="calendar fc fc-ltr">
+                            <div
+                                class="fc-header d-flex justify-content-around align-items-center"
+                            >
+                                <div class="fc-header-left">
+                                    <button
+                                        type="button"
+                                        class="border-0"
+                                    >
+                                        <i
+                                            class="fa fa-chevron-left"
+                                        ></i>
+                                    </button>
+                                </div>
+                                <div class="fc-header-center">
+                                    <div class="fc-header-title">
+                                        <h2>2022年 1月</h2>
+                                    </div>
+                                </div>
+                                <div class="fc-header-right">
+                                    <button
+                                        type="button"
+                                        class="border-0"
+                                    >
+                                        <i
+                                            class="fa fa-chevron-right"
+                                        ></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="fc-content text-center mt-3">
+                                <div
+                                    class="fc-view fc-view-month fc-grid"
+                                >
+                                    <table
+                                        class="fc-border-separate"
+                                        style="width: 100%"
+                                        cellspacing="0"
+                                    >
+                                        <thead>
+                                            <tr
+                                                class="fc-first fc-last"
+                                            >
+                                                <th
+                                                    class="fc-day-header fc-sun fc-widget-header fc-first"
+                                                >
+                                                    日
+                                                </th>
+                                                <th
+                                                    class="fc-day-header fc-mon fc-widget-header"
+                                                >
+                                                    月
+                                                </th>
+                                                <th
+                                                    class="fc-day-header fc-tue fc-widget-header"
+                                                >
+                                                    火
+                                                </th>
+                                                <th
+                                                    class="fc-day-header fc-wed fc-widget-header"
+                                                >
+                                                    水
+                                                </th>
+                                                <th
+                                                    class="fc-day-header fc-thu fc-widget-header"
+                                                >
+                                                    木
+                                                </th>
+                                                <th
+                                                    class="fc-day-header fc-fri fc-widget-header"
+                                                >
+                                                    金
+                                                </th>
+                                                <th
+                                                    class="fc-day-header fc-sat fc-widget-header fc-last"
+                                                >
+                                                    土
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- １週間目 -->
+                                            <tr
+                                            >
+                                                <td
+                                                    class="fc-day px-2 fc-sun fc-widget-content fc-other-month fc-first"
+                                                    data-date=""
+                                                >
+                                                    <div class="yasumi">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            29
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-mon fc-widget-content fc-other-month"
+                                                    data-date=""
+                                                >
+                                                    <div class="taikin">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            30
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-tue fc-widget-content fc-other-month"
+                                                    data-date=""
+                                                >
+                                                    <div class="taikin">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            31
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-wed fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="taikin">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            1
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-thu fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="taikin">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            2
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-fri fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="taikin">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            3
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-sat fc-widget-content fc-last"
+                                                    data-date=""
+                                                >
+                                                    <div class="yasumi">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            4
+                                                        </div>
+                                                        <!-- <div
+                                                            class="fc-day-content"
+                                                        >
+                                                            <div
+                                                                style="
+                                                                    position: relative;
+                                                                    height: 25px;
+                                                                "
+                                                            >
+                                                                         
+                                                            </div>
+                                                        </div> -->
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <!-- ２週間目-->
+                                            <tr
+                                            >
+                                                <td
+                                                    class="fc-day px-2 fc-sun fc-widget-content fc-other-month fc-first"
+                                                    data-date=""
+                                                >
+                                                    <div class="yasumi">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            5
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-mon fc-widget-content fc-other-month"
+                                                    data-date=""
+                                                >
+                                                    <div class="taikin">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            6
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-tue fc-widget-content fc-other-month"
+                                                    data-date=""
+                                                >
+                                                    <div class="taikin">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            7
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-wed fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="taikin">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            8
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-thu fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="taikin">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            9
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-fri fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="taikin">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            10
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-sat fc-widget-content fc-last"
+                                                    data-date=""
+                                                >
+                                                    <div class="yasumi">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            11
+                                                        </div>
+                                                        <!-- <div
+                                                            class="fc-day-content"
+                                                        >
+                                                            <div
+                                                                style="
+                                                                    position: relative;
+                                                                    height: 25px;
+                                                                "
+                                                            >
+                                                                         
+                                                            </div>
+                                                        </div> -->
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <!-- ３週間目-->
+                                            <tr
+                                            >
+                                                <td
+                                                    class="fc-day px-2 fc-sun fc-widget-content fc-other-month fc-first"
+                                                    data-date=""
+                                                >
+                                                    <div class="yasumi">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            12
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-mon fc-widget-content fc-other-month"
+                                                    data-date=""
+                                                >
+                                                    <div class="shukin">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            13
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-tue fc-widget-content fc-other-month"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            14
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-wed fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            15
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-thu fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            16
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-fri fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            17
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-sat fc-widget-content fc-last"
+                                                    data-date=""
+                                                >
+                                                    <div class="yasumi">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            18
+                                                        </div>
+                                                        <!-- <div
+                                                            class="fc-day-content"
+                                                        >
+                                                            <div
+                                                                style="
+                                                                    position: relative;
+                                                                    height: 25px;
+                                                                "
+                                                            >
+                                                                         
+                                                            </div>
+                                                        </div> -->
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <!-- ４週間目-->
+                                            <tr
+                                            >
+                                                <td
+                                                    class="fc-day px-2 fc-sun fc-widget-content fc-other-month fc-first"
+                                                    data-date=""
+                                                >
+                                                    <div class="yasumi">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            19
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-mon fc-widget-content fc-other-month"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            20
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-tue fc-widget-content fc-other-month"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            21
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-wed fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            22
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-thu fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            23
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-fri fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            24
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-sat fc-widget-content fc-last"
+                                                    data-date=""
+                                                >
+                                                    <div class="yasumi">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            25
+                                                        </div>
+                                                        <!-- <div
+                                                            class="fc-day-content"
+                                                        >
+                                                            <div
+                                                                style="
+                                                                    position: relative;
+                                                                    height: 25px;
+                                                                "
+                                                            >
+                                                                         
+                                                            </div>
+                                                        </div> -->
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <!-- ５週間目-->
+                                            <tr
+                                            >
+                                                <td
+                                                    class="fc-day px-2 fc-sun fc-widget-content fc-other-month fc-first"
+                                                    data-date=""
+                                                >
+                                                    <div class="yasumi">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            26
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-mon fc-widget-content fc-other-month"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            27
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-tue fc-widget-content fc-other-month"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            28
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-wed fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            29
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-thu fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            30
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-fri fc-widget-content"
+                                                    data-date=""
+                                                >
+                                                    <div class="">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            1
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    class="fc-day px-2 fc-sat fc-widget-content fc-last"
+                                                    data-date=""
+                                                >
+                                                    <div class="yasumi">
+                                                        <div
+                                                            class="fc-day-number py-2"
+                                                        >
+                                                            2
+                                                        </div>
+                                                        <!-- <div
+                                                            class="fc-day-content"
+                                                        >
+                                                            <div
+                                                                style="
+                                                                    position: relative;
+                                                                    height: 25px;
+                                                                "
+                                                            >
+                                                                         
+                                                            </div>
+                                                        </div> -->
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

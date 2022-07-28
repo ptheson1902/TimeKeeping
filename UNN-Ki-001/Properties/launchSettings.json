@@ -9,13 +9,13 @@
   },
   "profiles": {
     "UNN_Ki_001": {
+      "applicationUrl": "http://localhost:7165;http://localhost:5165",
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "applicationUrl": "https://localhost:7165;http://localhost:5165",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "launchBrowser": true
     },
     "IIS Express": {
       "commandName": "IISExpress",

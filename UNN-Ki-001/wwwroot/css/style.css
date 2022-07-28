@@ -1,0 +1,321 @@
+body {
+    background-color: #E5E5E5;
+}
+
+.dropdown-menu {
+    animation: slideIn 0.35s ease-in-out;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(3rem);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0rem);
+        opacity: 1;
+    }
+
+    0% {
+        transform: translateX(3rem);
+        opacity: 0;
+    }
+}
+
+.tablet, .phone {
+    display: none;
+}
+
+.desktop {
+    display: block;
+}
+
+.fa-user-tie {
+    font-size: 20px;
+    color: #1880FB;
+}
+
+.header {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.25);
+}
+
+    .header #logo .companyName {
+        font-size: 0.8rem;
+    }
+
+    .header .nav-custom {
+        width: 100%;
+    }
+
+        .header .nav-custom .navbar-nav {
+            padding: 0;
+        }
+
+            .header .nav-custom .navbar-nav .nav-item .nav-link {
+                color: #000;
+            }
+
+.main {
+    margin-top: 4rem;
+}
+
+    .main .left .date {
+        font-weight: 400;
+        font-size: 32px;
+        line-height: 39px;
+        color: #000000;
+    }
+
+    .main .left .time {
+        font-weight: 500;
+        font-size: 10rem;
+        line-height: 155px;
+        color: #000000;
+    }
+
+    .main .left .button .in {
+        font-size: 1rem;
+        font-weight: bold;
+        width: 10rem;
+        height: 5rem;
+        border-radius: 2.5rem;
+        background: #64FF56;
+        box-shadow: 0 0 8px #0ACF83;
+    }
+
+        .main .left .button .in:hover {
+            box-shadow: 0px 0px 30px #0ACF83;
+        }
+
+    .main .left .button .out {
+        font-size: 1rem;
+        font-weight: bold;
+        width: 10rem;
+        height: 5rem;
+        border-radius: 2.5rem;
+        background: #E3FF36;
+        box-shadow: 0px 0px 8px #C1C500;
+    }
+
+        .main .left .button .out:hover {
+            box-shadow: 0px 0px 30px #C1C500;
+        }
+
+    .main .right #calendar .panel .calendar .fc-header .fc-header-left button, .main .right #calendar .panel .calendar .fc-header .fc-header-right button {
+        width: 60px;
+        height: 40px;
+        background-color: transparent;
+    }
+
+        .main .right #calendar .panel .calendar .fc-header .fc-header-left button:hover > i, .main .right #calendar .panel .calendar .fc-header .fc-header-right button:hover > i {
+            color: #1880FB;
+            font-size: 20px;
+        }
+
+    .main .right #calendar .panel .calendar .fc-content .fc-border-separate thead tr {
+        height: 3rem;
+    }
+
+        .main .right #calendar .panel .calendar .fc-content .fc-border-separate thead tr th {
+            width: 3rem;
+        }
+
+    .main .right #calendar .panel .calendar .fc-content .fc-border-separate tbody tr {
+        height: 3.5rem;
+    }
+
+        .main .right #calendar .panel .calendar .fc-content .fc-border-separate tbody tr td > div {
+            margin: 0 auto;
+        }
+
+.taikin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid yellow;
+}
+
+    .taikin:hover {
+        background-color: yellow;
+    }
+
+.shukin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid green;
+}
+
+    .shukin:hover {
+        background-color: green;
+    }
+
+.yasumi {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid red;
+}
+
+    .yasumi:hover {
+        background-color: red;
+    }
+
+@media (max-width: 991px) {
+    .desktop, .phone, .footer {
+        display: none;
+    }
+
+    .tablet {
+        display: block;
+    }
+
+    body {
+        background-color: #fff;
+    }
+
+    .main {
+        margin-top: 0;
+    }
+
+        .main .container-fluid {
+            margin: 0 0 5rem 0 !important;
+            flex-direction: column;
+        }
+}
+
+@media (max-width: 429px) {
+    .desktop, .tablet {
+        display: none;
+    }
+
+    .phone {
+        display: block;
+    }
+
+    .footer {
+        display: none;
+    }
+
+    .main {
+        margin-top: 0;
+    }
+
+        .main .container-fluid {
+            margin: 20px 0 !important;
+            flex-direction: column;
+        }
+
+            .main .container-fluid .left {
+                margin: 0 !important;
+            }
+
+                .main .container-fluid .left .date {
+                    margin: 0.5rem 0 !important;
+                    font-size: 1rem;
+                    line-height: 1;
+                }
+
+                .main .container-fluid .left .time {
+                    margin: 0 !important;
+                    font-size: 5rem;
+                    line-height: 1;
+                }
+
+                .main .container-fluid .left .button {
+                    margin: 1rem 0 !important;
+                }
+
+                    .main .container-fluid .left .button .in, .main .container-fluid .left .button .out {
+                        font-size: 1rem;
+                        width: 8rem;
+                        height: 4rem;
+                        border-radius: 2rem;
+                    }
+
+            .main .container-fluid .right {
+                margin: 1rem 0 !important;
+                min-width: 15rem !important;
+            }
+
+                .main .container-fluid .right .panel .title {
+                    font-size: 1rem;
+                }
+
+                .main .container-fluid .right .panel .fc-content tr {
+                    height: 2rem !important;
+                }
+
+                .main .container-fluid .right .panel .fc-content tbody tr {
+                    height: 3rem !important;
+                }
+
+    .phone-wrapper {
+        width: 100%;
+        box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.25);
+    }
+
+    .hump {
+        width: 33%;
+        left: 0;
+        bottom: 2.9rem;
+        position: absolute;
+        transition: left 0.25s ease-out;
+    }
+
+    .nav {
+        height: 3rem;
+        background: #E5E5E5;
+        display: flex;
+        flex-flow: row nowrap;
+        box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-item-icon {
+        flex: 1;
+        position: relative;
+        cursor: pointer;
+    }
+
+        .nav-item-icon .title {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -150%;
+            font-size: 0.8rem;
+            text-align: center;
+            transition: bottom 0.35s ease-out;
+        }
+
+        .nav-item-icon *[class^="icon-"] {
+            position: absolute;
+            top: 0.7rem;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            transition: top 0.35s ease-out;
+        }
+
+        .nav-item-icon.active .title {
+            bottom: 1rem;
+        }
+
+        .nav-item-icon.active *[class^="icon-"] {
+            position: absolute;
+            top: -0.7rem;
+        }
+
+            .nav-item-icon.active *[class^="icon-"] i {
+                color: red;
+            }
+}

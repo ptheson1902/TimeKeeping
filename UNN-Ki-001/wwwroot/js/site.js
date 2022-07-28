@@ -1,4 +1,17 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿var tabs = document.getElementsByClassName("nav-item-icon");
+var hump = document.getElementById("hump");
+var humpLeftFromWindow = hump.getBoundingClientRect().left;
+var active = tabs[2];
+if (location.href.indexOf("Perforation") != -1) {
+    active = tabs[1]
+}
+if (location.href.indexOf("WorkSchedule") != -1) {
+    active = tabs[0]
+}
+function select(active) {
+    active.classList.add("active");
+    hump.style.left =
+    active.getBoundingClientRect().left - humpLeftFromWindow;
+}
 
-// Write your JavaScript code.
+select(active);
