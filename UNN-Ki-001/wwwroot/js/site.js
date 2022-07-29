@@ -89,11 +89,37 @@ function day1(i, b) {
     }
     return str;
 }
-var dayOfWeek = new Date(new Date().getFullYear() + "/" + (new Date().getMonth() + 1) + "/1").getDay();
-var dayNumOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()
-$(".calendar-data tr.week1").append(day(1, dayOfWeek))
-$(".calendar-data tr.week2").append(day(8 - dayOfWeek))
-$(".calendar-data tr.week3").append(day(15 - dayOfWeek))
-$(".calendar-data tr.week4").append(day(22 - dayOfWeek))
-$(".calendar-data tr.week5").append(day1(29 - dayOfWeek, 35 - dayNumOfMonth - dayOfWeek))
-if (dayNumOfMonth + dayOfWeek > 35) { $(".calendar-data tr.week6").append(day1((36 - dayOfWeek), 7 - (37 - dayOfWeek - dayNumOfMonth))) }
+let year = new Date().getFullYear()
+let month = new Date().getMonth() + 1
+function calendar() {
+    $(".fc-header .fc-header-center .year").text(year);
+    $(".fc-header .fc-header-center .month").text(month);
+    var dayOfWeek = new Date(year + "/" + month + "/1").getDay();
+    var dayNumOfMonth = new Date(year , month, 0).getDate()
+    $(".calendar-data tr.week1").append(day(1, dayOfWeek))
+    $(".calendar-data tr.week2").append(day(8 - dayOfWeek))
+    $(".calendar-data tr.week3").append(day(15 - dayOfWeek))
+    $(".calendar-data tr.week4").append(day(22 - dayOfWeek))
+    $(".calendar-data tr.week5").append(day1(29 - dayOfWeek, 35 - dayNumOfMonth - dayOfWeek))
+    if (dayNumOfMonth + dayOfWeek > 35) { $(".calendar-data tr.week6").append(day1((36 - dayOfWeek), 7 - (37 - dayOfWeek - dayNumOfMonth))) }
+}
+calendar();
+
+$(".prev-month").click(function () {
+    $(".calendar-data tr td").remove()
+    month--;
+    if (month == 0) {
+        year --;
+        month = 12;
+    }
+    calendar()
+})
+$(".next-month").click(function () {
+    $(".calendar-data tr td").remove()
+    month++;
+    if (month == 13) {
+        year ++;
+        month = 1;
+    }
+    calendar()
+})

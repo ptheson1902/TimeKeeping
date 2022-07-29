@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "打刻登録";
     var Date = DateTime.Now.ToString("yyyy年MM月dd日（dddd）");
-    var Month = DateTime.Now.ToString("yyyy年MM月");
+    //var Month = DateTime.Now.ToString("yyyy年MM月");
 }
 <div class="main d-flex justify-content-center align-items-center">
     <div
@@ -34,7 +34,7 @@
                                 <div class="fc-header-left">
                                     <button
                                         type="button"
-                                        class="border-0"
+                                        class="border-0 prev-month"
                                     >
                                         <i
                                             class="fa fa-chevron-left"
@@ -43,13 +43,13 @@
                                 </div>
                                 <div class="fc-header-center">
                                     <div class="fc-header-title">
-                                        <h2>@Month</h2>
+                                        <h2><span class="year"></span>年<span class="month"></span>月</h2>
                                     </div>
                                 </div>
                                 <div class="fc-header-right">
                                     <button
                                         type="button"
-                                        class="border-0"
+                                        class="border-0 next-month"
                                     >
                                         <i
                                             class="fa fa-chevron-right"
@@ -71,7 +71,7 @@
                                                 class="fc-first fc-last"
                                             >
                                                 <th
-                                                    class="fc-day-header fc-sun fc-widget-header fc-first"
+                                                    class="fc-day-header fc-sun fc-widget-header fc-first text-danger"
                                                 >
                                                     日
                                                 </th>
