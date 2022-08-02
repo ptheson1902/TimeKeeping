@@ -101,7 +101,9 @@ function calendar() {
     $(".calendar-data tr.week3").append(day(15 - dayOfWeek))
     $(".calendar-data tr.week4").append(day(22 - dayOfWeek))
     $(".calendar-data tr.week5").append(day1(29 - dayOfWeek, 35 - dayNumOfMonth - dayOfWeek))
-    if (dayNumOfMonth + dayOfWeek > 35) { $(".calendar-data tr.week6").append(day1((36 - dayOfWeek), 7 - (37 - dayOfWeek - dayNumOfMonth))) }
+    if (dayNumOfMonth - 35 + dayOfWeek > 0) {
+        $(".calendar-data tr.week6").append(day1((36 - dayOfWeek), 42 - dayNumOfMonth - dayOfWeek))
+    }
 }
 calendar();
 
