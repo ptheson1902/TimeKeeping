@@ -2,7 +2,7 @@
 @model Attendance.IndexModel
 @{
     ViewData["Title"] = "打刻登録";
-    var Date = DateTime.Now.ToString("yyyy年MM月dd日（dddd）");
+   
     //var Month = DateTime.Now.ToString("yyyy年MM月");
 }
 <div class="main d-flex justify-content-center align-items-center">
@@ -12,7 +12,8 @@
         <div
             class="left mt-5 d-flex flex-column align-items-center justify-content-between mx-5"
         >
-            <div class="date">@Date</div>
+            <asp:Label id="Date" runat="server"></asp:Label>
+            <div class="date"></div>
             <div class="time my-3"></div>
             <div class="button my-5">
                 <button type="button" class="border-0 in me-3">出勤</button>
