@@ -1,0 +1,68 @@
+﻿@page
+@model UNN_Ki_001.Pages.新しいフォルダー1.shainSearchModel
+@{
+}
+<h1>社員検索</h1>
+    <div class="container mt-5" style="max-width:800px">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row mb-3 align-items-center">
+                    <label class="col-2" for="shain_no">社員番号</label>
+                    <div class="col-3 row">
+                        <input type="text" class="form-control" name="shain_no" size="30" maxlength="10"
+                            id="shain_no" />
+                    </div>
+
+                </div>
+                <div class="row mb-3 align-items-center">
+                    <div class="col-2">氏名</div>
+                    <div class="col-3 row align-items-center">                       
+                            <input type="text"  class="form-control" name="shain_shimei" id="shain_shimei" />
+                    </div>
+                </div>
+                <div class="row mb-3 align-items-center">
+                    <div class="col-2">所属</div>
+                    <div class="col-10 row align-items-center">
+                        <div class="col-3 row">
+                            <input type="text"  class="form-control" name="shain_shozoku" size="30" maxlength="5" id="shain_shozoku" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <label class="col-2" for="customer_nm">職種</label>
+                    <div class="col-3 row">
+                        <input type="text" class="form-control" name="shain_shokushu" size="30" maxlength="30"
+                            id="shain_shokushu" />
+                    </div>
+                </div>
+                <div class="row mb-3 align-items-center">
+                    <label class="col-2" for="daily_title">雇用形態</label>
+                    <div class="col-10 row">
+                        <input type="text" class="form-control" name="koyou_keitai" size="30" maxlength="100"
+                            id="koyou_keitai" />
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <input type="button" class="search btn btn-secondary mx-3" value="検索" />
+                    <input type="reset" class="clear btn btn-secondary mx-3" value="クリア" />
+                </div>
+            </div>
+        </div>
+        <div class="p-2">
+            <table class="table table-bordered">
+                <thead class="table-primary">
+                    <tr class=" text-center">
+                        <th class="col-2">社員番号</th>
+                        <th class="col-3">氏名 </th>
+                        <th class="col-2">所属 </th>
+                        <th class="col-2">職種 </th>
+                        <th class="col-3">雇用形態</th>
+                    </tr>
+                </thead>
+                <tbody class="findData">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
