@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
+﻿@inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
@@ -30,8 +29,8 @@
                             <div class="nav-item mx-2">
                                 <a class="nav-link" asp-page="/WorkSchedule">勤務表</a>
                             </div>
-                            <div class="nav-item mx-2">
-                                <a class="nav-link" asp-page="/Account/Register">ユーザー登録</a>
+                            @*<div class="nav-item mx-2">
+                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">ユーザー登録</a>
                             </div>
                             <div class="nav-item mx-2">
                                 <a class="nav-link" asp-page="/Setting">基本設定</a>
@@ -79,7 +78,7 @@
                                         >
                                     </li>
                                 </ul>
-                            </div>
+                            </div>*@
                         </div>
                         <div class="loginUserInfo dropdown hidden col-3">
                             <a
