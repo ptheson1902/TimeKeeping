@@ -8,9 +8,10 @@ using UNN_Ki_001.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultCon");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString)
+);
 
 // Identity‚ð’Ç‰Á
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Stores.MaxLengthForKeys = 128)
@@ -49,8 +50,8 @@ builder.Services.AddAuthorization(options =>
 // CookieÝ’è
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.AccessDeniedPath = "/Account/AccessDenied";
-    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.LoginPath = "/Identity/Account/Login";
 });
 
 builder.Services.AddRazorPages();
