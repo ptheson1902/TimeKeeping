@@ -8,9 +8,8 @@ using UNN_Ki_001.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("Connection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString)
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Connection"))
 );
 
 // Identity‚ð’Ç‰Á
