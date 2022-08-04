@@ -73,11 +73,20 @@ namespace UNN_Ki_001.Pages.Account
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
             [DataType(DataType.Text)]
-            public string UserName { get; set; }
+            [Display(Name = "名")]
+            public string Name_mei { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
             [DataType(DataType.Text)]
+            [Display(Name = "性")]
+            public string Name_sei { get; set; }
+
+
+            [Required]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
+            [DataType(DataType.Text)]
+            [Display(Name = "社員番号")]
             public string Shain_no { get; set; }
 
             /// <summary>
@@ -115,6 +124,8 @@ namespace UNN_Ki_001.Pages.Account
             {
                 var user = CreateUser();
                 user.Shain_no = Input.Shain_no;
+                user.Name_mei = Input.Name_mei;
+                user.Name_sei = Input.Name_sei;
                 // ユーザー名を設定する
                 await _userStore.SetUserNameAsync(user, Input.Shain_no, CancellationToken.None);
 

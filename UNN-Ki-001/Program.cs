@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using UNN_Ki_001;
 using UNN_Ki_001.Data;
 
@@ -12,10 +13,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Identity‚ð’Ç‰Á
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Stores.MaxLengthForKeys = 128)
+builder.Services.AddIdentity<AppUser, AppRole>(options => options.Stores.MaxLengthForKeys = 128)
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders()
     .AddErrorDescriber<IdentityErrorDescriberJP>();
+
 
 // ³”FÝ’è
 builder.Services.AddAuthorization(options =>
