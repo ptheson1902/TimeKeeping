@@ -24,10 +24,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\VariousMaster\Employee.cshtml.cs" />
     <Compile Remove="Pages\VariousMaster\Index.cshtml.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\VariousMaster\Employee.cshtml" />
     <Content Remove="Pages\VariousMaster\Index.cshtml" />
   </ItemGroup>
 
