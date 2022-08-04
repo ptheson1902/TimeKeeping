@@ -9,11 +9,19 @@ using UNN_Ki_001.Data;
 
 #nullable disable
 
+<<<<<<<< HEAD:UNN-Ki-001/Migrations/20220803025343_Test.Designer.cs
 namespace UNN_Ki_001.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20220803025343_Test")]
     partial class Test
+========
+namespace UNN_Ki_001.Data.Migrations
+{
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20220803034409_InitialCreate")]
+    partial class InitialCreate
+>>>>>>>> son:UNN-Ki-001/Migrations/20220803034409_InitialCreate.Designer.cs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

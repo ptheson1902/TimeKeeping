@@ -1,12 +1,21 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+<<<<<<<< HEAD:UNN-Ki-001/Migrations/20220803025343_Test.cs
+========
+
+#nullable disable
+>>>>>>>> son:UNN-Ki-001/Migrations/20220803034409_InitialCreate.cs
 
 #nullable disable
 
 namespace UNN_Ki_001.Migrations
 {
+<<<<<<<< HEAD:UNN-Ki-001/Migrations/20220803025343_Test.cs
     public partial class Test : Migration
+========
+    public partial class InitialCreate : Migration
+>>>>>>>> son:UNN-Ki-001/Migrations/20220803034409_InitialCreate.cs
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

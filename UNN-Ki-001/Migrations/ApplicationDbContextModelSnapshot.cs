@@ -8,7 +8,7 @@ using UNN_Ki_001.Data;
 
 #nullable disable
 
-namespace UNN_Ki_001.Migrations
+namespace UNN_Ki_001.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
