@@ -10,28 +10,15 @@
 
   <ItemGroup>
     <Compile Remove="Areas.backup\**" />
-    <Compile Remove="Pages\新しいフォルダー\**" />
     <Content Remove="Areas.backup\**" />
-    <Content Remove="Pages\新しいフォルダー\**" />
     <EmbeddedResource Remove="Areas.backup\**" />
-    <EmbeddedResource Remove="Pages\新しいフォルダー\**" />
     <None Remove="Areas.backup\**" />
-    <None Remove="Pages\新しいフォルダー\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Pages\VariousMaster\Employee.cshtml.cs" />
-    <Compile Remove="Pages\VariousMaster\Index.cshtml.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Pages\VariousMaster\Employee.cshtml" />
-    <Content Remove="Pages\VariousMaster\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.7">
@@ -44,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Attendance\Record\" />
+    <Folder Include="Pages\Employee\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

@@ -1,5 +1,8 @@
-﻿@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+﻿@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+@using Microsoft.AspNetCore.Identity;
+@using UNN_Ki_001.Data;
+
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -92,7 +95,11 @@
                                 aria-expanded="false"
                             >
                                 <i class="fa-solid fa-user-tie"></i>
-                                <div class="username mx-3">@User.Identity?.Name </div>
+                                <div class="username mx-3">
+                                    @{
+                                       var user = await UserManager.FindByNameAsync(User.Identity?.Name);
+                                    }
+                                    @user.Name_sei @user.Name_mei</div>
                                 <span class="hidden">ようこそ！</span>
                             </a>
                             <ul

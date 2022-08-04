@@ -12,7 +12,11 @@ using UNN_Ki_001.Data;
 namespace UNN_Ki_001.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+<<<<<<<< HEAD:UNN-Ki-001/Migrations/20220804085427_initDb.Designer.cs
     [Migration("20220804085427_initDb")]
+========
+    [Migration("20220804063344_initDb")]
+>>>>>>>> son:UNN-Ki-001/Migrations/20220804063344_initDb.Designer.cs
     partial class initDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
