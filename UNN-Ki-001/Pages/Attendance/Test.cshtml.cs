@@ -12,7 +12,7 @@ namespace UNN_Ki_001.Pages.Attendance
     public class TestModel : PageModel
     {
         private readonly ApplicationDbContext db;
-        public IList<Users> GetData { get; set; }
+        public List<Users> GetData { get; set; }
         [BindProperty]
         public Users InsData { get; set; }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -38,7 +38,6 @@ namespace UNN_Ki_001.Pages.Attendance
                 case "insert":
                     db.Add(InsData);
                     await db.SaveChangesAsync();
-                    InsData = await db.user.FindAsync(user_id);
                     break;
                 case "delete":
 #pragma warning disable CS8601 // Possible null reference assignment.
@@ -52,4 +51,4 @@ namespace UNN_Ki_001.Pages.Attendance
             };
         }
     }
-} 
+}
