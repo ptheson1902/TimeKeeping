@@ -29,7 +29,8 @@
                             <div class="nav-item mx-2">
                                 <a class="nav-link" asp-page="/Attendance/Test">勤務表</a>
                             </div>
-                            @*<div class="nav-item mx-2">
+                            @if(User.IsInRole("Admin")){
+                                <div class="nav-item mx-2">
                                 <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">ユーザー登録</a>
                             </div>
                             <div class="nav-item mx-2">
@@ -78,7 +79,9 @@
                                         >
                                     </li>
                                 </ul>
-                            </div>*@
+                            </div>
+                            }
+                            
                         </div>
                         <div class="loginUserInfo dropdown hidden col-3">
                             <a
