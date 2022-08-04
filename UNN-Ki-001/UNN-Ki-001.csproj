@@ -10,16 +10,12 @@
 
   <ItemGroup>
     <Compile Remove="Areas.backup\**" />
-    <Compile Remove="Pages\VariousMaster\新しいフォルダー\**" />
     <Compile Remove="Pages\新しいフォルダー\**" />
     <Content Remove="Areas.backup\**" />
-    <Content Remove="Pages\VariousMaster\新しいフォルダー\**" />
     <Content Remove="Pages\新しいフォルダー\**" />
     <EmbeddedResource Remove="Areas.backup\**" />
-    <EmbeddedResource Remove="Pages\VariousMaster\新しいフォルダー\**" />
     <EmbeddedResource Remove="Pages\新しいフォルダー\**" />
     <None Remove="Areas.backup\**" />
-    <None Remove="Pages\VariousMaster\新しいフォルダー\**" />
     <None Remove="Pages\新しいフォルダー\**" />
   </ItemGroup>
 
@@ -37,6 +33,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -47,6 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Pages\Attendance\Record\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
