@@ -2,7 +2,7 @@
 @model UNN_Ki_001.Pages.VariousMaster.shainSearchModel
 @{ }
 <h1>社員検索</h1>
-<form >
+<form method="Post">
    <div class="container mt-5" style="max-width: 800px">
       <div class="card mb-4">
          <div class="card-body">
@@ -25,8 +25,8 @@
                   <input
                      type="text"
                      class="form-control"
-                     name="shain_shimei"
-                     id="shain_shimei"
+                     name="name_mei"
+                     id="name_mei"
                   />
                </div>
             </div>
@@ -37,10 +37,10 @@
                      <input
                         type="text"
                         class="form-control"
-                        name="shain_shozoku"
+                        name="shozoku_cd"
                         size="30"
                         maxlength="5"
-                        id="shain_shozoku"
+                        id="shozoku_cd"
                      />
                   </div>
                </div>
@@ -52,10 +52,10 @@
                   <input
                      type="text"
                      class="form-control"
-                     name="shain_shokushu"
+                     name="shokushu_cd"
                      size="30"
                      maxlength="30"
-                     id="shain_shokushu"
+                     id="shokushu_cd"
                   />
                </div>
             </div>
@@ -65,10 +65,10 @@
                   <input
                      type="text"
                      class="form-control"
-                     name="koyou_keitai"
+                     name="koyokeitai_cd"
                      size="30"
                      maxlength="100"
-                     id="koyou_keitai"
+                     id="koyokeitai_cd"
                   />
                </div>
             </div>
@@ -99,11 +99,14 @@
                </tr>
             </thead>
             @if (Model.GetData != null) {
-                @foreach (var user in Model.GetData) {
+                @foreach (var shain in Model.GetData) {
                     <tbody class="findData"></tbody>
                     <tr>
-                        <td> @user.id</td>
-                        <td> @user.username</td>
+                        <td> @shain.shain_no</td>
+                        <td> @shain.name_mei</td>
+                        <td> @shain.shozoku_cd</td>
+                        <td> @shain.shokushu_cd</td>
+                        <td> @shain.koyokeitai_cd</td>
                     </tr>
                 } 
             }

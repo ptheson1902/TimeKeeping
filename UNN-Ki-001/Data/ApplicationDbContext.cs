@@ -10,7 +10,7 @@ namespace UNN_Ki_001.Data
             : base(options)
         {
         }
-        public DbSet<Users> user { get; set; }
+        public DbSet<m_kensakushain> shain { get; set; }
     }
    
 }
