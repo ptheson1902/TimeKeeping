@@ -2,8 +2,37 @@
 @model UNN_Ki_001.Pages.Attendance.TestModel
 @{
 }
- @foreach (var user in Model.Data)
+
+<form method="POST">
+  <div class="mb-3">
+    <label for="user_id" class="form-label">User Id</label>
+    <input type="text" class="form-control" id="user_id" name="user_id">
+    <input type="text" class="form-control" name="action" value="insert">
+  </div>
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input type="password" class="form-control" id="password" name="password">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<form method="post">
+  <div class="mb-3">
+    <label for="user_id" class="form-label">User Id</label>
+    <input type="text" class="form-control" id="user_id" name="user_id" aria-describedby="emailHelp">
+    <input type="text" class="form-control" name="action" value="delete">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+@if (Model.GetData != null)
+{
+     @foreach (var user in Model.GetData)
   {
       <div>user_id : @user.user_id</div>
       <div>password : @user.password</div>
+  }
+}
+  @if (Model.InsData != null)
+  {
+      @Model.InsData.user_id
+      @Model.InsData.password
   }
