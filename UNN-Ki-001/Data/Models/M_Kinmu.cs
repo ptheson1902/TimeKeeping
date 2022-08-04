@@ -120,7 +120,7 @@ namespace UNN_Ki_001.Data.Models
         public string? CreatePgm { get; set; }
 
         [Column("update_dt")]
-        public DateTime? UpdateDt { get; }
+        public DateTime? UpdateDt { get; set; }
 
         [Column("update_usr")]
         public string? UpdateUsr { get; set; }

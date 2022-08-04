@@ -16,13 +16,8 @@ namespace UNN_Ki_001.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<M_Kinmu>()
-                .HasKey(c => new { c.KigyoCd, c.KinmuCd });
         }
 
-
         public DbSet<Users> user { get; set; }
-
-        public DbSet<M_Kinmu> m_Kinmus { get; set; }
     }
 }

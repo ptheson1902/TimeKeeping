@@ -6,39 +6,107 @@ namespace UNN_Ki_001.Data.Models
     [Table("t_kinmu", Schema = "public")]
     public class T_Kinmu
     {
-        public T_Kinmu(string kigyo_cd, string kinmu_cd)
+        public T_Kinmu(string kigyoCd, string shainNo, string kinmuDt)
         {
-            this.kigyo_cd = kigyo_cd;
-            this.kinmu_cd = kinmu_cd;
+            KigyoCd = kigyoCd;
+            ShainNo = shainNo;
+            KinmuDt = kinmuDt;
         }
 
         [Key]
         [Column("kigyo_cd")]
-        public string kigyo_cd { get; set; }
+        public string KigyoCd { get; set; }
 
         [Key]
-        [Column("kinmu_id")]
-        public string kinmu_cd { get; set; }
+        [Column("shain_no")]
+        public string ShainNo { get; set; }
 
-        [Column("kinmu_nm")]
-        public string? kinmu_nm { get; set; }
+        [Key]
+        [Column("kinmu_dt")]
+        public string KinmuDt { get; set; }
 
-        [Column("kinmu_bunrui")]
-        public string? kinmu_bunrui { get; set; }
+        [Column("kinmu_cd")]
+        public string? KinmuCd { get; set; }
+
+        [Column("dakoku_fr_kbn")]
+        public string? DakokuFrKbn { get; set; }
+
+        [Column("dakoku_fr_dt")]
+        public string? DakokuFrDt { get; set; }
+
+        [Column("dakoku_fr_tm")]
+        public string? DakokuFrTm { get; set; }
+
+        [Column("dakoku_to_kbn")]
+        public string? DakokuToKbn { get; set; }
+
+        [Column("dakoku_to_dt")]
+        public string? DakokuToDt { get; set; }
+
+        [Column("dakoku_to_tm")]
+        public string? DakokuToTm { get; set; }
 
         [Column("kinmu_fr_kbn")]
-        public string? kinmu_fr_kbn { get; set; }
+        public string? KinmuFrKbn { get; set; }
+
+        [Column("kinmu_fr_dt")]
+        public string? KinmuFrDt { get; set; }
 
         [Column("kinmu_fr_tm")]
-        public string? kinmu_fr_tm  { get; set; }
+        public string? KinmuFrTm { get; set; }
 
         [Column("kinmu_to_kbn")]
-        public string? kinmu_to_kbn { get; set; }
+        public string? KinmuToKbn { get; set; }
 
-        [Column("kyukei1_fr_kbn")]
-        public string? kyukei1_fr_kbn { get; set; }
+        [Column("kinmu_to_dt")]
+        public string? KinmuToDt { get; set; }
 
-        [Column("kyukei1_fr_tm")]
-        public string? kyukei1_fr_tm { get; set; }
+        [Column("kinmu_to_tm")]
+        public string? KinmuToTm { get; set; }
+
+        [Column("shotei")]
+        public int? Shotei { get; set; }
+
+        [Column("sorodo")]
+        public int? Sorodo { get; set; }
+
+        [Column("kojo")]
+        public int? Kojo { get; set; }
+
+        [Column("kyukei")]
+        public int? Kyukei { get; set; }
+
+        [Column("hoteinai")]
+        public int? Hoteinai { get; set; }
+
+        [Column("hoteigai")]
+        public int? Hoteigai { get; set; }
+
+        [Column("shinya")]
+        public int? Shinya { get; set; }
+
+        [Column("hoteikyu")]
+        public int? Hoteikyu { get; set; }
+
+        [Column("biko")]
+        public string? Biko { get; set; }
+
+        [Column("create_dt")]
+        public DateTime? CreateDt { get; }
+
+        [Column("create_usr")]
+        public string? CreateUsr { get; set; }
+
+        [Column("create_pgm")]
+        public string? CreatePgm { get; set; }
+
+        [Column("update_dt")]
+        public DateTime? UpdateDt { get; set; }
+
+        [Column("update_usr")]
+        public string? UpdateUsr { get; set; }
+
+        [Column("update_pgm")]
+        public string? UpdatePgm { get; set; }
     }
 }
