@@ -1,4 +1,4 @@
-﻿@page
+﻿@page 
 @model UNN_Ki_001.Pages.VariousMaster.shainSearchModel
 @{ }
 <h1>社員検索</h1>
@@ -16,6 +16,7 @@
                      size="30"
                      maxlength="10"
                      id="shain_no"
+                     asp-for="SearchString"
                   />
                </div>
             </div>
@@ -100,7 +101,7 @@
             </thead>
             @if (Model.GetData != null) {
                 @foreach (var shain in Model.GetData) {
-                    <tbody class="findData"></tbody>
+                    <tbody class="shainData"></tbody>
                     <tr>
                         <td> @shain.shain_no</td>
                         <td> @shain.name_mei</td>
