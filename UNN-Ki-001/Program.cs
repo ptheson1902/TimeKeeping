@@ -18,6 +18,9 @@ builder.Services.AddIdentity<AppUser, AppRole>(options => options.Stores.MaxLeng
     .AddDefaultTokenProviders()
     .AddErrorDescriber<IdentityErrorDescriberJP>();
 
+// Kintai用コンテキストの追加
+builder.Services.AddDbContext<KintaiDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // 承認設定
 builder.Services.AddAuthorization(options =>
