@@ -10,9 +10,13 @@
 
   <ItemGroup>
     <Compile Remove="Areas.backup\**" />
+    <Compile Remove="Pages\Employee\**" />
     <Content Remove="Areas.backup\**" />
+    <Content Remove="Pages\Employee\**" />
     <EmbeddedResource Remove="Areas.backup\**" />
+    <EmbeddedResource Remove="Pages\Employee\**" />
     <None Remove="Areas.backup\**" />
+    <None Remove="Pages\Employee\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,7 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Employee\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
