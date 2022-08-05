@@ -17,15 +17,16 @@ namespace UNN_Ki_001.Data.Models
         /// <summary>
         /// 勤務レコードに紐づいた基準情報
         /// </summary>
-        private M_Kinmu? KinmuData { get; set; }
+        private M_Kinmu? m_Kinmu { get; set; }
 
         public void DakokuStart(DateTime date)
         {
+            // DateTimeの変換を試行(例外が発生しうる)
             DateControl dc = new DateControl(date);
-            DakokuFrDt = dc.Date;
-            DakokuFrTm = dc.Time;
-
-            // 打刻開始区分の判定　例外処理
+            int dateInt = int.Parse(dc.Date);
+            int timeInt = int.Parse(dc.Time);
+            
+            
         }
 
         public void DakokuStart()

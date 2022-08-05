@@ -1,48 +1,91 @@
 ﻿namespace UNN_Ki_001.Data.Models
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class DateControl
     {
+        /// <summary>
+        /// DateTimeを今プロジェクトで用いる型に変換する。
+        /// </summary>
+        /// <param name="dateTime">日付</param>
         public DateControl(DateTime dateTime)
         {
-            Origin = dateTime;
+            // 文字列型に変換して格納
+            string[] tempData = dateTime.ToString("yyyyMMdd,HHmm").Split(",");
+            Date = tempData[0]!;
+            Time = tempData[1]!;
 
-            // 万が一、フォーマット後のデータがnullであった場合の初期値を入力する
-            const string errorString = "Error";
-            Date ??= errorString;
-            Time ??= errorString;
+            TimeInt = int.Parse(Time);
+            DateInt = int.Parse(Date);
         }
 
         /// <summary>
-        /// フォーマット対象のオリジンデータです。
+        /// DateControlによって丸め処理されたDateControl。
         /// </summary>
-        public DateTime Origin
+        /// <param name="date"></param>
+        /// <param name="time"></param>
+        private DateControl(string date, string time)
         {
-            get
-            {
-                return Origin;
-            }
-            set
-            {
-                // DateTime型を格納
-                Origin = value;
+            Date = date;
+            Time = time;
+        }
 
-                // 文字列型に変換して格納
-                string[] tempData = value.ToString("yyyyMMdd,HHmm").Split(",");
-                Date = tempData[0]!;
-                Time = tempData[1]!;
+        static void main()
+        {
+
+        }
+
+        /// <summary>
+        /// 丸め単位時間と丸め区分を指定して丸め処理を実行しインスタンスを作成する。
+        /// </summary>
+        /// <param name="marumeTm">丸め単位時間</param>
+        /// <param name="marumeKbn">丸め区分</param>
+        /// <returns>丸め処理の完了した日時データ</returns>
+        public DateControl MarumeProcess(string marumeTm, string marumeKbn)
+        {
+            if (marumeKbn.Equals("0") || marumeTm == null || marumeKbn == null)
+            {
+                // 処理なし
+                return this;
+            }
+            else
+            {
+                DateTime dateTime = DateTime.ParseExact(Date + Time, "yyyyMMddHHmm", null);
+                TimeSpan ts = TimeSpan.FromMinutes(int.Parse(marumeTm));
+
+                if (marumeKbn.Equals("1"))
+                {
+                    // 切り上げ処理
+                    dateTime = new DateTime(((dateTime.Ticks + ts.Ticks - 1) / ts.Ticks) * ts.Ticks, dateTime.Kind);
+                }
+                else
+                {
+                    // 切り下げ処理
+                    dateTime = new DateTime((((dateTime.Ticks + ts.Ticks) / ts.Ticks) - 1) * ts.Ticks, dateTime.Kind);
+                }
+
+                string[] resultTemp = dateTime.ToString("yyyyMMdd,HHmm").Split(",");
+                DateControl result = new DateControl(resultTemp[0], resultTemp[1]);
+                return result;
             }
         }
+
+        /// <summary>
+        /// DateをInt型にパースしたもの。
+        /// </summary>
+        public int DateInt { get; }
+
+        /// <summary>
+        /// TimeをInt型にパースしたもの。
+        /// </summary>
+        public int TimeInt { get; }
+
         /// <summary>
         /// オリジンデータを"yyyyMMdd"の文字列型へフォーマットしたデータです。
         /// </summary>
-        public string Date { get; private set; }
+        public string Date { get; }
 
         /// <summary>
         /// オリジンデータを"HHmm"の文字列型へフォーマットしたデータです。
         /// </summary>
-        public string Time { get; private set; }
+        public string Time { get; }
     }
 }
