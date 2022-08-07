@@ -15,8 +15,6 @@ namespace UNN_Ki_001.Data
 
         }
 
-        public DbSet<Users> user { get; set; }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

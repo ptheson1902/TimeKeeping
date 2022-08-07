@@ -16,7 +16,6 @@ namespace UNN_Ki_001.Pages.Attendance
         private readonly ILogger<IndexModel> _logger;
         private readonly ApplicationDbContext applicationDbContext;
         public string? Date { get; private set; }
-        public IList<Users> user { get; set; }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public IndexModel(ILogger<IndexModel> logger, ApplicationDbContext _context)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

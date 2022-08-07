@@ -28,17 +28,13 @@
             Time = time;
         }
 
-        static void main()
-        {
-
-        }
-
         /// <summary>
         /// 丸め単位時間と丸め区分を指定して丸め処理を実行しインスタンスを作成する。
+        /// パラメーターが不正であった場合Parseに失敗し例外がスローされる可能性があります。
         /// </summary>
-        /// <param name="marumeTm">丸め単位時間</param>
-        /// <param name="marumeKbn">丸め区分</param>
-        /// <returns>丸め処理の完了した日時データ</returns>
+        /// <param name="marumeTm"></param>
+        /// <param name="marumeKbn"></param>
+        /// <returns>丸め処理実行済みのDateControl</returns>
         public DateControl MarumeProcess(string marumeTm, string marumeKbn)
         {
             if (marumeKbn.Equals("0") || marumeTm == null || marumeKbn == null)
