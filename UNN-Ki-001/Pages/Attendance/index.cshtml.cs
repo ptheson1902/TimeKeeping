@@ -15,25 +15,23 @@ namespace UNN_Ki_001.Pages.Attendance
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly ApplicationDbContext applicationDbContext;
+        private readonly KintaiDbContext kintaiDbContext;
         public string? Date { get; private set; }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public IndexModel(ILogger<IndexModel> logger, ApplicationDbContext _context, KintaiDbContext context)
+        public IndexModel(ILogger<IndexModel> logger, ApplicationDbContext _context, KintaiDbContext context, KintaiDbContext kintaiDbContext)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             _logger = logger;
             applicationDbContext = _context;
+            this.kintaiDbContext = kintaiDbContext;
         }
 
         public async void OnGet()
         {
-            using(var _context = new KintaiDbContext())
-            {
-                // テストしまーす
-                M_Kinmu test = await _context.m_kinmus.FirstOrDefaultAsync();
-                test.UpdateDt = DateTime.UtcNow;
-                _context.Update(test);
-                _context.SaveChanges();
-            }
+            // テストしまーす
+            M_Kinmu test = await kintaiDbContext.m_kinmus.FirstOrDefaultAsync();
+            test.UpdateDt = DateTime.UtcNow;
+            kintaiDbContext.SaveChanges();
 
         }
     }

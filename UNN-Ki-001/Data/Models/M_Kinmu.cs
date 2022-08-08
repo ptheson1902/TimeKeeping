@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace UNN_Ki_001.Data.Models
 {
     [Table("m_kinmu", Schema = "public")]
-    public class M_Kinmu
+    public class M_Kinmu : Reloadable
     {
         public M_Kinmu(string KigyoCd, string KinmuCd)
         {
@@ -15,7 +15,7 @@ namespace UNN_Ki_001.Data.Models
 
         public void reload()
         {
-            Debug.WriteLine("リロードメソッドが実行されました。あああああああああああああああああああああああああああああああああああああああああああああああああ");
+            // ここ
         }
 
         [Key]

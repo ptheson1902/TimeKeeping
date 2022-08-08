@@ -12,13 +12,14 @@ namespace UNN_Ki_001.Data
         }
 
         public KintaiDbContext()
+            : base()
         {
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             // 変更点をループしreloadメソッドを呼びだす
-            var entries = this.ChangeTracker.Entries<M_Kinmu>();
+            var entries = this.ChangeTracker.Entries<Reloadable>();
             foreach(var entry in entries)
             {
                 entry.Entity.reload();
