@@ -28,20 +28,26 @@ namespace UNN_Ki_001.Data.Models
         /// <summary>
         /// 勤務レコードに紐づいた基準情報
         /// </summary>
-        private M_Kinmu? m_Kinmu => _context.m_kinmus
+        private M_Kinmu? mKinmu
+        {
+            get
+            {
+                if(mKinmuBack == null)
+                    mKinmuBack = _context.m_kinmus
                         .Where(e => e.KigyoCd.Equals(KigyoCd) && e.KinmuCd.Equals(KinmuCd))
                         .FirstOrDefault();
+                return mKinmuBack;
+            }
+        }
+        private M_Kinmu? mKinmuBack { get; set; }
 
         /// <summary>
-        /// 打刻登録処理。
-        /// DakokuFrDt, DakokuFrTm, KinmuFrDt, KinmuFrTmの値を適切に操作する。
-        /// 最新の勤務記録が退勤前ならExceptionをスローする。
+        /// 打刻専用
         /// </summary>
-        /// <param name="date"></param>
-        /// <exception cref="Exception">最新の勤務記録が退勤前</exception>
-        public void DakokuStart(DateTime? date)
+        /// <exception cref="Exception"></exception>
+        public void Dakokustart()
         {
-            // TODO: 最新の勤務記録を参照し、退勤済みか確認する。
+            // 最新の勤務記録を参照し、退勤済みか確認する。
             T_Kinmu? record = _context.t_kinmus
                 .Where(e => e.KigyoCd.Equals(KigyoCd) && e.KinmuDt.Equals(KinmuDt) && e.ShainNo.Equals(ShainNo) && e.DakokuFrTm != null)
                 .OrderByDescending(e => e.KinmuDt)
@@ -49,69 +55,64 @@ namespace UNN_Ki_001.Data.Models
             if (record != null && (record.DakokuToDt == null || record.DakokuToTm == null))
                 throw new Exception("出勤打刻を行うには、退勤打刻が必要です。");
 
-            // 打刻忘れの処理
-            if(date == null)
-            {
-                DakokuFrDt = NULL_CHAR;
-                DakokuFrTm = NULL_CHAR;
-                KinmuFrDt = NULL_CHAR;
-                KinmuFrTm = NULL_CHAR;
-
-                return;
-            }
-
-            // キャストと丸め処理実行
-            DateControl dakokuDc = new DateControl((DateTime)date);
-            DateControl marumeDc = (m_Kinmu == null) ? dakokuDc : dakokuDc.MarumeProcess(m_Kinmu.KinmuFrMarumeTm, m_Kinmu.KinmuFrMarumeKbn);
-
-            // 打刻記録を保存
-            DakokuFrDt = dakokuDc.Date;
-            DakokuFrTm = dakokuDc.Time;
-
-            // 刻限の適用
-            if (m_Kinmu != null && m_Kinmu.KinmuFrCtrlFlg != null && m_Kinmu.KinmuFrCtrlFlg.Equals("0") && m_Kinmu.KinmuFrTm != null && m_Kinmu.KinmuFrTm != null)
-            {
-                DateControl kinmuFrDc = new DateControl(KinmuDt, m_Kinmu.KinmuFrTm, m_Kinmu.KinmuFrKbn);
-                if (marumeDc.Origin < kinmuFrDc.Origin)
-                    marumeDc = kinmuFrDc;
-            }
-
-            // 実績記録を保存
-            KinmuFrDt = marumeDc.Date;
-            KinmuFrTm = marumeDc.Time;
+            DateTime now = DateTime.UtcNow;
+            DakokuStartWriter(now, true);
         }
 
         /// <summary>
-        /// 打刻登録処理。
-        /// 現在のサーバー時刻で打刻登録を行う。（DBの時刻とは異なります）
-        /// DakokuFrDt, DakokuFrTm, KinmuFrDt, KinmuFrTmの値を適切に操作する。
-        /// 最新の勤務記録が退勤前ならExceptionをスローする。
+        /// 打刻と勤務表兼用
         /// </summary>
-        /// <param name="date"></param>
-        /// <exception cref="Exception">最新の勤務記録が退勤前</exception>
-        public void DakokuStart()
+        /// <param name="dateTime"></param>
+        /// <param name="andKinmuStartWrite"></param>
+        public void DakokuStartWriter(DateTime dateTime, Boolean andKinmuStartWrite = false)
         {
-            DakokuStart(DateTime.Now);
+            // 打刻記録のフォーマット
+            DateControl dc = new DateControl(dateTime);
+
+            // 打刻記録を保存
+            DakokuFrDt = dc.Date;
+            DakokuFrTm = dc.Time;
+
+            // 勤務記録も保存
+            if (andKinmuStartWrite)
+            {
+                KinmuStartWriter(dc, true);
+            }
         }
 
-        public void DakokuEnd(DateTime date)
+        /// <summary>
+        /// 勤務表専用
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <param name="marumeProcess"></param>
+        public void KinmuStartWriter(DateTime dateTime, Boolean marumeProcess = false)
         {
-
+            // 実績記録のフォーマット
+            DateControl dc = new DateControl(dateTime);
+            KinmuStartWriter(dc, marumeProcess);
         }
-
-        public void DakokuEnd()
+        /// <summary>
+        /// 打刻と勤務表兼用
+        /// </summary>
+        /// <param name="dc"></param>
+        /// <param name="marumeProcess"></param>
+        private void KinmuStartWriter(DateControl dc, Boolean marumeProcess = false)
         {
-            DakokuEnd(DateTime.Now);
-        }
-        
-        public void KinmuStart(DateTime date)
-        {
+            // 丸め処理の実行
+            if (marumeProcess)
+            {
+                DateControl marumeDc = (mKinmu == null) ? dc : dc.MarumeProcess(mKinmu.KinmuFrMarumeTm, mKinmu.KinmuFrMarumeKbn);
+                if (mKinmu != null && mKinmu.KinmuFrCtrlFlg != null && mKinmu.KinmuFrCtrlFlg.Equals("0") && mKinmu.KinmuFrTm != null && mKinmu.KinmuFrTm != null)
+                {
+                    DateControl kinmuFrDc = new DateControl(KinmuDt, mKinmu.KinmuFrTm, mKinmu.KinmuFrKbn);
+                    if (marumeDc.Origin < kinmuFrDc.Origin)
+                        marumeDc = kinmuFrDc;
+                }
+            }
 
-        }
-
-        public void KinmuEnd(DateTime date)
-        {
-
+            // 実績記録を保存
+            KinmuFrDt = dc.Date;
+            KinmuFrTm = dc.Time;
         }
 
         [Key]
