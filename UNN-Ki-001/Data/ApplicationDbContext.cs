@@ -11,6 +11,9 @@ namespace UNN_Ki_001.Data
         {
         }
         public DbSet<m_kensakushain> shain { get; set; }
+        public DbSet<shozokukensaku> shozoku { get; set; }
+        public DbSet<shokushukensaku> shokushu { get; set; }
+        public DbSet<koyokeitaikensaku> koyokeitai { get; set; }
     }
    
 }

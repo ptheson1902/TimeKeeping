@@ -16,7 +16,6 @@
                      size="30"
                      maxlength="10"
                      id="shain_no"
-                     asp-for="SearchString"
                   />
                </div>
             </div>
@@ -99,15 +98,15 @@
                   <th class="col-3">雇用形態</th>
                </tr>
             </thead>
-            @if (Model.GetData != null) {
-                @foreach (var shain in Model.GetData) {
+            @if (Model.Data != null) {
+                @foreach (var shain in Model.Data) {
                     <tbody class="shainData"></tbody>
                     <tr>
                         <td> @shain.shain_no</td>
                         <td> @shain.name_mei</td>
-                        <td> @shain.shozoku_cd</td>
-                        <td> @shain.shokushu_cd</td>
-                        <td> @shain.koyokeitai_cd</td>
+                        <td> @shain.shozoku_nm</td>
+                        <td> @shain.shokushu_nm</td>
+                        <td> @shain.koyokeitai_nm</td>
                     </tr>
                 } 
             }

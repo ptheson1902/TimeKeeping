@@ -17,6 +17,6 @@ namespace UNN_Ki_001.Data.Models
         public string? shokushu_cd { get; set; }
         [Column("koyokeitai_cd")]
         public string? koyokeitai_cd { get; set; }
-
+        public string? shozoku_nm { get; set; }
     }
 }
