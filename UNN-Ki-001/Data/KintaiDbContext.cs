@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using UNN_Ki_001.Data.Models;
 
 namespace UNN_Ki_001.Data
@@ -8,12 +9,22 @@ namespace UNN_Ki_001.Data
         public KintaiDbContext(DbContextOptions<KintaiDbContext> options)
             : base(options)
         {
-
         }
 
         public KintaiDbContext()
         {
+        }
 
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            // 変更点をループしreloadメソッドを呼びだす
+            var entries = this.ChangeTracker.Entries<M_Kinmu>();
+            foreach(var entry in entries)
+            {
+                entry.Entity.reload();
+            }
+            
+            return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
