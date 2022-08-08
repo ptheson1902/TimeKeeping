@@ -12,6 +12,12 @@ namespace UNN_Ki_001.Data.Models
             this.KinmuCd = KinmuCd;
         }
 
+        private void reload()
+        {
+            // kinmu_to_tm - kinmu_fr_tmを計算する
+            // SHOTEI_TMを更新する
+        }
+
         [Key]
         [Column("kigyo_cd")]
         public string KigyoCd { get; set; }
@@ -30,55 +36,142 @@ namespace UNN_Ki_001.Data.Models
         public string? KinmuFrKbn { get; set; }
 
         [Column("kinmu_fr_tm")]
-        public string? KinmuFrTm { get; set; }
+        public string? KinmuFrTm
+        {
+            get
+            {
+                return KinmuFrTm;
+            }
+            set
+            {
+                KinmuFrTm = value;
+                reload();
+            }
+        }
 
         [Column("kinmu_to_kbn")]
         public string? KinmuToKbn { get; set; }
 
         [Column("kinmu_to_tm")]
-        public string? KinmuToTm { get; set; }
+        public string? KinmuToTm
+        {
+            get
+            {
+                return KinmuToTm;
+            }
+            set
+            {
+                KinmuToTm = value;
+                reload();
+            }
+        }
 
         [Column("kyukei1_fr_kbn")]
         public string? Kyukei1FrKbn { get; set; }
-
         [Column("kyukei1_fr_tm")]
-        public string? Kyukei1FrTm { get; set; }
+        public string? Kyukei1FrTm
+        {
+            get
+            {
+                return Kyukei1FrTm;
+            }
+            set
+            {
+                Kyukei1FrTm = value;
+                reload();
+            }
+        }
 
         [Column("kyukei1_to_kbn")]
         public string? Kyukei1ToKbn { get; set; }
 
         [Column("kyukei1_to_tm")]
-        public string? Kyukei1ToTm { get; set; }
+        public string? Kyukei1ToTm
+        {
+            get
+            {
+                return Kyukei1ToTm;
+            }
+            set
+            {
+                Kyukei1ToTm = value;
+                reload();
+            }
+        }
 
         [Column("kyukei2_fr_kbn")]
         public string? Kyukei2FrKbn { get; set; }
 
         [Column("kyukei2_fr_tm")]
-        public string? Kyukei2FrTm { get; set; }
+        public string? Kyukei2FrTm
+        {
+            get
+            {
+                return Kyukei2FrTm;
+            }
+            set
+            {
+                Kyukei2FrTm = value;
+                reload();
+            }
+        }
 
         [Column("kyukei2_to_kbn")]
         public string? Kyukei2ToKbn { get; set; }
 
         [Column("kyukei2_to_tm")]
-        public string? Kyukei2ToTm { get; set; }
+        public string? Kyukei2ToTm
+        {
+            get
+            {
+                return Kyukei2ToTm;
+            }
+            set
+            {
+                Kyukei2ToTm = value;
+                reload();
+            }
+        }
 
         [Column("kyukei3_fr_kbn")]
         public string? Kyukei3FrKbn { get; set; }
 
         [Column("kyukei3_fr_tm")]
-        public string? Kyukei3FrTm { get; set; }
+        public string? Kyukei3FrTm
+        {
+            get
+            {
+                return Kyukei3FrTm;
+            }
+            set
+            {
+                Kyukei3FrTm = value;
+                reload();
+            }
+        }
 
         [Column("kyukei3_to_kbn")]
         public string? Kyukei3ToKbn { get; set; }
 
         [Column("kyukei3_to_tm")]
-        public string? Kyukei3ToTm { get; set; }
+        public string? Kyukei3ToTm
+        {
+            get
+            {
+                return Kyukei3ToTm;
+            }
+            set
+            {
+                Kyukei3ToTm = value;
+                reload();
+            }
+        }
 
         [Column("kyukei_auto_flg")]
         public string? KyukeiAutoFlg { get; set; }
 
         [Column("shotei_tm")]
-        public string? ShoteiTm { get; set; }
+        public string? ShoteiTm { get; private set; }
 
         [Column("kinmu_fr_ctrl_flg")]
         public string? KinmuFrCtrlFlg { get; set; }

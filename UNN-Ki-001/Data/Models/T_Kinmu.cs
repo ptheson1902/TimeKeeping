@@ -6,6 +6,8 @@ namespace UNN_Ki_001.Data.Models
     [Table("t_kinmu", Schema = "public")]
     public class T_Kinmu
     {
+        static private KintaiDbContext _context = new KintaiDbContext();
+
         public T_Kinmu(string kigyoCd, string shainNo, string kinmuDt)
         {
             // 必須項目を入力
@@ -19,14 +21,47 @@ namespace UNN_Ki_001.Data.Models
         /// </summary>
         private M_Kinmu? m_Kinmu { get; set; }
 
-        public void DakokuStart(DateTime date)
+        public void DakokuStart(DateTime? date)
         {
-            // DateTimeの変換を試行(例外が発生しうる)
-            DateControl dc = new DateControl(date);
-            int dateInt = int.Parse(dc.Date);
-            int timeInt = int.Parse(dc.Time);
-            
-            
+            // 打刻忘れの処理
+            if(date == null)
+            {
+                string NULL_CHAR = "N/A";
+
+                DakokuFrDt = NULL_CHAR;
+                DakokuFrTm = NULL_CHAR;
+                KinmuFrDt = NULL_CHAR;
+                KinmuFrTm = NULL_CHAR;
+
+                return;
+            }
+
+            // キャストと丸め処理実行
+            DateControl dakokuDc = new DateControl((DateTime)date);
+            DateControl marumeDc = (m_Kinmu == null) ? dakokuDc : dakokuDc.MarumeProcess(m_Kinmu.KinmuFrMarumeTm, m_Kinmu.KinmuFrMarumeKbn);
+
+            // TODO: 適切な打刻時間(当日・前日・翌日）で無いなら例外をスローする
+
+
+            // 打刻記録を保存
+            DakokuFrDt = dakokuDc.Date;
+            DakokuFrTm = dakokuDc.Time;
+
+            // 実績記録
+            KinmuFrDt = marumeDc.Date;
+            if (m_Kinmu != null && m_Kinmu.KinmuFrCtrlFlg == null && m_Kinmu.KinmuFrCtrlFlg.Equals("0") && m_Kinmu.KinmuFrTm != null && m_Kinmu.KinmuFrTm != null)
+            {
+                // 刻限（開始）をDateControl型にキャスト
+                DateControl kinmuFrDc = new DateControl(KinmuDt, m_Kinmu.KinmuFrTm, m_Kinmu.KinmuFrKbn);
+
+                // TODO: 実績記録を保存
+
+
+
+            } else
+            {
+                KinmuFrTm = marumeDc.Time;
+            }
         }
 
         public void DakokuStart()
@@ -75,13 +110,10 @@ namespace UNN_Ki_001.Data.Models
             }
             set
             {
-                using (var _context = new KintaiDbContext())
-                {
-                    _context.m_kinmus
+                KinmuCd = value;
+                m_Kinmu = _context.m_kinmus
                         .Where(e => e.KigyoCd.Equals(KigyoCd) && e.KinmuCd.Equals(KinmuCd))
                         .FirstOrDefault();
-                }
-                    
             }
         }
 
