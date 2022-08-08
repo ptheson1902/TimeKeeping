@@ -11,11 +11,6 @@ namespace UNN_Ki_001.Data
         {
         }
 
-        public KintaiDbContext()
-            : base()
-        {
-        }
-
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             // 変更点をループしreloadメソッドを呼びだす
@@ -36,8 +31,8 @@ namespace UNN_Ki_001.Data
                 .HasKey(c => new { c.KigyoCd, c.ShainNo, c.KinmuDt });
         }
 
-        public DbSet<M_Kinmu>? m_kinmus{ get; set; }
+        public DbSet<M_Kinmu> m_kinmus{ get; set; }
 
-        public DbSet<T_Kinmu>? t_kinmus { get; set; }
+        public DbSet<T_Kinmu> t_kinmus { get; set; }
     }
 }

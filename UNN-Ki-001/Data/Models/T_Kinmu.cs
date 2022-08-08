@@ -6,23 +6,34 @@ namespace UNN_Ki_001.Data.Models
     [Table("t_kinmu", Schema = "public")]
     public class T_Kinmu
     {
-        static private KintaiDbContext _context = new KintaiDbContext();
+        private readonly KintaiDbContext _context;
 
-        public T_Kinmu(string kigyoCd, string shainNo, string kinmuDt)
+        public T_Kinmu(string kigyoCd, string shainNo, string kinmuDt, KintaiDbContext context)
         {
             // 必須項目を入力
             KigyoCd = kigyoCd;
             ShainNo = shainNo;
             KinmuDt = kinmuDt;
+            _context = context;
         }
 
         /// <summary>
         /// 勤務レコードに紐づいた基準情報
         /// </summary>
-        private M_Kinmu? m_Kinmu { get; set; }
+        private M_Kinmu? m_Kinmu => _context.m_kinmus
+                        .Where(e => e.KigyoCd.Equals(KigyoCd) && e.KinmuCd.Equals(KinmuCd))
+                        .FirstOrDefault();
 
         public void DakokuStart(DateTime? date)
         {
+            // TODO: 最新の勤務記録を参照し、退勤済みか確認する。
+            T_Kinmu? record = _context.t_kinmus
+                .Where(e => e.KigyoCd.Equals(KigyoCd) && e.KinmuDt.Equals(KinmuDt) && e.ShainNo.Equals(ShainNo) && e.DakokuFrTm != null)
+                .OrderByDescending(e => e.KinmuDt)
+                .FirstOrDefault();
+            if (record != null && (record.DakokuToDt == null || record.DakokuToTm == null))
+                throw new Exception("出勤打刻を行うには、退勤打刻が必要です。");
+
             // 打刻忘れの処理
             if(date == null)
             {
@@ -40,28 +51,21 @@ namespace UNN_Ki_001.Data.Models
             DateControl dakokuDc = new DateControl((DateTime)date);
             DateControl marumeDc = (m_Kinmu == null) ? dakokuDc : dakokuDc.MarumeProcess(m_Kinmu.KinmuFrMarumeTm, m_Kinmu.KinmuFrMarumeKbn);
 
-            // TODO: 適切な打刻時間(当日・前日・翌日）で無いなら例外をスローする
-
-
             // 打刻記録を保存
             DakokuFrDt = dakokuDc.Date;
             DakokuFrTm = dakokuDc.Time;
 
-            // 実績記録
-            KinmuFrDt = marumeDc.Date;
-            if (m_Kinmu != null && m_Kinmu.KinmuFrCtrlFlg == null && m_Kinmu.KinmuFrCtrlFlg.Equals("0") && m_Kinmu.KinmuFrTm != null && m_Kinmu.KinmuFrTm != null)
+            // 刻限の適用
+            if (m_Kinmu != null && m_Kinmu.KinmuFrCtrlFlg != null && m_Kinmu.KinmuFrCtrlFlg.Equals("0") && m_Kinmu.KinmuFrTm != null && m_Kinmu.KinmuFrTm != null)
             {
-                // 刻限（開始）をDateControl型にキャスト
                 DateControl kinmuFrDc = new DateControl(KinmuDt, m_Kinmu.KinmuFrTm, m_Kinmu.KinmuFrKbn);
-
-                // TODO: 実績記録を保存
-
-
-
-            } else
-            {
-                KinmuFrTm = marumeDc.Time;
+                if (marumeDc.Origin < kinmuFrDc.Origin)
+                    marumeDc = kinmuFrDc;
             }
+
+            // 実績記録を保存
+            KinmuFrDt = marumeDc.Date;
+            KinmuFrTm = marumeDc.Time;
         }
 
         public void DakokuStart()
@@ -102,20 +106,7 @@ namespace UNN_Ki_001.Data.Models
         public string KinmuDt { get; set; }
 
         [Column("kinmu_cd")]
-        public string? KinmuCd
-        {
-            get
-            {
-                return KinmuCd;
-            }
-            set
-            {
-                KinmuCd = value;
-                m_Kinmu = _context.m_kinmus
-                        .Where(e => e.KigyoCd.Equals(KigyoCd) && e.KinmuCd.Equals(KinmuCd))
-                        .FirstOrDefault();
-            }
-        }
+        public string? KinmuCd { get; set; }
 
         [Column("dakoku_fr_kbn")]
         public string? DakokuFrKbn { get; private set; }
