@@ -47,11 +47,8 @@
                      </div>
                   </div>
                   <div class="d-flex justify-content-end mt-2">
-                     <input
-                        type="submit"
-                        class="search btn btn-secondary mx-3"
-                        value="検索"
-                     />
+                        <input type="hidden" value="search" name="action" />
+                        <button type="submit" class="search btn btn-secondary mx-3">検索</button>
                   </div>
                   <div class="d-flex justify-content-end mt-2">
                      <input
@@ -122,10 +119,10 @@
                         <input
                            type="text"
                            class="form-control"
-                           name="shozoku_cd"
+                           name="shozoku_cd1"
                            size="30"
                            maxlength="10"
-                           id="shozoku_cd"
+                           id="shozoku_cd1"
                         />                    
                   </div>
                   <div class="row mb-3 align-items-center">                     
@@ -133,8 +130,8 @@
                         <input
                            type="text"
                            class="form-control"
-                           name="shozoku_nm"
-                           id="shozoku_nm"
+                           name="shozoku_nm1"
+                           id="shozoku_nm1"
                         />
                   </div>
                   <div class="row mb-3 align-items-center">
@@ -143,16 +140,16 @@
                         <label for="valid_flg">有効</label>
                         <input
                            type="checkbox"
-                           name="valid_flg"
+                           name="valid_flg1"
                            value="1"
-                           id="valid_flg"
+                           id="valid_flg1"
                         />
                         <label for="valid_flg">無効</label>
                         <input
                            type="checkbox"
-                           name="valid_flg"
+                           name="valid_flg1"
                            value="0"
-                           id="valid_flg"
+                           id="valid_flg1"
                         />
                      </div>
                   </div>
@@ -165,11 +162,8 @@
                         class="btn modal-close btn-warning"
                         data-bs-dismiss="modal"
                      />
-                     <input
-                        type="button"
-                        class="register btn btn-secondary mx-3"
-                        value="登録"
-                     />
+                      <input type="hidden" value="register" name="action" />
+                       <button type="submit" class="register btn btn-secondary mx-3">登録</button>
                      <input
                         type="button"
                         class="delete btn btn-secondary mx-3"
