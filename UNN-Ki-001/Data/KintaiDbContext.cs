@@ -30,9 +30,13 @@ namespace UNN_Ki_001.Data
             modelBuilder.Entity<T_Kinmu>()
                 .HasKey(c => new { c.KigyoCd, c.ShainNo, c.KinmuDt });
         }
+        public DbSet<m_kensakushain>? shain { get; set; }
+        public DbSet<shokushukensaku>? shokushu { get; set; }
+        public DbSet<shozokukensaku>? shozoku { get; set; }
+        public DbSet<koyokeitaikensaku>? koyokeitai { get; set; }
 
-        public DbSet<M_Kinmu> m_kinmus{ get; set; }
+        public DbSet<M_Kinmu>? m_kinmus{ get; set; }
 
-        public DbSet<T_Kinmu> t_kinmus { get; set; }
+        public DbSet<T_Kinmu>? t_kinmus { get; set; }
     }
 }

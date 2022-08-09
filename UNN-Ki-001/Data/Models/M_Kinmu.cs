@@ -15,7 +15,28 @@ namespace UNN_Ki_001.Data.Models
 
         public void reload()
         {
-            // ここ
+
+            TimeSpan plus = TimeSpan.FromDays(1);
+            TimeSpan kftm = TimeSpan.FromMinutes(int.Parse(KinmuFrTm == null ? "0" : KinmuFrTm));
+            if (KinmuFrKbn.Equals("2"))
+            {
+                kftm += plus;
+            }
+            if (KinmuFrKbn.Equals("1"))
+            {
+                kftm -= plus;
+            }
+            TimeSpan kttm = TimeSpan.FromMinutes(int.Parse(KinmuToTm == null ? "0" : KinmuToTm));
+            TimeSpan kkftm1 = TimeSpan.FromMinutes(int.Parse(Kyukei1FrTm == null ? "0" : Kyukei1FrTm));
+            TimeSpan kkttm1 = TimeSpan.FromMinutes(int.Parse(Kyukei1ToTm == null ? "0" : Kyukei1ToTm));
+            TimeSpan kkftm2 = TimeSpan.FromMinutes(int.Parse(Kyukei2FrTm == null ? "0" : Kyukei2FrTm));
+            TimeSpan kkttm2 = TimeSpan.FromMinutes(int.Parse(Kyukei2ToTm == null ? "0" : Kyukei2ToTm));
+            TimeSpan kkftm3 = TimeSpan.FromMinutes(int.Parse(Kyukei3FrTm == null ? "0" : Kyukei3FrTm));
+            TimeSpan kkttm3 = TimeSpan.FromMinutes(int.Parse(Kyukei3ToTm == null ? "0" : Kyukei3ToTm));
+
+            TimeSpan stm = (kftm - kttm - (kkftm1 - kkttm1) - (kkftm2 - kkttm2) - (kkftm3 - kkttm3));
+            ShoteiTm = stm.TotalMinutes.ToString();
+            
         }
 
         [Key]

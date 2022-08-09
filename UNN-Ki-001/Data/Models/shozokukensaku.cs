@@ -11,7 +11,9 @@ namespace UNN_Ki_001.Data.Models
         public string? shozoku_cd { get; set; }
         [Column("shozoku_nm")]
         public string? shozoku_nm { get; set; }
-        
+        [Column("valid_flg")]
+        public string? valid_flg { get; set; }
+
 
     }
 }

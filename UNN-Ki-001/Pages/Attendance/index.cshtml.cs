@@ -26,12 +26,12 @@ namespace UNN_Ki_001.Pages.Attendance
             this.kintaiDbContext = kintaiDbContext;
         }
 
-        public async void OnGet()
+        public void OnGet()
         {
             // テストしまーす
-            M_Kinmu test = await kintaiDbContext.m_kinmus.FirstOrDefaultAsync();
+            /*M_Kinmu test = await kintaiDbContext.m_kinmus.FirstOrDefaultAsync();
             test.UpdateDt = DateTime.UtcNow;
-            kintaiDbContext.SaveChanges();
+            kintaiDbContext.SaveChanges();*/
 
         }
     }

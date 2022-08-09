@@ -4,25 +4,26 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using UNN_Ki_001.Data;
 using UNN_Ki_001.Data.Models;
-using PagedList;
-
 namespace UNN_Ki_001.Pages.VariousMaster
 {
     [AllowAnonymous]
-    public class shainSearchModel : PageModel
+    public class ShainSearchModel : PageModel
     {
-        private readonly UNN_Ki_001.Data.ApplicationDbContext _context;
+        private readonly KintaiDbContext _context;
+        private readonly ApplicationDbContext context1;
         public List<Display> Data = new List<Display>();
         
-        public shainSearchModel(UNN_Ki_001.Data.ApplicationDbContext context)
+        public ShainSearchModel(UNN_Ki_001.Data.KintaiDbContext context, ApplicationDbContext application)
         {
             _context = context;
+            context1 = application;
         }
         public void OnGet()
         { 
+            Data.Clear();
         }
 
-        public async Task OnPostAsync()
+        public void OnPost()
         {
             // フォームからValueを受け取る。
             string shain_no = Request.Form["shain_no"];
