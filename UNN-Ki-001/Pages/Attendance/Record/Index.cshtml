@@ -1,0 +1,192 @@
+﻿@page
+@model UNN_Ki_001.Pages.Attendance.Record.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].KinmuCd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].DakokuFrKbn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].DakokuFrDt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].DakokuFrTm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].DakokuToKbn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].DakokuToDt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].DakokuToTm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].KinmuFrKbn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].KinmuFrDt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].KinmuFrTm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].KinmuToKbn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].KinmuToDt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].KinmuToTm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].Shotei)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].Sorodo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].Kojo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].Kyukei)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].Hoteinai)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].Hoteigai)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].Shinya)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].Hoteikyu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].Biko)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].CreateUsr)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].CreatePgm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].UpdateDt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].UpdateUsr)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.T_Kinmu[0].UpdatePgm)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.T_Kinmu) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.KinmuCd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DakokuFrKbn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DakokuFrDt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DakokuFrTm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DakokuToKbn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DakokuToDt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DakokuToTm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KinmuFrKbn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KinmuFrDt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KinmuFrTm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KinmuToKbn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KinmuToDt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KinmuToTm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Shotei)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sorodo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kojo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kyukei)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hoteinai)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hoteigai)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Shinya)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hoteikyu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Biko)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateUsr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatePgm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdateDt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdateUsr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatePgm)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

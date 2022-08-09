@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace UNN_Ki_001.Data.Models
 {
     [Table("t_kinmu", Schema = "public")]
-    public class T_Kinmu
+    public class T_Kinmu : Reloadable
     {
         /// <summary>
         /// 打刻忘れの際の識別文字
@@ -25,6 +25,20 @@ namespace UNN_Ki_001.Data.Models
             _context = context;
         }
 
+
+
+        public void reload()
+        {
+            // TODO: 所定時間の計算
+            // TODO: 総労働時間の計算
+            // TODO: 法廷内時間の計算
+            // TODO: 法定外時間の計算
+            // TODO: 深夜時間の計算
+            // TODO: 法定休日（労働）時間の計算
+            // TODO: 休憩時間の計算
+            // TODO: 控除時間の計算
+        }
+
         private M_Kinmu? mKinmu
         {
             get
@@ -38,7 +52,7 @@ namespace UNN_Ki_001.Data.Models
         }
         private M_Kinmu? mKinmuBack { get; set; }
 
-        public void Dakokustart()
+        public void DakokuStart()
         {
             // 最新の勤務記録を参照し、退勤済みか確認する。
             T_Kinmu? record = _context.t_kinmus
@@ -48,8 +62,18 @@ namespace UNN_Ki_001.Data.Models
             if (record != null && (record.DakokuToDt == null || record.DakokuToTm == null))
                 throw new Exception("出勤打刻を行うには、退勤打刻が必要です。");
 
-            DateTime now = DateTime.UtcNow;
+            DateTime now = DateTime.Now;
             DakokuStartWriter(now, true);
+        }
+
+        public void DakokuEnd()
+        {
+            // 出勤済みか確認する。
+            if (DakokuFrDt == null || DakokuFrTm == null)
+                throw new Exception("退勤打刻を行うには、先に出勤打刻が必要です。");
+
+            DateTime now = DateTime.Now;
+            DakokuEndWriter(now, true);
         }
 
         public void DakokuStartWriter(DateTime dateTime, Boolean andKinmuStartWrite = false)
@@ -124,8 +148,8 @@ namespace UNN_Ki_001.Data.Models
             }
 
             // 実績記録を保存
-            KinmuFrDt = dc.Date;
-            KinmuFrTm = dc.Time;
+            KinmuToDt = dc.Date;
+            KinmuToTm = dc.Time;
         }
 
         [Key]
