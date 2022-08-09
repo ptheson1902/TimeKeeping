@@ -67,7 +67,7 @@ namespace UNN_Ki_001.Pages.Account
             /// </summary>
             [Required]
             [DataType(DataType.Text)]
-            public string UserNamOrShain_no { get; set; }
+            public string UserName { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -81,7 +81,7 @@ namespace UNN_Ki_001.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Display(Name = "そのままログインする？?")]
+            [Display(Name = "ログイン状態を維持する")]
             public bool RememberMe { get; set; }
         }
 
@@ -112,7 +112,7 @@ namespace UNN_Ki_001.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.UserNamOrShain_no, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("ログインできました");
@@ -129,7 +129,7 @@ namespace UNN_Ki_001.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "社員番号またはパスワードが正しくありません。");
+                    ModelState.AddModelError(string.Empty, "ユーザー名またはパスワードが正しくありません。");
                     return Page();
                 }
             }

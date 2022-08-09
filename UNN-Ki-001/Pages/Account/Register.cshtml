@@ -11,21 +11,10 @@
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" style="min-width: 500px">
             <h2>社員新規登録</h2>
             <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.Name_sei" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.Name_sei"></label>
-                <span asp-validation-for="Input.Name_sei" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Name_mei" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.Name_mei"></label>
-                <span asp-validation-for="Input.Name_mei" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Shain_no" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.Shain_no"></label>
-                <span asp-validation-for="Input.Shain_no" class="text-danger"></span>
+                <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" />
+                <label asp-for="Input.UserName"></label>
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />

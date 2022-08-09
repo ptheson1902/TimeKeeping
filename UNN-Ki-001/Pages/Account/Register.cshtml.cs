@@ -66,27 +66,11 @@ namespace UNN_Ki_001.Pages.Account
         /// </summary>
         public class InputModel
         {
-            /// <summary>
-            /// ユーザー名
-            /// </summary>
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
             [DataType(DataType.Text)]
-            [Display(Name = "名")]
-            public string Name_mei { get; set; }
-
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
-            [DataType(DataType.Text)]
-            [Display(Name = "性")]
-            public string Name_sei { get; set; }
-
-
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
-            [DataType(DataType.Text)]
-            [Display(Name = "社員番号")]
-            public string Shain_no { get; set; }
+            [Display(Name = "ユーザー名")]
+            public string UserName { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -122,17 +106,15 @@ namespace UNN_Ki_001.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                user.Shain_no = Input.Shain_no;
-                user.Name_mei = Input.Name_mei;
-                user.Name_sei = Input.Name_sei;
+
                 // ユーザー名を設定する
-                await _userStore.SetUserNameAsync(user, Input.Shain_no, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("社員マスタが登録出来ました。");
+                    _logger.LogInformation("User created a new account with password.");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);

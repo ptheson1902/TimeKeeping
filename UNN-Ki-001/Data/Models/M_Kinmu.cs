@@ -53,49 +53,27 @@ namespace UNN_Ki_001.Data.Models
         [Column("kinmu_bunrui")]
         public string? KinmuBunrui { get; set; }
 
-        [Column("kinmu_fr_kbn")]
-        public string? KinmuFrKbn { get; set; }
-
         [Column("kinmu_fr_tm")]
         public string? KinmuFrTm { get; set; }
-
-        [Column("kinmu_to_kbn")]
-        public string? KinmuToKbn { get; set; }
 
         [Column("kinmu_to_tm")]
         public string? KinmuToTm { get; set; }
 
-        [Column("kyukei1_fr_kbn")]
-        public string? Kyukei1FrKbn { get; set; }
         [Column("kyukei1_fr_tm")]
         public string? Kyukei1FrTm { get; set; }
 
-        [Column("kyukei1_to_kbn")]
-        public string? Kyukei1ToKbn { get; set; }
 
         [Column("kyukei1_to_tm")]
         public string? Kyukei1ToTm { get; set; }
 
-        [Column("kyukei2_fr_kbn")]
-        public string? Kyukei2FrKbn { get; set; }
-
         [Column("kyukei2_fr_tm")]
         public string? Kyukei2FrTm { get; set; }
-
-        [Column("kyukei2_to_kbn")]
-        public string? Kyukei2ToKbn { get; set; }
 
         [Column("kyukei2_to_tm")]
         public string? Kyukei2ToTm { get; set; }
 
-        [Column("kyukei3_fr_kbn")]
-        public string? Kyukei3FrKbn { get; set; }
-
         [Column("kyukei3_fr_tm")]
         public string? Kyukei3FrTm { get; set; }
-
-        [Column("kyukei3_to_kbn")]
-        public string? Kyukei3ToKbn { get; set; }
 
         [Column("kyukei3_to_tm")]
         public string? Kyukei3ToTm { get; set; }

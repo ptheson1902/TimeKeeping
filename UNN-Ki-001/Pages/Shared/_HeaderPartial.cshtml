@@ -96,10 +96,7 @@
                             >
                                 <i class="fa-solid fa-user-tie"></i>
                                 <div class="username mx-3">
-                                    @{
-                                       var user = await UserManager.FindByNameAsync(User.Identity?.Name);
-                                    }
-                                    @user.Name_sei @user.Name_mei</div>
+                                    @User.Identity?.Name</div>
                                 <span class="hidden">ようこそ！</span>
                             </a>
                             <ul
