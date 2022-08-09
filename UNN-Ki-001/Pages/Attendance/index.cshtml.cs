@@ -56,9 +56,11 @@ namespace UNN_Ki_001.Pages.Attendance
             var now = DateTime.Now;
             if (user != null)
             {
+#pragma warning disable CS8604 // Possible null reference argument.
                 kinmu = _kintaiDbContext.t_kinmus
                 .Where(e => e.KigyoCd.Equals(user.Kigyo_cd) && e.KinmuDt.Equals(now.ToString("yyyyMMdd")) && e.ShainNo.Equals(user.Shain_no) && e.DakokuFrTm != null && e.DakokuToTm == null)
                 .FirstOrDefault();
+#pragma warning restore CS8604 // Possible null reference argument.
 
                 kinmu.DakokuEnd();
                 kinmu.UpdateDt = DateTime.UtcNow;
