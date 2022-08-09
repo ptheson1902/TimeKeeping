@@ -16,16 +16,7 @@ namespace UNN_Ki_001.Data.Models
         public void reload()
         {
 
-            TimeSpan plus = TimeSpan.FromDays(1);
             TimeSpan kftm = TimeSpan.FromMinutes(int.Parse(KinmuFrTm == null ? "0" : KinmuFrTm));
-            if (KinmuFrKbn.Equals("2"))
-            {
-                kftm += plus;
-            }
-            if (KinmuFrKbn.Equals("1"))
-            {
-                kftm -= plus;
-            }
             TimeSpan kttm = TimeSpan.FromMinutes(int.Parse(KinmuToTm == null ? "0" : KinmuToTm));
             TimeSpan kkftm1 = TimeSpan.FromMinutes(int.Parse(Kyukei1FrTm == null ? "0" : Kyukei1FrTm));
             TimeSpan kkttm1 = TimeSpan.FromMinutes(int.Parse(Kyukei1ToTm == null ? "0" : Kyukei1ToTm));

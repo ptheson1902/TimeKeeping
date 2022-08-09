@@ -23,8 +23,8 @@
                         <input
                            type="text"
                            class="form-control"
-                           name="shozoku_mei"
-                           id="shozoku_mei"
+                           name="shozoku_nm"
+                           id="shozoku_nm"
                         />
                   </div>
                   <div class="row mb-3 align-items-center">
@@ -73,7 +73,7 @@
                <tr class="text-center">
                   <th class="col-2">所属コード</th>
                   <th class="col-3">所属名</th>
-                  <th class="col-2">有効日</th>
+                  <th class="col-2">有効</th>
                </tr>
             </thead>
              @if (Model.Data != null) {
@@ -81,9 +81,16 @@
                     <tbody class="shainData"></tbody>
                     <tr>
                         <td> @shozoku.shozoku_cd</td>
-                        <td> @shozoku.shozoku_nm</td>
-                        <td> @shozoku.valid_flg</td>
-                    </tr>
+                        <td> @shozoku.shozoku_nm</td>                      
+                         <td>@if (@shozoku.valid_flg != "0")
+                                {
+                                    <input
+                                     type="checkbox"
+                                     checked
+                                     />
+                                }
+                          </td>                       
+                     </tr>
                 } 
             }
          </table>
