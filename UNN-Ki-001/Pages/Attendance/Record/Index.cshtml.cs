@@ -15,10 +15,12 @@ namespace UNN_Ki_001.Pages.Attendance.Record
     public class IndexModel : PageModel
     {
         private readonly UNN_Ki_001.Data.KintaiDbContext _context;
+        private readonly KinmuManager kinmuManager;
 
-        public IndexModel(UNN_Ki_001.Data.KintaiDbContext context)
+        public IndexModel(UNN_Ki_001.Data.KintaiDbContext context, KinmuManager kinmuManager)
         {
             _context = context;
+            this.kinmuManager = kinmuManager;
         }
 
         public IList<T_Kinmu> T_Kinmu { get;set; } = default!;
