@@ -31,6 +31,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             {
                 T_Kinmu = await _context.t_kinmus.ToListAsync();
             }
+            kinmuManager.Shukkin("test");
         }
     }
 }

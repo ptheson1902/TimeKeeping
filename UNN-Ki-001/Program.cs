@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using UNN_Ki_001;
 using UNN_Ki_001.Data;
+using UNN_Ki_001.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +20,11 @@ builder.Services.AddIdentity<AppUser, AppRole>(options => options.Stores.MaxLeng
     .AddDefaultTokenProviders()
     .AddErrorDescriber<IdentityErrorDescriberJP>();
 
+// KintaiDbContext
 builder.Services.AddDbContext<KintaiDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<KinmuManager>();
 
 // ³”FÝ’è
 builder.Services.AddAuthorization(options =>
