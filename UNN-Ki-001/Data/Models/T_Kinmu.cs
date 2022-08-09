@@ -22,10 +22,10 @@ namespace UNN_Ki_001.Data.Models
             KigyoCd = kigyoCd;
             ShainNo = shainNo;
             KinmuDt = kinmuDt;
-
             _context = context;
-
         }
+
+
 
         public void reload()
         {
@@ -51,87 +51,6 @@ namespace UNN_Ki_001.Data.Models
             }
         }
         private M_Kinmu? mKinmuBack { get; set; }
-
-        public DateControl? DakokuFrDc
-        {
-            get
-            {
-                if(DakokuFrDc == null && DakokuFrDt != null && DakokuFrTm != null)
-                {
-                    DakokuFrDc = new DateControl(DakokuFrDt, DakokuFrTm);
-                }
-                return DakokuFrDc;
-            }
-            set
-            {
-                DakokuFrDc = value;
-                if(value != null)
-                {
-                    DakokuFrDt = value.Date;
-                    DakokuFrTm = value.Time;
-                }
-            }
-        }
-        public DateControl? DakokuToDc
-        {
-            get
-            {
-                if (DakokuToDc == null && DakokuToDt != null && DakokuToTm != null)
-                {
-                    DakokuToDc = new DateControl(DakokuToDt, DakokuToTm);
-                }
-                return DakokuToDc;
-            }
-            set
-            {
-                DakokuToDc = value;
-                if (value != null)
-                {
-                    DakokuToDt = value.Date;
-                    DakokuToTm = value.Time;
-                }
-            }
-        }
-        public DateControl? KinmuFrDc
-        {
-            get
-            {
-                if (KinmuFrDc == null && KinmuFrDt != null && KinmuFrTm != null)
-                {
-                    KinmuFrDc = new DateControl(KinmuFrDt, KinmuFrTm);
-                }
-                return KinmuFrDc;
-            }
-            set
-            {
-                KinmuFrDc = value;
-                if (value != null)
-                {
-                    KinmuFrDt = value.Date;
-                    KinmuFrTm = value.Time;
-                }
-            }
-        }
-        public DateControl? KinmuToDc
-        {
-            get
-            {
-                if (KinmuToDc == null && KinmuToDt != null && KinmuToTm != null)
-                {
-                    KinmuToDc = new DateControl(KinmuToDt, KinmuToTm);
-                }
-                return KinmuToDc;
-            }
-            set
-            {
-                KinmuToDc = value;
-                if (value != null)
-                {
-                    KinmuToDt = value.Date;
-                    KinmuToTm = value.Time;
-                }
-            }
-        }
 
         public void DakokuStart()
         {
@@ -163,12 +82,13 @@ namespace UNN_Ki_001.Data.Models
             DateControl dc = new DateControl(dateTime);
 
             // 打刻記録を保存
-            DakokuFrDc = dc;
+            DakokuFrDt = dc.Date;
+            DakokuFrTm = dc.Time;
 
             // 勤務記録も保存
             if (andKinmuStartWrite)
             {
-                KinmuStartWriter(DakokuFrDc, true);
+                KinmuStartWriter(dc, true);
             }
         }
 
@@ -178,12 +98,13 @@ namespace UNN_Ki_001.Data.Models
             DateControl dc = new DateControl(dateTime);
 
             // 打刻記録を保存
-            DakokuToDc = dc;
+            DakokuToDt = dc.Date;
+            DakokuToTm = dc.Time;
 
             // 勤務記録も保存
             if (andKinmuEndWrite)
             {
-                KinmuEndWriter(DakokuToDc, true);
+                KinmuEndWriter(dc, true);
             }
         }
 
@@ -208,7 +129,8 @@ namespace UNN_Ki_001.Data.Models
             }
 
             // 実績記録を保存
-            KinmuFrDc = dc;
+            KinmuFrDt = dc.Date;
+            KinmuFrTm = dc.Time;
         }
 
         public void KinmuEndWriter(DateTime dateTime, Boolean marumeProcess = false)
@@ -226,7 +148,8 @@ namespace UNN_Ki_001.Data.Models
             }
 
             // 実績記録を保存
-            KinmuToDc = dc;
+            KinmuToDt = dc.Date;
+            KinmuToTm = dc.Time;
         }
 
         [Key]
@@ -246,7 +169,7 @@ namespace UNN_Ki_001.Data.Models
 
 
         [Column("dakoku_fr_dt")]
-        public string? DakokuFrDt { get; set; }
+        public string? DakokuFrDt { get; private set; }
 
         [Column("dakoku_fr_tm")]
         public string? DakokuFrTm { get; private set; }
