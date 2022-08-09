@@ -122,7 +122,7 @@ namespace UNN_Ki_001.Data.Models
                 dc = (mKinmu == null) ? dc : dc.MarumeProcess(mKinmu.KinmuFrMarumeTm, mKinmu.KinmuFrMarumeKbn);
                 if (mKinmu != null && mKinmu.KinmuFrCtrlFlg != null && mKinmu.KinmuFrCtrlFlg.Equals("0") && mKinmu.KinmuFrTm != null && mKinmu.KinmuFrTm != null)
                 {
-                    DateControl kinmuFrDc = new DateControl(KinmuDt, mKinmu.KinmuFrTm, mKinmu.KinmuFrKbn);
+                    DateControl kinmuFrDc = new DateControl(KinmuDt, mKinmu.KinmuFrTm);
                     if (dc.Origin < kinmuFrDc.Origin)
                         dc = kinmuFrDc;
                 }
@@ -167,8 +167,6 @@ namespace UNN_Ki_001.Data.Models
         [Column("kinmu_cd")]
         public string? KinmuCd { get; set; }
 
-        [Column("dakoku_fr_kbn")]
-        public string? DakokuFrKbn { get; private set; }
 
         [Column("dakoku_fr_dt")]
         public string? DakokuFrDt { get; private set; }
@@ -176,26 +174,17 @@ namespace UNN_Ki_001.Data.Models
         [Column("dakoku_fr_tm")]
         public string? DakokuFrTm { get; private set; }
 
-        [Column("dakoku_to_kbn")]
-        public string? DakokuToKbn { get; private set; }
-
         [Column("dakoku_to_dt")]
         public string? DakokuToDt { get; private set; }
 
         [Column("dakoku_to_tm")]
         public string? DakokuToTm { get; private set; }
 
-        [Column("kinmu_fr_kbn")]
-        public string? KinmuFrKbn { get; private set; }
-
         [Column("kinmu_fr_dt")]
         public string? KinmuFrDt { get; private set; }
 
         [Column("kinmu_fr_tm")]
         public string? KinmuFrTm { get; private set; }
-
-        [Column("kinmu_to_kbn")]
-        public string? KinmuToKbn { get; private set; }
 
         [Column("kinmu_to_dt")]
         public string? KinmuToDt { get; private set; }
