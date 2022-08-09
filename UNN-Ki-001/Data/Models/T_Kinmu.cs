@@ -38,7 +38,7 @@ namespace UNN_Ki_001.Data.Models
         }
         private M_Kinmu? mKinmuBack { get; set; }
 
-        public void Dakokustart()
+        public void DakokuStart()
         {
             // 最新の勤務記録を参照し、退勤済みか確認する。
             T_Kinmu? record = _context.t_kinmus
