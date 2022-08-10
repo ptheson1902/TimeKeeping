@@ -1,72 +1,76 @@
-﻿@page
-@model UNN_Ki_001.Pages.VariousMaster.AffiliationModel
-@{
+﻿@page "/VariousMaster/Affiliation/{id:int?}"
+@model UNN_Ki_001.Pages.VariousMaster.AffiliationModel 
+@{ 
 }
 <h1>所属マスタメンテナンス</h1>
-      <div>
-         <div class="container mt-5" style="max-width: 500px">
-            <form class="card mb-4" method="Post">
-               <div class="card-body">
-                  <div class="row mb-3 align-items-center">                    
-                        <label class="col-5" for="shozoku_cd">所属コード</label>
-                        <input
-                           type="text"
-                           class="form-control"
-                           name="shozoku_cd"
-                           size="30"
-                           maxlength="10"
-                           id="shozoku_cd"
-                        />                    
-                  </div>
-                  <div class="row mb-3 align-items-center">                     
-                        <label class="col-5">所属名</label>
-                        <input
-                           type="text"
-                           class="form-control"
-                           name="shozoku_nm"
-                           id="shozoku_nm"
-                        />
-                  </div>
-                  <div class="row mb-3 align-items-center">
-                     <div class="col-10">
-                        有効/無効   
-                        <label for="valid_flg">有効</label>
-                        <input
-                           type="checkbox"
-                           name="valid_flg"
-                           value="1"
-                           id="valid_flg"
-                        />
-                        <label for="valid_flg">無効</label>
-                        <input
-                           type="checkbox"
-                           name="valid_flg"
-                           value="0"
-                           id="valid_flg"
-                        />
-                     </div>
-                  </div>
-                  <div class="d-flex justify-content-end mt-2">
-                        <input type="hidden" value="search" name="action" />
-                        <button type="submit" class="search btn btn-secondary mx-3">検索</button>
-                  </div>
-                  <div class="d-flex justify-content-end mt-2">
-                     <input
-                        type="button"
-                        class="search btn btn-secondary mx-3"
-                        value="追加"
-                        data-bs-toggle="modal"
-                        data-bs-target="#tsuikaModal"
-                     />
-                     <input
-                        type="button"
-                        class="search btn btn-secondary mx-3"
-                        value="複写"
-                     />
-                  </div>
+<div>
+   <div class="container mt-5" style="max-width: 500px">
+      <form class="card mb-4" method="Post">
+         <div class="card-body">
+            <div class="row mb-3 align-items-center">
+               <label class="col-5" for="shozoku_cd">所属コード</label>
+               <input
+                  type="text"
+                  class="form-control"
+                  name="shozoku_cd"
+                  size="30"
+                  maxlength="10"
+                  id="shozoku_cd"
+               />
+            </div>
+            <div class="row mb-3 align-items-center">
+               <label class="col-5">所属名</label>
+               <input
+                  type="text"
+                  class="form-control"
+                  name="shozoku_nm"
+                  id="shozoku_nm"
+               />
+            </div>
+            <div class="row mb-3 align-items-center">
+               <div class="col-10">
+                  有効/無効
+                  <label for="valid_flg">有効</label>
+                  <input
+                     type="radio"
+                     name="valid_flg"
+                     value="1"
+                     id="valid_flg"
+                  />
+                  <label for="valid_flg">無効</label>
+                  <input
+                     type="radio"
+                     name="valid_flg"
+                     value="0"
+                     id="valid_flg"
+                  />
                </div>
-            </form>
-             <div class="p-2">
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+               <input type="hidden" value="search" name="action" />
+               <button type="submit" class="search btn btn-secondary mx-3">
+                  検索
+               </button>
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+               <input
+                  type="button"
+                  class="search btn btn-secondary mx-3"
+                  value="追加"
+                  data-bs-toggle="modal"
+                  data-bs-target="#tsuikaModal"
+               />
+               <input
+                  type="button"
+                  class="search btn btn-secondary mx-3"
+                  value="複写"
+               />
+            </div>
+         </div>
+      </form>
+      <div class="text-black"> @Model.Message </div>
+      <div class="text-danger"> @Model.ErrorMessage </div>
+      <div class="p-2">
          <table class="table table-bordered">
             <thead class="table-primary">
                <tr class="text-center">
@@ -75,104 +79,188 @@
                   <th class="col-2">有効</th>
                </tr>
             </thead>
-             @if (Model.Data != null) {
-                @foreach (var shozoku in Model.Data) {
-                    <tbody class="shainData"></tbody>
-                    <tr>
-                        <td> @shozoku.shozoku_cd</td>
-                        <td> @shozoku.shozoku_nm</td>                      
-                         <td>@if (@shozoku.valid_flg != "0")
-                                {
-                                    <input
-                                     type="checkbox"
-                                     checked 
-                                     readonly
-                                     />
-                                }
-                          </td>                       
-                     </tr>
-                } 
-            }
+            @if (Model.Data != null) { @foreach (var shozoku in Model.Data) {
+            <tbody class="shainData"></tbody>
+            <tr>
+               <td data-bs-toggle="modal" data-bs-target="#updateModal">
+                  <a href="~/VariousMaster/Affiliation/@shozoku.shozoku_cd">@shozoku.shozoku_cd</a>
+               </td>
+               <td>@shozoku.shozoku_nm</td>
+               <td>
+                  @if (@shozoku.valid_flg != "0") {
+                  <input type="radio" checked readonly
+                      />
+                  }
+               </td>
+            </tr>
+            } }
          </table>
       </div>
+   </div>
+</div>
+
+@*所属メンテナンス登録(ポップアップ)*@
+<div
+   class="modal fade"
+   id="tsuikaModal"
+   tabindex="-1"
+   aria-labelledby="userModalLabel"
+   aria-hidden="true"
+>
+   
+   <div class="modal-dialog modal-lg">
+      <div class="tsuikaModalContent modal-content" style="width: 60%">
+         <div class="modal-header">
+            <div class="d-flex justify-content-between w-100"></div>
          </div>
-      </div>
-
-      @*所属メンテナンスポップアップ*@
-      <div
-            class="modal fade"
-            id="tsuikaModal"
-            tabindex="-1"
-            aria-labelledby="userModalLabel"
-            aria-hidden="true"
-         >
-            <div class="modal-dialog modal-lg">
-               <div class=" tsuikaModalContent modal-content" style="width : 60%">
-                  <div class="modal-header">
-                  <div class="d-flex justify-content-between w-100">
-                  </div>
-
-                  </div>
-                 <form class="card mb-4" method="Post">
-               <div class="card-body">
-                  <div class="row mb-3 align-items-center">                    
-                        <label class="col-5" for="shozoku_cd1">所属コード</label>
-                        <input
-                           type="text"
-                           class="form-control"
-                           name="shozoku_cd1"
-                           size="30"
-                           maxlength="10"
-                           id="shozoku_cd1"
-                        />                    
-                  </div>
-                  <div class="row mb-3 align-items-center">                     
-                        <label class="col-5" for="shozoku_nm1">所属名</label>
-                        <input
-                           type="text"
-                           class="form-control"
-                           name="shozoku_nm1"
-                           id="shozoku_nm1"
-                        />
-                  </div>
-                  <div class="row mb-3 align-items-center">
-                     <div class="col-10">
-                        有効/無効   
-                        <label for="valid_flg1">有効</label>
-                        <input
-                           type="checkbox"
-                           name="valid_flg1"
-                           value="1"
-                           id="valid_flg1"
-                        />
-                        <label for="valid_flg">無効</label>
-                        <input
-                           type="checkbox"
-                           name="valid_flg1"
-                           value="0"
-                           id="valid_flg1"
-                        />
-                     </div>
-                  </div>
-                 
-                  <div class="d-flex justify-content-end mt-2">
-                      <input
-                        type="button"
-                        class="cancel btn btn-secondary mx-3"
-                        value="キャンセル"
-                        class="btn modal-close btn-warning"
-                        data-bs-dismiss="modal"
-                     />
-                      <input type="hidden" value="register" name="action" />
-                       <button type="submit" class="register btn btn-secondary mx-3">登録</button>
+         <form class="card mb-4" method="Post">
+            <div class="card-body">
+               <div class="row mb-3 align-items-center">
+                  <label class="col-5" for="shozoku_cd1">所属コード</label>
+                  <input
+                     type="text"
+                     class="form-control"
+                     name="shozoku_cd1"
+                     size="30"
+                     maxlength="10"
+                     id="shozoku_cd1"
+                  />
+               </div>
+               <div class="row mb-3 align-items-center">
+                  <label class="col-5" for="shozoku_nm1">所属名</label>
+                  <input
+                     type="text"
+                     class="form-control"
+                     name="shozoku_nm1"
+                     id="shozoku_nm1"
+                  />
+               </div>
+               <div class="row mb-3 align-items-center">
+                  <div class="col-10">
+                     有効/無効
+                     <label for="valid_flg1">有効</label>
                      <input
-                        type="button"
-                        class="delete btn btn-secondary mx-3"
-                        value="削除"
+                        type="radio"
+                        name="valid_flg1"
+                        value="1"
+                        id="valid_flg1"
+                     />
+                     <label for="valid_flg">無効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg1"
+                        value="0"
+                        id="valid_flg1"
                      />
                   </div>
                </div>
-            </form>
+
+               <div class="d-flex justify-content-end mt-2">
+                  <input
+                     type="button"
+                     class="cancel btn btn-secondary mx-3"
+                     value="キャンセル"
+                     class="btn modal-close btn-warning"
+                     data-bs-dismiss="modal"
+                  />
+                  <input type="hidden" value="register" name="action" />
+                  <button type="submit" class="register btn btn-secondary mx-3">
+                     登録
+                  </button>
+                  <input
+                     type="button"
+                     class="delete btn btn-secondary mx-3"
+                     value="削除"
+                  />
                </div>
             </div>
+         </form>
+      </div>
+   </div>
+</div>
+@*所属メンテナンス修正(ポップアップ)*@ 
+@if (Model.Data1 != null){
+
+<div
+   class="modal fade show d-block"
+   id="updateModal"
+   tabindex="-1"
+   aria-labelledby="userModalLabel"
+   aria-hidden="true"
+>
+   <div class="modal-dialog modal-lg">
+      <div class="tsuikaModalContent modal-content" style="width: 60%">
+         <div class="modal-header">
+            <div class="d-flex justify-content-between w-100"></div>
          </div>
+         <form class="card mb-4" method="Post">
+            <div class="card-body">
+               <div class="row mb-3 align-items-center">
+                  <label class="col-5" for="shozoku_cd2">所属コード</label>
+                  <input
+                     type="text"
+                     class="form-control"
+                     name="shozoku_cd2"
+                     size="30"
+                     maxlength="10"
+                     id="shozoku_cd2"
+                     readonly
+                     value="@Model.Data1.shozoku_cd"
+                  />
+               </div>
+               <div class="row mb-3 align-items-center">
+                  <label class="col-5" for="shozoku_nm2">所属名</label>
+                  <input
+                     type="text"
+                     class="form-control"
+                     name="shozoku_nm2"
+                     id="shozoku_nm2"
+                     value="@Model.Data1.shozoku_nm"
+                  />
+               </div>
+               <div class="row mb-3 align-items-center">
+                  <div class="col-10">
+                     有効/無効
+                     <label for="valid_flg2">有効</label>
+                     @if (@Model.Data1.valid_flg != "0") {
+                        <input type="radio" checked
+                        name="valid_flg2"
+                        value="@Model.Data1.valid_flg"
+                        id="valid_flg2"/>
+
+                       }
+                     
+                     <label for="valid_flg2">無効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg2"
+                        value="0"
+                        id="valid_flg2"
+                     />
+                  </div>
+               </div>
+
+               <div class="d-flex justify-content-end mt-2">
+                  <input
+                     type="button"
+                     class="cancel btn btn-secondary mx-3"
+                     value="キャンセル"
+                     class="btn modal-close btn-warning"
+                     data-bs-dismiss="modal"
+                  />
+                  <input type="hidden" value="update" name="action" />
+                  <button type="submit" class="register btn btn-secondary mx-3">
+                     登録
+                  </button>
+                  <input
+                     type="button"
+                     class="delete btn btn-secondary mx-3"
+                     value="削除"
+                  />
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+}
