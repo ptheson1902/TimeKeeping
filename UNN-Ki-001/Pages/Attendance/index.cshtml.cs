@@ -86,12 +86,10 @@ namespace UNN_Ki_001.Pages.Attendance
                 .OrderByDescending(e => e.KinmuDt)
                 .FirstOrDefault();
                 if (t_Kinmu == null)
-                {
                     kinmu = new(user.Kigyo_cd, user.Shain_no, now.ToString("yyyyMMdd"), _kintaiDbContext);
-                }
-                kinmu = t_Kinmu;
-                try { kinmu.DakokuStart(); }
-                catch { throw new Exception("本日は退勤しました。"); }
+                else
+                    kinmu = t_Kinmu;
+                kinmu.DakokuStart();
                 kinmu.CreateUsr = user.Shain_no;
                 kinmu.UpdateDt = DateTime.UtcNow;
                 kinmu.UpdateUsr = user.Shain_no;
