@@ -8,6 +8,7 @@ using Npgsql;
 using System.Data;
 using System.Linq;
 using UNN_Ki_001.Data;
+using UNN_Ki_001.Data.Control;
 using UNN_Ki_001.Data.Models;
 
 namespace UNN_Ki_001.Pages.Attendance
@@ -56,18 +57,20 @@ namespace UNN_Ki_001.Pages.Attendance
             var now = DateTime.Now;
             if (user != null)
             {
-#pragma warning disable CS8604 // Possible null reference argument.
                 kinmu = _kintaiDbContext.t_kinmus
-                .Where(e => e.KigyoCd.Equals(user.Kigyo_cd) && e.KinmuDt.Equals(now.ToString("yyyyMMdd")) && e.ShainNo.Equals(user.Shain_no) && e.DakokuFrTm != null && e.DakokuToTm == null)
-                .FirstOrDefault();
-#pragma warning restore CS8604 // Possible null reference argument.
-
-                kinmu.DakokuEnd();
-                kinmu.UpdateDt = DateTime.UtcNow;
-                kinmu.UpdateUsr = user.Shain_no;
-                _kintaiDbContext.Update(kinmu);
-                _kintaiDbContext.SaveChanges();
-                Message = "退勤が出来ました";
+                    .Where(e => e.KigyoCd.Equals(user.Kigyo_cd) && e.ShainNo.Equals(user.Shain_no) && e.DakokuFrDt != null && e.DakokuFrTm != null && e.DakokuToDt == null && e.DakokuToDt == null)
+                    .FirstOrDefault();
+                if(kinmu != null)
+                {
+                    KinmuControl kc = new KinmuControl(kinmu, _kintaiDbContext);
+                    kinmu = kc.DakokuEnd();
+                    kinmu.CreateUsr = user.Shain_no;
+                    kinmu.UpdateDt = DateTime.UtcNow;
+                    kinmu.UpdateUsr = user.Shain_no;
+                    _kintaiDbContext.Update(kinmu);
+                    _kintaiDbContext.SaveChanges();
+                    Message = "退勤が出来ました";
+                }
             }
             else
             {
@@ -81,22 +84,14 @@ namespace UNN_Ki_001.Pages.Attendance
             var now = DateTime.Now;
             if (user != null)
             {
-                T_Kinmu? t_Kinmu = _kintaiDbContext.t_kinmus
-                .Where(e => e.KigyoCd.Equals(user.Kigyo_cd) && e.KinmuDt.Equals(now.ToString("yyyyMMdd")) && e.ShainNo.Equals(user.Shain_no) && e.DakokuFrTm == null)
-                .OrderByDescending(e => e.KinmuDt)
-                .FirstOrDefault();
-                if (t_Kinmu == null)
-                    kinmu = new(user.Kigyo_cd, user.Shain_no, now.ToString("yyyyMMdd"), _kintaiDbContext);
-                else
-                    kinmu = t_Kinmu;
-                kinmu.DakokuStart();
+                kinmu = new(user.Kigyo_cd, user.Shain_no, now.ToString("yyyyMMdd"));
+                kinmu.KinmuCd = "K001";
+                KinmuControl kc = new KinmuControl(kinmu, _kintaiDbContext);
+                kinmu = kc.DakokuStart();
                 kinmu.CreateUsr = user.Shain_no;
                 kinmu.UpdateDt = DateTime.UtcNow;
                 kinmu.UpdateUsr = user.Shain_no;
-                if (t_Kinmu == null)
-                    _kintaiDbContext.Add(kinmu);
-                else
-                    _kintaiDbContext.Update(kinmu);
+                _kintaiDbContext.Add(kinmu);
                 _kintaiDbContext.SaveChanges();
                 Message = "出勤が出来ました";
             }
