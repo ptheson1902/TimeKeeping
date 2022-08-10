@@ -11,18 +11,18 @@ namespace UNN_Ki_001.Data
         {
         }
 
-       /* public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             // 変更点をループしreloadメソッドを呼びだす
             var entries = this.ChangeTracker.Entries<Reloadable>();
-            foreach(var entry in entries)
+            foreach (var entry in entries)
             {
                 entry.Entity.reload();
             }
 
-            
+
             return base.SaveChanges(acceptAllChangesOnSuccess);
-        }*/
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -68,7 +68,7 @@ namespace UNN_Ki_001.Pages.Attendance
                     kinmu.UpdateDt = DateTime.UtcNow;
                     kinmu.UpdateUsr = user.Shain_no;
                     _kintaiDbContext.Update(kinmu);
-                    _kintaiDbContext.SaveChanges();
+                    await _kintaiDbContext.SaveChangesAsync();
                     Message = "退勤が出来ました";
                 }
             }
@@ -92,7 +92,7 @@ namespace UNN_Ki_001.Pages.Attendance
                 kinmu.UpdateDt = DateTime.UtcNow;
                 kinmu.UpdateUsr = user.Shain_no;
                 _kintaiDbContext.Add(kinmu);
-                _kintaiDbContext.SaveChanges();
+                await _kintaiDbContext.SaveChangesAsync();
                 Message = "出勤が出来ました";
             }
             else
