@@ -47,11 +47,8 @@
                      </div>
                   </div>
                   <div class="d-flex justify-content-end mt-2">
-                     <input
-                        type="submit"
-                        class="search btn btn-secondary mx-3"
-                        value="検索"
-                     />
+                        <input type="hidden" value="search" name="action" />
+                        <button type="submit" class="search btn btn-secondary mx-3">検索</button>
                   </div>
                   <div class="d-flex justify-content-end mt-2">
                      <input
@@ -88,7 +85,8 @@
                                 {
                                     <input
                                      type="checkbox"
-                                     checked
+                                     checked 
+                                     readonly
                                      />
                                 }
                           </td>                       
@@ -100,7 +98,7 @@
          </div>
       </div>
 
-      
+      @*所属メンテナンスポップアップ*@
       <div
             class="modal fade"
             id="tsuikaModal"
@@ -118,41 +116,41 @@
                  <form class="card mb-4" method="Post">
                <div class="card-body">
                   <div class="row mb-3 align-items-center">                    
-                        <label class="col-5" for="shozoku_cd">所属コード</label>
+                        <label class="col-5" for="shozoku_cd1">所属コード</label>
                         <input
                            type="text"
                            class="form-control"
-                           name="shozoku_cd"
+                           name="shozoku_cd1"
                            size="30"
                            maxlength="10"
-                           id="shozoku_cd"
+                           id="shozoku_cd1"
                         />                    
                   </div>
                   <div class="row mb-3 align-items-center">                     
-                        <label class="col-5">所属名</label>
+                        <label class="col-5" for="shozoku_nm1">所属名</label>
                         <input
                            type="text"
                            class="form-control"
-                           name="shozoku_nm"
-                           id="shozoku_nm"
+                           name="shozoku_nm1"
+                           id="shozoku_nm1"
                         />
                   </div>
                   <div class="row mb-3 align-items-center">
                      <div class="col-10">
                         有効/無効   
-                        <label for="valid_flg">有効</label>
+                        <label for="valid_flg1">有効</label>
                         <input
                            type="checkbox"
-                           name="valid_flg"
+                           name="valid_flg1"
                            value="1"
-                           id="valid_flg"
+                           id="valid_flg1"
                         />
                         <label for="valid_flg">無効</label>
                         <input
                            type="checkbox"
-                           name="valid_flg"
+                           name="valid_flg1"
                            value="0"
-                           id="valid_flg"
+                           id="valid_flg1"
                         />
                      </div>
                   </div>
@@ -165,11 +163,8 @@
                         class="btn modal-close btn-warning"
                         data-bs-dismiss="modal"
                      />
-                     <input
-                        type="button"
-                        class="register btn btn-secondary mx-3"
-                        value="登録"
-                     />
+                      <input type="hidden" value="register" name="action" />
+                       <button type="submit" class="register btn btn-secondary mx-3">登録</button>
                      <input
                         type="button"
                         class="delete btn btn-secondary mx-3"
