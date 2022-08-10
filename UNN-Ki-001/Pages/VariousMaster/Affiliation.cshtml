@@ -85,7 +85,8 @@
                                 {
                                     <input
                                      type="checkbox"
-                                     checked
+                                     checked 
+                                     readonly
                                      />
                                 }
                           </td>                       
@@ -97,7 +98,7 @@
          </div>
       </div>
 
-      
+      @*所属メンテナンスポップアップ*@
       <div
             class="modal fade"
             id="tsuikaModal"
@@ -115,7 +116,7 @@
                  <form class="card mb-4" method="Post">
                <div class="card-body">
                   <div class="row mb-3 align-items-center">                    
-                        <label class="col-5" for="shozoku_cd">所属コード</label>
+                        <label class="col-5" for="shozoku_cd1">所属コード</label>
                         <input
                            type="text"
                            class="form-control"
@@ -126,7 +127,7 @@
                         />                    
                   </div>
                   <div class="row mb-3 align-items-center">                     
-                        <label class="col-5">所属名</label>
+                        <label class="col-5" for="shozoku_nm1">所属名</label>
                         <input
                            type="text"
                            class="form-control"
@@ -137,7 +138,7 @@
                   <div class="row mb-3 align-items-center">
                      <div class="col-10">
                         有効/無効   
-                        <label for="valid_flg">有効</label>
+                        <label for="valid_flg1">有効</label>
                         <input
                            type="checkbox"
                            name="valid_flg1"
