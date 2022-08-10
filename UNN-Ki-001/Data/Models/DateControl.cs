@@ -6,8 +6,16 @@
         /// DateTimeを今プロジェクトで用いる型に変換する。
         /// </summary>
         /// <param name="dateTime">日付</param>
-        public DateControl(DateTime dateTime)
+        public DateControl(DateTime dateTime, string? kbn = "0")
         {
+            kbn ??= "0";
+
+            // 区分を適用
+            if (kbn.Equals("2"))
+                dateTime = dateTime.AddDays(1);
+            else if (kbn.Equals("1"))
+                dateTime = dateTime.AddDays(-1);
+
             // 文字列型に変換して格納
             string[] tempData = dateTime.ToString("yyyyMMdd,HHmm").Split(",");
             Date = tempData[0]!;
@@ -21,8 +29,8 @@
         /// </summary>
         /// <param name="date"></param>
         /// <param name="time"></param>
-        public DateControl(string date, string time = "0000")
-            : this(DateTime.ParseExact(date + time, "yyyyMMddHHmm", null)) { }
+        public DateControl(string date, string time = "0000", string? kbn = "0")
+            : this(DateTime.ParseExact(date + time, "yyyyMMddHHmm", null), kbn){}
 
         public DateTime Origin { get; }
 

@@ -1,7 +1,9 @@
-﻿namespace UNN_Ki_001.Data
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace UNN_Ki_001.Data
 {
-    interface Reloadable
+    public abstract class Reloadable
     {
-        public void reload();
+        public abstract void reload(KintaiDbContext context);
     }
 }

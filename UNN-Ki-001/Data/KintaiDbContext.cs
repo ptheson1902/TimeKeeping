@@ -13,14 +13,37 @@ namespace UNN_Ki_001.Data
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            // 変更点をループしreloadメソッドを呼びだす
-            var entries = this.ChangeTracker.Entries<Reloadable>();
-            foreach(var entry in entries)
+            // M_KINMUレコードの変更があれば、
+            // 紐づいたT_KINMUレコードも再計算にエントリーさせる
+            var mKinmus = ChangeTracker.Entries<M_Kinmu>();
+            if(mKinmus.Count() > 0)
             {
-                entry.Entity.reload();
+                // KinmuCdのリストを取得
+                List<string> list = new List<string>();
+                foreach(var mKinmu in mKinmus)
+                {
+                    list.Add(mKinmu.Entity.KinmuCd);
+                }
+
+                // 該当するT_KINMUレコードを取得
+                var tKinmus = t_kinmus.Where(e => e.KinmuCd != null && list.Contains(e.KinmuCd));
+
+                // Reloadableの対象としてマーク
+                foreach(var tKinmu in tKinmus)
+                {
+                    Entry(tKinmu).State = EntityState.Modified;
+                }
+
             }
 
-            
+            // Reloadableを実行
+            var records = ChangeTracker.Entries<Reloadable>();
+            foreach(var record in records)
+            {
+                record.Entity.reload(this);
+            }
+
+
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 

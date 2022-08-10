@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UNN_Ki_001.Data.Models
@@ -6,150 +7,62 @@ namespace UNN_Ki_001.Data.Models
     [Table("t_kinmu", Schema = "public")]
     public class T_Kinmu : Reloadable
     {
-        /// <summary>
-        /// 打刻忘れの際の識別文字
-        /// </summary>
-        private const　string NULL_CHAR = "N/A";
-
-        /// <summary>
-        /// KintaiDbContextクラス
-        /// </summary>
-        private readonly KintaiDbContext _context;
-
-        public T_Kinmu(string kigyoCd, string shainNo, string kinmuDt, KintaiDbContext context)
+        public T_Kinmu(string kigyoCd, string shainNo, string kinmuDt)
         {
             // 必須項目を入力
             KigyoCd = kigyoCd;
             ShainNo = shainNo;
             KinmuDt = kinmuDt;
-            _context = context;
         }
 
-
-
-        public void reload()
+        public override void reload(KintaiDbContext context)
         {
-            // TODO: 所定時間の計算
-            // TODO: 総労働時間の計算
-            // TODO: 法廷内時間の計算
-            // TODO: 法定外時間の計算
-            // TODO: 深夜時間の計算
-            // TODO: 法定休日（労働）時間の計算
-            // TODO: 休憩時間の計算
-            // TODO: 控除時間の計算
-        }
-
-        private M_Kinmu? mKinmu
-        {
-            get
-            {
-                if(mKinmuBack == null)
-                    mKinmuBack = _context.m_kinmus
-                        .Where(e => e.KigyoCd.Equals(KigyoCd) && e.KinmuCd.Equals(KinmuCd))
-                        .FirstOrDefault();
-                return mKinmuBack;
-            }
-        }
-        private M_Kinmu? mKinmuBack { get; set; }
-
-        public void DakokuStart()
-        {
-            // 最新の勤務記録を参照し、退勤済みか確認する。
-            T_Kinmu? record = _context.t_kinmus
-                .Where(e => e.KigyoCd.Equals(KigyoCd) && e.KinmuDt.Equals(KinmuDt) && e.ShainNo.Equals(ShainNo) && e.DakokuFrTm != null)
-                .OrderByDescending(e => e.KinmuDt)
+            // マスターレコードの取得
+            M_Kinmu? m_Kinmu = context.m_kinmus
+                .Where(e => e.KinmuCd.Equals(KinmuCd) && e.KigyoCd.Equals(KigyoCd))
                 .FirstOrDefault();
-            if (record != null && (record.DakokuToDt == null || record.DakokuToTm == null))
-                throw new Exception("出勤打刻を行うには、退勤打刻が必要です。");
 
-            DateTime now = DateTime.Now;
-            DakokuStartWriter(now, true);
-        }
-
-        public void DakokuEnd()
-        {
-            // 出勤済みか確認する。
-            if (DakokuFrDt == null || DakokuFrTm == null)
-                throw new Exception("退勤打刻を行うには、先に出勤打刻が必要です。");
-
-            DateTime now = DateTime.Now;
-            DakokuEndWriter(now, true);
-        }
-
-        public void DakokuStartWriter(DateTime dateTime, Boolean andKinmuStartWrite = false)
-        {
-            // 打刻記録のフォーマット
-            DateControl dc = new DateControl(dateTime);
-
-            // 打刻記録を保存
-            DakokuFrDt = dc.Date;
-            DakokuFrTm = dc.Time;
-
-            // 勤務記録も保存
-            if (andKinmuStartWrite)
+            // マスターレコードが存在しない場合
+            if (m_Kinmu == null)
             {
-                KinmuStartWriter(dc, true);
-            }
-        }
-
-        public void DakokuEndWriter(DateTime dateTime, Boolean andKinmuEndWrite = false)
-        {
-            // 打刻記録のフォーマット
-            DateControl dc = new DateControl(dateTime);
-
-            // 打刻記録を保存
-            DakokuToDt = dc.Date;
-            DakokuToTm = dc.Time;
-
-            // 勤務記録も保存
-            if (andKinmuEndWrite)
+                // 実績時間の計算
+                if (KinmuFrDate == null) KinmuFrDate = DakokuFrDate;
+                if (KinmuToDate == null) KinmuToDate = DakokuToDate;
+                
+                // マスタレコード無しで集計を行う
+            } 
+            // マスターレコードが存在する場合
+            else
             {
-                KinmuEndWriter(dc, true);
-            }
-        }
-
-        public void KinmuStartWriter(DateTime dateTime, Boolean marumeProcess = false)
-        {
-            // 実績記録のフォーマット
-            DateControl dc = new DateControl(dateTime);
-            KinmuStartWriter(dc, marumeProcess);
-        }
-        private void KinmuStartWriter(DateControl dc, Boolean marumeProcess = false)
-        {
-            // 丸め処理の実行
-            if (marumeProcess)
-            {
-                dc = (mKinmu == null) ? dc : dc.MarumeProcess(mKinmu.KinmuFrMarumeTm, mKinmu.KinmuFrMarumeKbn);
-                if (mKinmu != null && mKinmu.KinmuFrCtrlFlg != null && mKinmu.KinmuFrCtrlFlg.Equals("0") && mKinmu.KinmuFrTm != null && mKinmu.KinmuFrTm != null)
+                // 実績開始時間の計算
+                if (DakokuFrDate != null && KinmuFrDate == null /*←注意:仕様です。*/)
                 {
-                    DateControl kinmuFrDc = new DateControl(KinmuDt, mKinmu.KinmuFrTm);
-                    if (dc.Origin < kinmuFrDc.Origin)
-                        dc = kinmuFrDc;
+                    DateTime DakokuFrDateLocal = ((DateTime)DakokuFrDate).ToLocalTime();
+                    // 丸め処理を行う
+                    DateTime KinmuFrDateTmp = new DateControl((DateTime)DakokuFrDateLocal).MarumeProcess(m_Kinmu.KinmuFrMarumeTm, m_Kinmu.KinmuFrMarumeKbn).Origin;
+
+                    // 刻限の適用
+                    if (m_Kinmu.KinmuFrTm != null && m_Kinmu.KinmuFrKbn != null && m_Kinmu.KinmuFrCtrlFlg != null)
+                    {
+                        DateTime ZissekiFrDate = new DateControl(KinmuDt, m_Kinmu.KinmuFrTm, m_Kinmu.KinmuFrKbn).Origin;
+                        if (ZissekiFrDate > KinmuFrDateTmp)
+                        {
+                            KinmuFrDateTmp = ZissekiFrDate;
+                        }
+                    }
+                    KinmuFrDate = KinmuFrDateTmp.ToUniversalTime();
                 }
+
+                // 実績終了時間の計算
+                if(DakokuToDate != null && KinmuToDate == null /*←仕様です。*/)
+                {
+                    DateTime DakokuToDateLocal = ((DateTime)DakokuToDate).ToLocalTime();
+                    // 丸め処理を行う
+                    KinmuToDate = new DateControl(DakokuToDateLocal).MarumeProcess(m_Kinmu.KinmuToMarumeTm, m_Kinmu.KinmuToMarumeKbn).Origin.ToUniversalTime();
+                }
+
+                // マスタレコードを下に集計を行う
             }
-
-            // 実績記録を保存
-            KinmuFrDt = dc.Date;
-            KinmuFrTm = dc.Time;
-        }
-
-        public void KinmuEndWriter(DateTime dateTime, Boolean marumeProcess = false)
-        {
-            // 実績記録のフォーマット
-            DateControl dc = new DateControl(dateTime);
-            KinmuEndWriter(dc, marumeProcess);
-        }
-        private void KinmuEndWriter(DateControl dc, Boolean marumeProcess = false)
-        {
-            // 丸め処理の実行
-            if (marumeProcess)
-            {
-                dc = (mKinmu == null) ? dc : dc.MarumeProcess(mKinmu.KinmuFrMarumeTm, mKinmu.KinmuFrMarumeKbn);
-            }
-
-            // 実績記録を保存
-            KinmuToDt = dc.Date;
-            KinmuToTm = dc.Time;
         }
 
         [Key]
@@ -167,6 +80,17 @@ namespace UNN_Ki_001.Data.Models
         [Column("kinmu_cd")]
         public string? KinmuCd { get; set; }
 
+        [Column("dakoku_fr_date")]
+        public DateTime? DakokuFrDate { get; set; }
+
+        [Column("dakoku_to_date")]
+        public DateTime? DakokuToDate { get; set; }
+
+        [Column("kinmu_fr_date")]
+        public DateTime? KinmuFrDate { get; set; }
+
+        [Column("kinmu_to_date")]
+        public DateTime? KinmuToDate { get; set; }
 
         [Column("dakoku_fr_dt")]
         public string? DakokuFrDt { get; private set; }

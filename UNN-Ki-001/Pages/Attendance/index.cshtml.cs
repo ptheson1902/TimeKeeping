@@ -57,20 +57,18 @@ namespace UNN_Ki_001.Pages.Attendance
             if (user != null)
             {
                 kinmu = _kintaiDbContext.t_kinmus
-                .Where(e => e.KigyoCd.Equals(user.Kigyo_cd) && e.KinmuDt.Equals(now.ToString("yyyyMMdd")) && e.ShainNo.Equals(user.Shain_no) && e.DakokuFrTm != null && e.DakokuToTm == null)
+                .Where(e => e.KigyoCd.Equals(user.Kigyo_cd) && e.KinmuDt.Equals(now.ToString("yyyyMMdd")) && e.ShainNo.Equals(user.Shain_no) && e.DakokuToDate == null)
                 .FirstOrDefault();
 
-                kinmu.DakokuEnd();
-                kinmu.UpdateDt = DateTime.UtcNow;
-                kinmu.UpdateUsr = user.Shain_no;
-                _kintaiDbContext.Update(kinmu);
-                _kintaiDbContext.SaveChanges();
-                Message = "退勤が出来ました";
+                if(kinmu != null)
+                {
+                    kinmu.DakokuToDate = now.ToUniversalTime();
+                    _kintaiDbContext.SaveChanges();
+                    Message = "退勤が出来ました";
+                    return;
+                }
             }
-            else
-            {
-                Message = "退勤ができません。";
-            }
+            Message = "退勤ができませんでした。";
         }
 
         private async Task StartAsync()
@@ -83,16 +81,12 @@ namespace UNN_Ki_001.Pages.Attendance
                 .Where(e => e.KigyoCd.Equals(user.Kigyo_cd) && e.KinmuDt.Equals(now.ToString("yyyyMMdd")) && e.ShainNo.Equals(user.Shain_no) && e.DakokuFrTm == null)
                 .OrderByDescending(e => e.KinmuDt)
                 .FirstOrDefault();
-                if (t_Kinmu == null)
-                {
-                    kinmu = new(user.Kigyo_cd, user.Shain_no, now.ToString("yyyyMMdd"), _kintaiDbContext);
-                }
                 kinmu = t_Kinmu;
-                try { kinmu.DakokuStart(); }
-                catch { throw new Exception("本日は退勤しました。"); }
-                kinmu.CreateUsr = user.Shain_no;
-                kinmu.UpdateDt = DateTime.UtcNow;
-                kinmu.UpdateUsr = user.Shain_no;
+                if (kinmu == null)
+                {
+                    kinmu = new T_Kinmu(user.Kigyo_cd, user.Shain_no, now.ToString("yyyyMMdd"));
+                }
+                kinmu.DakokuFrDate = now.ToUniversalTime();
                 if (t_Kinmu == null)
                     _kintaiDbContext.Add(kinmu);
                 else

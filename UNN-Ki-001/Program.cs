@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using UNN_Ki_001;
 using UNN_Ki_001.Data;
-using UNN_Ki_001.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
