@@ -32,10 +32,10 @@ namespace UNN_Ki_001.Pages.VariousMaster
             string shokushu_nm = Request.Form["shokushu_cd"];
             string koyokeitai_nm = Request.Form["koyokeitai_cd"];
             // 所属コード、所属コード、雇用形態コードでJOIN
-            var no = from a in _context.shain
+            var no = from a in _context.m_shains
                      join b in _context.shozoku
                      on a.shozoku_cd equals b.shozoku_cd
-                     join c in _context.shokushu
+                     join c in _context.m_test
                      on a.shokushu_cd equals c.shokushu_cd
                      join d in _context.koyokeitai
                      on a.koyokeitai_cd equals d.koyokeitai_cd

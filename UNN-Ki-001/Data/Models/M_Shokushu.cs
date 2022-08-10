@@ -5,7 +5,7 @@ namespace UNN_Ki_001.Data.Models
 {
    
     [Table("m_shokushu", Schema = "public")]
-    public class shokushukensaku
+    public class M_Shokushu
     {
         [Key]
         [Column("shokushu_cd")]
