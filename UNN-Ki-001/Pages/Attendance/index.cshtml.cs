@@ -21,6 +21,7 @@ namespace UNN_Ki_001.Pages.Attendance
         private readonly KintaiDbContext _kintaiDbContext;
         private readonly UserManager<AppUser> _userManager;
         private T_Kinmu? kinmu { get; set; }
+        private IList<T_Kinmu> ListKinmu { get; set; }
         public string? Message { get; set; }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public IndexModel(ILogger<IndexModel> logger, ApplicationDbContext applicationDbContext, KintaiDbContext context, KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager)
@@ -34,6 +35,8 @@ namespace UNN_Ki_001.Pages.Attendance
 
         public void OnGet()
         {
+            int month = DateTime.Now.Month;
+            ListKinmu = _kintaiDbContext.t_kinmus.Where(e => e.KinmuDt.Substring(2, 4) == month.ToString()).ToList();
         }
 
         public async Task OnPostAsync()
@@ -60,7 +63,7 @@ namespace UNN_Ki_001.Pages.Attendance
                 kinmu = _kintaiDbContext.t_kinmus
                     .Where(e => e.KigyoCd.Equals(user.Kigyo_cd) && e.ShainNo.Equals(user.Shain_no) && e.DakokuFrDt != null && e.DakokuFrTm != null && e.DakokuToDt == null && e.DakokuToDt == null)
                     .FirstOrDefault();
-                if(kinmu != null)
+                if (kinmu != null)
                 {
                     KinmuControl kc = new KinmuControl(kinmu, _kintaiDbContext);
                     kinmu = kc.DakokuEnd();
