@@ -21,7 +21,7 @@ namespace UNN_Ki_001.Pages.Attendance
         private readonly KintaiDbContext _kintaiDbContext;
         private readonly UserManager<AppUser> _userManager;
         private T_Kinmu? kinmu { get; set; }
-        private IList<T_Kinmu> ListKinmu { get; set; }
+        public List<T_Kinmu?> ListKinmu { get; set; }
         public string? Message { get; set; }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public IndexModel(ILogger<IndexModel> logger, ApplicationDbContext applicationDbContext, KintaiDbContext context, KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager)
@@ -35,13 +35,14 @@ namespace UNN_Ki_001.Pages.Attendance
 
         public void OnGet()
         {
-            int month = DateTime.Now.Month;
-            ListKinmu = _kintaiDbContext.t_kinmus.Where(e => e.KinmuDt.Substring(2, 4) == month.ToString()).ToList();
+
         }
 
         public async Task OnPostAsync()
         {
             var action = Request.Form["action"];
+            DateTime now = DateTime.Now;
+            ListKinmu = _kintaiDbContext.t_kinmus.Where(e => e.ShainNo.Equals(User.Identity.Name) && e.KinmuDt.Substring(0, 6).Equals(now.ToString("yyyyMM"))).ToList();
             switch (action)
             {
                 case "start":

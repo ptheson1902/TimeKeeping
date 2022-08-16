@@ -95,7 +95,7 @@ function calendar() {
     $(".fc-header .fc-header-center .year").text(year);
     $(".fc-header .fc-header-center .month").text(month);
     var dayOfWeek = new Date(year + "/" + month + "/1").getDay();
-    var dayNumOfMonth = new Date(year , month, 0).getDate()
+    var dayNumOfMonth = new Date(year, month, 0).getDate()
     $(".calendar-data tr.week1").append(day(1, dayOfWeek))
     $(".calendar-data tr.week2").append(day(8 - dayOfWeek))
     $(".calendar-data tr.week3").append(day(15 - dayOfWeek))
@@ -111,7 +111,7 @@ $(".prev-month").click(function () {
     $(".calendar-data tr td").remove()
     month--;
     if (month == 0) {
-        year --;
+        year--;
         month = 12;
     }
     calendar()
@@ -120,8 +120,17 @@ $(".next-month").click(function () {
     $(".calendar-data tr td").remove()
     month++;
     if (month == 13) {
-        year ++;
+        year++;
         month = 1;
     }
     calendar()
+})
+
+$.ajax({
+    url: "/Attendance/GetData",
+    method: "get",
+    Cache: "false",
+    success: function (e) {
+        console.log(e);
+    }
 })

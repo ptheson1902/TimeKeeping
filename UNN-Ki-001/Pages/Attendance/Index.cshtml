@@ -2,13 +2,20 @@
 @model Attendance.IndexModel
 @{
     ViewData["Title"] = "打刻登録";
-   
+
     //var Month = DateTime.Now.ToString("yyyy年MM月");
 }
 <div class="main d-flex justify-content-center align-items-center">
     <div
         class="container-fluid d-flex align-items-center my-5 justify-content-center"
     >
+        @if (Model.ListKinmu != null)
+        {
+            @foreach (var item in Model.ListKinmu)
+            {
+                @item.DakokuFrDt
+            }
+        }
     <div class="text-danger"> @Model.Message </div>
         <div
             class="left mt-5 d-flex flex-column align-items-center justify-content-between mx-5"
