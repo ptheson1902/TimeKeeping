@@ -15,12 +15,17 @@ namespace UNN_Ki_001.Pages.VariousMaster
         public Display? Data1;
         public string? Message { get; set; }
         public string? ErrorMessage { get; set; }
+        public string? Shozoku_cd { get; set; }
+        public string? Shozoku_nm { get; set; }
+        public string? Valid_flg { get; set; }
+
 
         public AffiliationModel(UNN_Ki_001.Data.KintaiDbContext context, ApplicationDbContext application)
         {
             _context = context;
             context1 = application;
         }
+
         public void OnGet(int? id)
         {
             Data.Clear();
@@ -35,6 +40,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
         }
         public void OnPost()
         {
+
             var action = Request.Form["action"];
             switch (action)
             {
@@ -70,34 +76,38 @@ namespace UNN_Ki_001.Pages.VariousMaster
         }
         private void Search()
         {
-            string shozoku_cd = Request.Form["shozoku_cd"];
-            string shozoku_nm = Request.Form["shozoku_nm"];
-            string valid_flg = Request.Form["valid_flg"];
+             Shozoku_cd = Request.Form["shozoku_cd"];
+             Shozoku_nm = Request.Form["shozoku_nm"];
+             Valid_flg = Request.Form["valid_flg"];
             var no = from m_shozoku in _context.shozoku
-                     select new { m_shozoku.shozoku_cd, m_shozoku.shozoku_nm, m_shozoku.valid_flg };
+                     orderby m_shozoku.shozoku_cd
+                     select new { m_shozoku.shozoku_cd, m_shozoku.shozoku_nm, m_shozoku.valid_flg } ;
             // èåèÇ…ÇÊÇÈåüçıÇ∑ÇÈÇ±Ç∆(valueÅÅnullÇÕåüçıèåèÇ…Ç»ÇÁÇ»Ç¢Ç±Ç∆ÅB)
-            if (!string.IsNullOrEmpty(shozoku_cd))
+            if (!string.IsNullOrEmpty(Shozoku_cd))
             {
-                no = no.Where(e => e.shozoku_cd.Equals(shozoku_cd));
+                no = no.Where(e => e.shozoku_cd.Equals(Shozoku_cd));
             }
 
-            if (!string.IsNullOrEmpty(shozoku_nm))
+            if (!string.IsNullOrEmpty(Shozoku_nm))
             {
-                no = no.Where(e => e.shozoku_nm.Equals(shozoku_nm));
+                no = no.Where(e => e.shozoku_nm.Equals(Shozoku_nm));
             }
 
-            if (!string.IsNullOrEmpty(valid_flg))
+            if (!string.IsNullOrEmpty(Valid_flg))
             {
-                no = no.Where(e => e.valid_flg.Equals(valid_flg));
+                no = no.Where(e => e.valid_flg.Equals(Valid_flg));
             }
+            
             foreach (var item in no)
-            {                            
+            {     
+                
                     Display d = new Display();
                     d.shozoku_cd = item.shozoku_cd;
                     d.shozoku_nm = item.shozoku_nm;
                     d.valid_flg = item.valid_flg;
-                    Data.Add(d);         
+                    Data.Add(d);                
             }
+            
         }
         // êVãK
         private void Register()

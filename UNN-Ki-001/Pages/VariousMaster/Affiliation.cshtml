@@ -16,6 +16,7 @@
                   size="30"
                   maxlength="10"
                   id="shozoku_cd"
+                  value = "@Model.Shozoku_cd"
                />
             </div>
             <div class="row mb-3 align-items-center">
@@ -25,25 +26,45 @@
                   class="form-control"
                   name="shozoku_nm"
                   id="shozoku_nm"
+                  value = "@Model.Shozoku_nm"
                />
             </div>
             <div class="row mb-3 align-items-center">
                <div class="col-10">
                   有効/無効
-                  <label for="valid_flg">有効</label>
-                  <input
-                     type="radio"
-                     name="valid_flg"
-                     value="1"
-                     id="valid_flg"
-                  />
-                  <label for="valid_flg">無効</label>
-                  <input
-                     type="radio"
-                     name="valid_flg"
-                     value="0"
-                     id="valid_flg"
-                  />
+                   @if(@Model.Valid_flg!="0") {
+                     <label for="valid_flg">有効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg"
+                        value="1"
+                        id="valid_flg"
+                        checked
+                     />
+                     <label for="valid_flg">無効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg"
+                        value="0"
+                        id="valid_flg"
+                     />
+                     }else {
+                     <label for="valid_flg">有効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg"
+                        value="1"
+                        id="valid_flg"
+                     />
+                     <label for="valid_flg">無効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg"
+                        value="0"
+                        id="valid_flg"
+                        checked
+                     />
+                     }
                </div>
             </div>
             <div class="d-flex justify-content-end mt-2">
@@ -80,7 +101,7 @@
                </tr>
             </thead>
             @if (Model.Data != null) { @foreach (var shozoku in Model.Data) {
-            <tbody class="shainData"></tbody>
+            <tbody class="shozokuData"></tbody>
             <tr>
                <td data-bs-toggle="modal" data-bs-target="#updateModal">
                   <a href="~/VariousMaster/Affiliation/@shozoku.shozoku_cd"
@@ -95,9 +116,10 @@
                   <input type="checkbox" disabled />
                   }
                </td>
-            </tr>
-            } }
-         </table>
+                        </tr>
+                    }
+                }
+            </table>
       </div>
    </div>
 </div>
@@ -203,7 +225,7 @@
                      name="shozoku_cd2"
                      size="30"
                      maxlength="10"
-                     id="shozoku_cd2"
+                     id="shozoku_cd2"   
                      readonly
                      value="@Model.Data1.shozoku_cd"
                   />
@@ -271,7 +293,7 @@
                      value="update"
                      name="update_action"
                   >
-                     登録
+                     更新
                   </button>
                   <button
                      type="submit"
