@@ -13,6 +13,7 @@ namespace UNN_Ki_001.Data
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
+            /*
             // M_KINMUレコードの変更があれば、
             // 紐づいたT_KINMUレコードも再計算にエントリーさせる
             var mKinmus = ChangeTracker.Entries<M_Kinmu>();
@@ -35,6 +36,7 @@ namespace UNN_Ki_001.Data
                 }
 
             }
+            */
 
             // Reloadableを実行
             var records = ChangeTracker.Entries<Reloadable>();

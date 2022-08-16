@@ -41,46 +41,21 @@ namespace UNN_Ki_001.Data.Models
             // TODO: 深夜時間の計算
             // TODO: 法定休日時間の計算
         }
+
         private void ShoteiZikan(M_Kinmu? masterRecord)
         {
-            // ヌルを許容しない
-            if(KinmuFrDate == null ||  KinmuToDate == null)
-            {
-                return;
-            }
-
-            // 勤務データの宣言
-            DateTime tKinmuFrDate = ((DateTime)KinmuFrDate).ToUniversalTime();
-            DateTime tKinmuToDate = ((DateTime)KinmuToDate).ToUniversalTime();
-
-            // マスターレコードの適用
-            if(masterRecord != null)
-            {
-                if(masterRecord.KinmuFrTm != null)
-                {
-
-                }
-            }
-
-            /*
-            string? kinmuFrTm = masterRecord.KinmuFrTm;
-            string? kinmuToTm = masterRecord.KinmuToTm;
-            if(kinmuFrTm == null || kinmuToTm == null || KinmuFrDate == null || KinmuToDate == null)
+            // マスターレコードの取り込み
+            if(masterRecord != null && masterRecord.ShoteiTm != null)
             {
                 Shotei = masterRecord.ShoteiTm;
                 return;
             }
 
-            // 必須データが存在しない場合
-            if (KinmuFrDate == null || KinmuToDate == null)
+            // 勤務データの宣言
+            if(KinmuToDate != null && KinmuFrDate != null)
             {
-                return;
+                Shotei = (int)((DateTime)KinmuToDate - (DateTime)KinmuFrDate).TotalMinutes;
             }
-            var res = (DateTime)KinmuToDate - (DateTime)KinmuFrDate;
-
-            */
-            var res = mToDate - mFrDate;
-            Shotei = (int)res.TotalMinutes;
         }
 
         private void KinmuFrWrite(M_Kinmu? masterRecord)
