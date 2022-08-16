@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using UNN_Ki_001.Data;
 using UNN_Ki_001.Data.Control;
@@ -21,6 +22,7 @@ namespace UNN_Ki_001.Pages.Attendance
         private readonly KintaiDbContext _kintaiDbContext;
         private readonly UserManager<AppUser> _userManager;
         private T_Kinmu? kinmu { get; set; }
+        public int Button { get; set; } = 0;
         public List<T_Kinmu?> ListKinmu { get; set; }
         public string? Message { get; set; }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -33,30 +35,44 @@ namespace UNN_Ki_001.Pages.Attendance
             _userManager = userManager;
         }
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-
+            var now = DateTime.Now;
+            var user = await _userManager.FindByNameAsync(User.Identity?.Name);
+            var qr = _kintaiDbContext.t_kinmus.Where(a => a.KigyoCd.Equals(user.Kigyo_cd) && a.ShainNo.Equals(user.Shain_no) && a.KinmuDt.Equals(now.ToString("yyyyMMdd"))).FirstOrDefault();
+            if (qr != null && qr.DakokuFrDt != null && qr.DakokuFrTm != null && qr.DakokuToDt == null && qr.DakokuToTm == null)
+            {
+                Button = 1;
+            }
+            else if (qr != null && qr.DakokuFrDt != null && qr.DakokuFrTm != null && qr.DakokuToDt != null && qr.DakokuToTm != null)
+            {
+                Button = 2;
+            }
         }
 
         public async Task OnPostAsync()
         {
+            var now = DateTime.Now;
             var action = Request.Form["action"];
-
+            var user = await _userManager.FindByNameAsync(User.Identity?.Name);
             switch (action)
             {
                 case "start":
-                    await StartAsync();
+                    await StartAsync(user);
+                    await OnGetAsync();
                     break;
                 case "end":
-                    await EndAsync();
+                    await EndAsync(user);
+                    await OnGetAsync();
                     break;
-                default: break;
+                default:
+                    await OnGetAsync();
+                    break;
             }
         }
 
-        private async Task EndAsync()
+        private async Task EndAsync(AppUser user)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity?.Name);
             var now = DateTime.Now;
             if (user != null)
             {
@@ -81,9 +97,8 @@ namespace UNN_Ki_001.Pages.Attendance
             }
         }
 
-        private async Task StartAsync()
+        private async Task StartAsync(AppUser user)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity?.Name);
             var now = DateTime.Now;
             if (user != null)
             {

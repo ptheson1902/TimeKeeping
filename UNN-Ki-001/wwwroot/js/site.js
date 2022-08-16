@@ -102,84 +102,76 @@ function Calendar(year, month, e) {
     if (dayNumOfMonth - 35 + dayOfWeek > 0) {
         $(".calendar-data tr.week6").append(day1((36 - dayOfWeek), 42 - dayNumOfMonth - dayOfWeek))
     }
-    /*for (let i = 0; i < dayOfWeek; i++) {
-        $(".calendar-data tr.week1").append("<td class='fc-day px-2' data-date=''>" +
-            "<div class=''>" +
-            "<div class='fc-day-number py-2'></div>" +
-            "</div>" +
-            "</td>"
-        )
-    }*/
 
     var q = 0;
     $(".fc-day").each(function () {
-            var it = $(this);
-            for (let j = 0; j < e.length; j++) {
-                if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt != null && e[j].dakokuFrTm != null) {
-                    it.children().addClass("taikin");
-                }
-                if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt != null && e[j].dakokuFrTm == null) {
-                    it.children().addClass("shukin");
-                }
-                if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt == null && e[j].dakokuFrTm == null) {
-                    it.children().addClass("yasumi");
-                }
+        var it = $(this);
+        for (let j = 0; j < e.length; j++) {
+            if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt != null && e[j].dakokuFrTm != null && e[j].dakokuToDt != null && e[j].dakokuToTm != null) {
+                it.children().addClass("taikin");
             }
-        })
+            if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt != null && e[j].dakokuFrTm != null && e[j].dakokuToDt == null && e[j].dakokuToTm == null) {
+                it.children().addClass("shukin");   
+            }
+            if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt == null && e[j].dakokuFrTm == null && e[j].dakokuToDt == null && e[j].dakokuToTm == null) {
+                it.children().addClass("yasumi");
+            }
+        }
+    })
     /*e.forEach(item => {
         var str = "";
         if (q < 7 - dayOfWeek) {
             str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
-                "<div class=''>" +
-                "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
-                "</div>" +
-                "</td>"
-            $(".calendar-data tr.week1").append(str);
-            q++;
-        }
-        else if (q < 14 - dayOfWeek) {
-            str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
-                "<div class=''>" +
-                "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
-                "</div>" +
-                "</td>"
-            $(".calendar-data tr.week2").append(str);
-            q++;
-        } else if (q < 21 - dayOfWeek) {
-            str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
-                "<div class=''>" +
-                "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
-                "</div>" +
-                "</td>"
-            $(".calendar-data tr.week3").append(str);
-            q++;
-        } else if (q < 28 - dayOfWeek) {
-            str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
-                "<div class=''>" +
-                "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
-                "</div>" +
-                "</td>"
-            $(".calendar-data tr.week4").append(str);
-            q++;
-        } else if (q < 35 - dayOfWeek) {
-            str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
-                "<div class=''>" +
-                "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
-                "</div>" +
-                "</td>"
-            $(".calendar-data tr.week5").append(str);
-            q++;
-        } else {
-            str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
-                "<div class=''>" +
-                "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
-                "</div>" +
-                "</td>"
-            $(".calendar-data tr.week6").append(str);
-            q++;
-        }
-    })*/
-    
+        "<div class=''>" +
+        "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
+        "</div>" +
+        "</td>"
+    $(".calendar-data tr.week1").append(str);
+    q++;
+}
+else if (q < 14 - dayOfWeek) {
+    str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
+        "<div class=''>" +
+        "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
+        "</div>" +
+        "</td>"
+    $(".calendar-data tr.week2").append(str);
+    q++;
+} else if (q < 21 - dayOfWeek) {
+    str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
+        "<div class=''>" +
+        "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
+        "</div>" +
+        "</td>"
+    $(".calendar-data tr.week3").append(str);
+    q++;
+} else if (q < 28 - dayOfWeek) {
+    str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
+        "<div class=''>" +
+        "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
+        "</div>" +
+        "</td>"
+    $(".calendar-data tr.week4").append(str);
+    q++;
+} else if (q < 35 - dayOfWeek) {
+    str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
+        "<div class=''>" +
+        "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
+        "</div>" +
+        "</td>"
+    $(".calendar-data tr.week5").append(str);
+    q++;
+} else {
+    str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
+        "<div class=''>" +
+        "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
+        "</div>" +
+        "</td>"
+    $(".calendar-data tr.week6").append(str);
+    q++;
+}
+})*/
+
 };
 GetData(year, month);
 

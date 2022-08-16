@@ -3,30 +3,36 @@
 @{
     ViewData["Title"] = "打刻登録";
 
-    //var Month = DateTime.Now.ToString("yyyy年MM月");
+    var Date = DateTime.Now.ToString("yyyy年MM月(dddd)");
 }
 <div class="main d-flex justify-content-center align-items-center">
     <div
-        class="container-fluid d-flex align-items-center my-5 justify-content-center"
+        class="container-fluid d-flex align-items-start my-5 justify-content-center"
     >
-
-    <div class="text-danger"> @Model.Message </div>
         <div
-            class="left mt-5 d-flex flex-column align-items-center justify-content-between mx-5"
+            class="left d-flex flex-column align-items-center justify-content-between mx-5"
         >
-            <asp:Label id="Date" runat="server"></asp:Label>
-            <div class="date"></div>
+            <div class="date">@Date</div>
             <div class="time my-3"></div>
-            <div class="button my-5">
-                <form method="post">
+            <div class="button my-5 row">
+                <form method="post" class="col-6">
                     <input type="hidden" value="start" name="action" />
-                    <button type="submit" class="border-0 in me-3">出勤</button>
+                    @if (Model.Button == 1 || Model.Button == 2) {
+                        <button type="submit" class="border-0 in me-3" disabled>出勤</button>
+                    }else{
+                        <button type="submit" class="border-0 in me-3">出勤</button>
+                    }
                 </form>
-                <form method="post">
+                <form method="post" class="col-6">
                     <input type="hidden" value="end" name="action" />
-                    <button type="submit" class="border-0 out">退勤</button>
+                    @if(Model.Button == 2){
+                        <button type="submit" class="border-0 out" disabled>退勤</button>
+                    }else{
+                        <button type="submit" class="border-0 out">退勤</button>
+                    }
                 </form>
             </div>
+            <div class="text-danger"> @Model.Message </div>
         </div>
         <div class="right mx-5" style="min-width: 25rem; max-width: 25rem;">
             <div
