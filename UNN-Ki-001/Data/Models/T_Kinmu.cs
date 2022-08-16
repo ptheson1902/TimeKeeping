@@ -24,53 +24,74 @@ namespace UNN_Ki_001.Data.Models
                 .Where(e => e.KinmuCd.Equals(KinmuCd) && e.KigyoCd.Equals(KigyoCd))
                 .FirstOrDefault();
 
-            // マスターレコードが存在しない場合 ///////////////////////////////////////////////////////////
-            if (m_Kinmu == null)
-            {
-                // 実績時間の計算
-                if (KinmuFrDate == null) KinmuFrDate = DakokuFrDate;
-                if (KinmuToDate == null) KinmuToDate = DakokuToDate;
-                
-                // マスタレコード無しで集計を行う
-            }
-            // マスターレコードが存在する場合 ///////////////////////////////////////////////////////////
-            else
-            {
-                // 実績開始時間の計算
-                KinmuFrWrite(m_Kinmu);
+            // 実績開始時間の計算
+            KinmuFrWrite(m_Kinmu);
 
-                // 実績終了時間の計算
-                KinmuToWrite(m_Kinmu);
+            // 実績終了時間の計算
+            KinmuToWrite(m_Kinmu);
 
-                // マスタレコードを下に集計を行う
-                ShoteiZikan(m_Kinmu);
-            }
+            // 所定時間の計算
+            ShoteiZikan(m_Kinmu);
+
+            // TODO: 休憩時間の計算
+            // TODO: 総労働時間の計算
+            // TODO: 控除時間の計算
+            // TODO: 法廷内時間の計算
+            // TODO: 法定外時間の計算
+            // TODO: 深夜時間の計算
+            // TODO: 法定休日時間の計算
         }
-        private void ShoteiZikan(M_Kinmu masterRecord)
+        private void ShoteiZikan(M_Kinmu? masterRecord)
         {
-            string? kinmuFrTm = masterRecord.KinmuFrTm;
-            string? kinmuToTm = masterRecord.KinmuToTm;
-            if(kinmuFrTm == null || kinmuToTm == null || KinmuFrDate == null || KinmuToDate == null)
+            // ヌルを許容しない
+            if(KinmuFrDate == null ||  KinmuToDate == null)
             {
                 return;
             }
 
-            DateTime tFrDate = ((DateTime)KinmuFrDate).ToUniversalTime();
-            DateTime tToDate = ((DateTime)KinmuToDate).ToUniversalTime();
-            DateTime mFrDate = new DateControl(KinmuDt, kinmuFrTm,  masterRecord.KinmuFrKbn).Origin.ToUniversalTime();
-            DateTime mToDate = new DateControl(KinmuDt, kinmuToTm, masterRecord.KinmuToKbn).Origin.ToUniversalTime();
-            if (mFrDate < tFrDate)
-                mFrDate = tFrDate;
-            if (mToDate > tToDate)
-                mToDate = tToDate;
+            // 勤務データの宣言
+            DateTime tKinmuFrDate = ((DateTime)KinmuFrDate).ToUniversalTime();
+            DateTime tKinmuToDate = ((DateTime)KinmuToDate).ToUniversalTime();
 
+            // マスターレコードの適用
+            if(masterRecord != null)
+            {
+                if(masterRecord.KinmuFrTm != null)
+                {
 
+                }
+            }
+
+            /*
+            string? kinmuFrTm = masterRecord.KinmuFrTm;
+            string? kinmuToTm = masterRecord.KinmuToTm;
+            if(kinmuFrTm == null || kinmuToTm == null || KinmuFrDate == null || KinmuToDate == null)
+            {
+                Shotei = masterRecord.ShoteiTm;
+                return;
+            }
+
+            // 必須データが存在しない場合
+            if (KinmuFrDate == null || KinmuToDate == null)
+            {
+                return;
+            }
+            var res = (DateTime)KinmuToDate - (DateTime)KinmuFrDate;
+
+            */
             var res = mToDate - mFrDate;
             Shotei = (int)res.TotalMinutes;
         }
 
-        private void KinmuFrWrite(M_Kinmu masterRecord)
+        private void KinmuFrWrite(M_Kinmu? masterRecord)
         {
+            // マスター勤務レコードが存在しない場合
+            if(masterRecord == null)
+            {
+                KinmuFrDate = DakokuFrDate;
+                return;
+            }
+
             // 実績開始時間の計算
             if (DakokuFrDate != null && KinmuFrDate == null /*←注意:仕様です。*/)
             {
@@ -92,8 +113,15 @@ namespace UNN_Ki_001.Data.Models
                 KinmuFrDate = result.ToUniversalTime();
             }
         }
-        private void KinmuToWrite(M_Kinmu masterRecord)
+        private void KinmuToWrite(M_Kinmu? masterRecord)
         {
+            // マスター勤務レコードが存在しない場合
+            if (masterRecord == null)
+            {
+                KinmuToDate = DakokuToDate;
+                return;
+            }
+
             if (DakokuToDate != null && KinmuToDate == null /*←仕様です。*/)
             {
                 DateTime DakokuToDateLocal = ((DateTime)DakokuToDate).ToLocalTime();

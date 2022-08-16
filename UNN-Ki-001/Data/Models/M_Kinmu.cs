@@ -25,7 +25,7 @@ namespace UNN_Ki_001.Data.Models
             TimeSpan kkttm3 = TimeSpan.FromMinutes(int.Parse(Kyukei3ToTm == null ? "0" : Kyukei3ToTm));
 
             TimeSpan stm = (kftm - kttm - (kkftm1 - kkttm1) - (kkftm2 - kkttm2) - (kkftm3 - kkttm3));
-            ShoteiTm = stm.TotalMinutes.ToString();
+            ShoteiTm = (int)stm.TotalMinutes;
         }
 
         [Key]
@@ -86,7 +86,7 @@ namespace UNN_Ki_001.Data.Models
         public string? KyukeiAutoFlg { get; set; }
 
         [Column("shotei_tm")]
-        public string? ShoteiTm { get; private set; }
+        public int? ShoteiTm { get; private set; }
 
         [Column("kinmu_fr_ctrl_flg")]
         public string? KinmuFrCtrlFlg { get; set; }
