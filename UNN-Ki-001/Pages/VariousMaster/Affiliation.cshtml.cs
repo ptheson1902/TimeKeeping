@@ -41,11 +41,29 @@ namespace UNN_Ki_001.Pages.VariousMaster
                 case "search":
                     Search();
                     break;
+                default: break;
+            }
+            var register_action = Request.Form["register_action"];
+            switch (register_action)
+            {       
                 case "register":
                     Register();
                     break;
+                default: break;
+            }
+            var update_action = Request.Form["update_action"];
+            switch (update_action)
+            {
                 case "update":
                     Update();
+                    break;
+                default: break;
+            }
+            var delete_action = Request.Form["delete_action"];
+            switch (delete_action)
+            {
+                case "delete":
+                    Delete();
                     break;
                 default: break;
             }
@@ -81,6 +99,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
                     Data.Add(d);         
             }
         }
+        // 新規
         private void Register()
         {
             string shozoku_cd1 = Request.Form["shozoku_cd1"];
@@ -104,6 +123,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
                 shozokukensaku sz = new(shozoku_cd1, shozoku_nm1, valid_flg1, kigyo_cd1);
                 _context.shozoku.Add(sz);
                 var a = _context.SaveChanges();
+                
                 if (a < 0)
                 {
                     Message = "登録できませんでした。";
@@ -114,9 +134,9 @@ namespace UNN_Ki_001.Pages.VariousMaster
                 }              
             }
         }
+        //　更新
         private void Update()
-        {
-            //........           
+        {         
             string shozoku_cd2 = Request.Form["shozoku_cd2"];
             string shozoku_nm2 = Request.Form["shozoku_nm2"];
             string valid_flg2 = Request.Form["valid_flg2"];
@@ -144,6 +164,35 @@ namespace UNN_Ki_001.Pages.VariousMaster
                 }
             }
                 
+        }
+        private void Delete()
+        {
+            string shozoku_cd2 = Request.Form["shozoku_cd2"];
+            string shozoku_nm2 = Request.Form["shozoku_nm2"];
+            string valid_flg2 = Request.Form["valid_flg2"];
+            if (shozoku_nm2 == "")
+            {
+                ErrorMessage += "所属名を入力してください。";
+            }
+            if (valid_flg2 == null)
+            {
+                ErrorMessage += "有効/無効をチェックしてください。";
+            }
+            if (valid_flg2 != null && shozoku_nm2 != "")
+            {
+                shozokukensaku sz = _context.shozoku.Where(e => e.shozoku_cd.Equals(shozoku_cd2)).FirstOrDefault();
+                sz.shozoku_nm = shozoku_nm2;
+                _context.shozoku.Remove(sz);
+                var a = _context.SaveChanges();
+                if (a < 0)
+                {
+                    Message = "削除できませんでした。";
+                }
+                else
+                {
+                    Message = "削除できました。";
+                }
+            }
         }
     }
 }

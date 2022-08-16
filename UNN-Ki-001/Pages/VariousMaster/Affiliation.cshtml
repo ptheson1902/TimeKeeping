@@ -1,4 +1,4 @@
-﻿@page "/VariousMaster/Affiliation/{id:int?}" 
+﻿@page "/VariousMaster/Affiliation/{id:int?}"
 @model UNN_Ki_001.Pages.VariousMaster.AffiliationModel 
 @{
 }
@@ -102,7 +102,7 @@
    </div>
 </div>
 
-@*所属メンテナンス登録(ポップアップ)*@
+@*所属メンテナンス登録(追加ポップアップ)*@
 <div
    class="modal fade"
    id="tsuikaModal"
@@ -165,22 +165,21 @@
                      class="btn modal-close btn-warning"
                      data-bs-dismiss="modal"
                   />
-                  <input type="hidden" value="register" name="action" />
-                  <button type="submit" class="register btn btn-secondary mx-3">
+                  <button
+                     type="submit"
+                     class="register btn btn-secondary mx-3"
+                     value="register"
+                     name="register_action"
+                  >
                      登録
                   </button>
-                  <input
-                     type="button"
-                     class="delete btn btn-secondary mx-3"
-                     value="削除"
-                  />
                </div>
             </div>
          </form>
       </div>
    </div>
 </div>
-@*所属メンテナンス修正(ポップアップ)*@ @if (Model.Data1 != null){
+@*所属メンテナンス修正(社員番号ポップアップ)*@ @if (Model.Data1 != null) {
 
 <div
    class="modal fade show d-block"
@@ -221,21 +220,40 @@
                </div>
                <div class="row mb-3 align-items-center">
                   <div class="col-10">
-                     有効/無効
+                     有効/無効 
+                     @if(@Model.Data1.valid_flg!="0") {
                      <label for="valid_flg2">有効</label>
                      <input
                         type="radio"
                         name="valid_flg2"
-                        value="@Model.Data1.valid_flg"
+                        value="1"
+                        id="valid_flg2"
+                        checked
+                     />
+                     <label for="valid_flg2">無効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg2"
+                        value="0"
+                        id="valid_flg2"
+                     />
+                     }else {
+                     <label for="valid_flg2">有効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg2"
+                        value="1"
                         id="valid_flg2"
                      />
                      <label for="valid_flg2">無効</label>
                      <input
                         type="radio"
                         name="valid_flg2"
-                        value="@Model.Data1.valid_flg"
+                        value="0"
                         id="valid_flg2"
+                        checked
                      />
+                     }
                   </div>
                </div>
 
@@ -247,15 +265,22 @@
                      class="btn modal-close btn-warning"
                      data-bs-dismiss="modal"
                   />
-                  <input type="hidden" value="update" name="action" />
-                  <button type="submit" class="register btn btn-secondary mx-3">
+                  <button
+                     type="submit"
+                     class="register btn btn-secondary mx-3"
+                     value="update"
+                     name="update_action"
+                  >
                      登録
                   </button>
-                  <input
-                     type="button"
+                  <button
+                     type="submit"
                      class="delete btn btn-secondary mx-3"
-                     value="削除"
-                  />
+                     value="delete"
+                     name="delete_action"
+                  >
+                     削除
+                  </button>
                </div>
             </div>
          </form>
