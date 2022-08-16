@@ -11,19 +11,6 @@ namespace UNN_Ki_001.Data
         {
         }
 
-        public override int SaveChanges(bool acceptAllChangesOnSuccess)
-        {
-            // 変更点をループしreloadメソッドを呼びだす
-            var entries = this.ChangeTracker.Entries<Reloadable>();
-            foreach (var entry in entries)
-            {
-                entry.Entity.reload();
-            }
-
-
-            return base.SaveChanges(acceptAllChangesOnSuccess);
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<M_Kinmu>()
@@ -31,13 +18,12 @@ namespace UNN_Ki_001.Data
             modelBuilder.Entity<T_Kinmu>()
                 .HasKey(c => new { c.KigyoCd, c.ShainNo, c.KinmuDt });
         }
-        public DbSet<m_kensakushain>? shain { get; set; }
-        public DbSet<shokushukensaku>? shokushu { get; set; }
-        public DbSet<shozokukensaku>? shozoku { get; set; }
-        public DbSet<koyokeitaikensaku>? koyokeitai { get; set; }
 
-        public DbSet<M_Kinmu>? m_kinmus{ get; set; }
-
-        public DbSet<T_Kinmu>? t_kinmus { get; set; }
+        public DbSet<m_kensakushain> m_shains => Set<m_kensakushain>();
+        public DbSet<M_Shokushu> m_shokushu => Set<M_Shokushu>();
+        public DbSet<M_Shozoku> m_shozoku => Set<M_Shozoku>();
+        public DbSet<M_Koyokeitai> koyokeitai => Set<M_Koyokeitai>();
+        public DbSet<M_Kinmu> m_kinmus => Set<M_Kinmu>();
+        public DbSet<T_Kinmu> t_kinmus => Set<T_Kinmu>();
     }
 }

@@ -28,14 +28,12 @@ function getdate() {
     setTimeout(function () { getdate() }, 1);
 }
 getdate()
-
-
 // Calendar
 function day(i) {
     var str = "";
     let j = 0;
     while (j < 7) {
-        str += "<td class='fc-day px-2' data-date='" + new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2) + "'>" +
+        str += "<td class='fc-day px-2' data-date='" + year + ("0" + month).slice(-2) + ("0" + i).slice(-2) + "'>" +
             "<div class=''>" +
             "<div class='fc-day-number py-2'>" + i + "</div>" +
             "</div>" +
@@ -56,7 +54,7 @@ function day(i, b) {
                 "</div>" +
                 "</td>"
         } else {
-            str += "<td class='fc-day px-2' data-date='" + new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2) + "'>" +
+            str += "<td class='fc-day px-2' data-date='" + year + ("0" + month).slice(-2) + ("0" + i).slice(-2) + "'>" +
                 "<div class=''>" +
                 "<div class='fc-day-number py-2'>" + i + "</div>" +
                 "</div>" +
@@ -72,7 +70,7 @@ function day1(i, b) {
     let j = 0;
     while (j < 7) {
         if (j < 7 - b) {
-            str += "<td class='fc-day px-2' data-date='" + new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2) + "'>" +
+            str += "<td class='fc-day px-2' data-date='" + year + ("0" + month).slice(-2) + ("0" + i).slice(-2) + "'>" +
                 "<div class=''>" +
                 "<div class='fc-day-number py-2'>" + i + "</div>" +
                 "</div>" +
@@ -91,12 +89,12 @@ function day1(i, b) {
 }
 let year = new Date().getFullYear()
 let month = new Date().getMonth() + 1
-function calendar() {
+function Calendar(year, month, e) {
     $(".fc-header .fc-header-center .year").text(year);
     $(".fc-header .fc-header-center .month").text(month);
     var dayOfWeek = new Date(year + "/" + month + "/1").getDay();
     var dayNumOfMonth = new Date(year, month, 0).getDate()
-    $(".calendar-data tr.week1").append(day(1, dayOfWeek))
+    $(".calendar-data tr.week1").append(day(1, dayOfWeek));
     $(".calendar-data tr.week2").append(day(8 - dayOfWeek))
     $(".calendar-data tr.week3").append(day(15 - dayOfWeek))
     $(".calendar-data tr.week4").append(day(22 - dayOfWeek))
@@ -104,8 +102,86 @@ function calendar() {
     if (dayNumOfMonth - 35 + dayOfWeek > 0) {
         $(".calendar-data tr.week6").append(day1((36 - dayOfWeek), 42 - dayNumOfMonth - dayOfWeek))
     }
-}
-calendar();
+    /*for (let i = 0; i < dayOfWeek; i++) {
+        $(".calendar-data tr.week1").append("<td class='fc-day px-2' data-date=''>" +
+            "<div class=''>" +
+            "<div class='fc-day-number py-2'></div>" +
+            "</div>" +
+            "</td>"
+        )
+    }*/
+
+    var q = 0;
+    $(".fc-day").each(function () {
+            var it = $(this);
+            for (let j = 0; j < e.length; j++) {
+                if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt != null && e[j].dakokuFrTm != null) {
+                    it.children().addClass("taikin");
+                }
+                if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt != null && e[j].dakokuFrTm == null) {
+                    it.children().addClass("shukin");
+                }
+                if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt == null && e[j].dakokuFrTm == null) {
+                    it.children().addClass("yasumi");
+                }
+            }
+        })
+    /*e.forEach(item => {
+        var str = "";
+        if (q < 7 - dayOfWeek) {
+            str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
+                "<div class=''>" +
+                "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
+                "</div>" +
+                "</td>"
+            $(".calendar-data tr.week1").append(str);
+            q++;
+        }
+        else if (q < 14 - dayOfWeek) {
+            str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
+                "<div class=''>" +
+                "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
+                "</div>" +
+                "</td>"
+            $(".calendar-data tr.week2").append(str);
+            q++;
+        } else if (q < 21 - dayOfWeek) {
+            str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
+                "<div class=''>" +
+                "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
+                "</div>" +
+                "</td>"
+            $(".calendar-data tr.week3").append(str);
+            q++;
+        } else if (q < 28 - dayOfWeek) {
+            str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
+                "<div class=''>" +
+                "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
+                "</div>" +
+                "</td>"
+            $(".calendar-data tr.week4").append(str);
+            q++;
+        } else if (q < 35 - dayOfWeek) {
+            str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
+                "<div class=''>" +
+                "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
+                "</div>" +
+                "</td>"
+            $(".calendar-data tr.week5").append(str);
+            q++;
+        } else {
+            str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
+                "<div class=''>" +
+                "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
+                "</div>" +
+                "</td>"
+            $(".calendar-data tr.week6").append(str);
+            q++;
+        }
+    })*/
+    
+};
+GetData(year, month);
 
 $(".prev-month").click(function () {
     $(".calendar-data tr td").remove()
@@ -114,7 +190,7 @@ $(".prev-month").click(function () {
         year--;
         month = 12;
     }
-    calendar()
+    GetData(year, month);
 })
 $(".next-month").click(function () {
     $(".calendar-data tr td").remove()
@@ -123,14 +199,16 @@ $(".next-month").click(function () {
         year++;
         month = 1;
     }
-    calendar()
+    GetData(year, month);
 })
 
-$.ajax({
-    url: "/Attendance/GetData",
-    method: "get",
-    Cache: "false",
-    success: function (e) {
-        console.log(e);
-    }
-})
+function GetData(year, month) {
+    $.ajax({
+        url: "/Attendance/GetData/" + year + "-" + month,
+        method: "get",
+        Cache: "false",
+        success: function (e) {
+            Calendar(year, month, e);
+        }
+    })
+}

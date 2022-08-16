@@ -12,14 +12,14 @@ namespace UNN_Ki_001.Pages.VariousMaster
         private readonly KintaiDbContext _context;
         private readonly ApplicationDbContext context1;
         public List<Display> Data = new List<Display>();
-        
+
         public ShainSearchModel(UNN_Ki_001.Data.KintaiDbContext context, ApplicationDbContext application)
         {
             _context = context;
             context1 = application;
         }
         public void OnGet()
-        { 
+        {
             Data.Clear();
         }
 
@@ -32,34 +32,34 @@ namespace UNN_Ki_001.Pages.VariousMaster
             string shokushu_nm = Request.Form["shokushu_cd"];
             string koyokeitai_nm = Request.Form["koyokeitai_cd"];
             // 所属コード、所属コード、雇用形態コードでJOIN
-            var no = from a in _context.shain
-                     join b in _context.shozoku
+            var no = from a in _context.m_shains
+                     join b in _context.m_shozoku
                      on a.shozoku_cd equals b.shozoku_cd
-                     join c in _context.shokushu
+                     join c in _context.m_shokushu
                      on a.shokushu_cd equals c.shokushu_cd
                      join d in _context.koyokeitai
                      on a.koyokeitai_cd equals d.koyokeitai_cd
-                     select new {a.shain_no , a.name_mei , b.shozoku_nm , c.shokushu_nm , d.koyokeitai_nm};
+                     select new { a.shain_no, a.name_mei, b.shozoku_nm, c.shokushu_nm, d.koyokeitai_nm };
 
             // 条件による検索すること(value＝nullは検索条件にならないこと。)
             if (!string.IsNullOrEmpty(shain_no))
             {
-                no = no.Where(e => e.shain_no.Equals(shain_no) );
+                no = no.Where(e => e.shain_no.Equals(shain_no));
             }
 
-           if (!string.IsNullOrEmpty(name_mei))
+            if (!string.IsNullOrEmpty(name_mei))
             {
                 no = no.Where(e => e.name_mei.Equals(name_mei));
             }
 
             if (!string.IsNullOrEmpty(shozoku_nm))
             {
-                no = no.Where(e => e.shozoku_nm.Equals(shozoku_nm) );
+                no = no.Where(e => e.shozoku_nm.Equals(shozoku_nm));
             }
 
             if (!string.IsNullOrEmpty(shokushu_nm))
             {
-                no = no.Where(e => e.shokushu_nm.Equals(shokushu_nm) );
+                no = no.Where(e => e.shokushu_nm.Equals(shokushu_nm));
             }
 
             if (!string.IsNullOrEmpty(koyokeitai_nm))

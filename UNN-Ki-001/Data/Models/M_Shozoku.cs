@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace UNN_Ki_001.Data.Models
 {
     [Table("m_shozoku", Schema = "public")]
-    public class shozokukensaku
+    public class M_Shozoku
     {
         [Key]
         [Column("shozoku_cd")]

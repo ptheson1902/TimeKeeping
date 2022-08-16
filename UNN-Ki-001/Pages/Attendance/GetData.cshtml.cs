@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using UNN_Ki_001.Data.Models;
 using UNN_Ki_001.Data;
 using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics;
 
 namespace UNN_Ki_001.Pages.Attendance
 {
@@ -12,19 +13,24 @@ namespace UNN_Ki_001.Pages.Attendance
     {
         public List<T_Kinmu?> ListKinmu { get; set; }
         private readonly KintaiDbContext _kintaiDbContext;
-        public string? Message { get; set; }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public GetDataModel(KintaiDbContext kintaiDbContext)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             _kintaiDbContext = kintaiDbContext;
         }
-
-        public IActionResult OnGet()
+        [HttpGet]
+        public JsonResult OnGet(DateTime? month)
         {
             DateTime now = DateTime.Now;
-            //ListKinmu = _kintaiDbContext.t_kinmus.Where(e => e.ShainNo.Equals(User.Identity.Name) && e.KinmuDt.Substring(0, 6).Equals(now.ToString("yyyyMM")));
-            return new OkObjectResult(_kintaiDbContext.t_kinmus.Where(e => e.ShainNo.Equals(User.Identity.Name) && e.KinmuDt.Substring(0, 6).Equals(now.ToString("yyyyMM"))));
+            if (month != null)
+            {
+                return new JsonResult(_kintaiDbContext.t_kinmus.Where(a => a.ShainNo.Equals(/*User.Identity.Name*/"U00001") && a.KinmuDt.Substring(0, 6).Equals(((DateTime)month).ToString("yyyyMM"))).Select(a => new {a.KinmuDt, a.DakokuFrDt, a.DakokuFrTm , a.DakokuToDt, a.DakokuToTm, a.KinmuFrDt, a.KinmuFrTm, a.KinmuToDt, a.KinmuToTm }).OrderBy(a => a.KinmuDt));
+            }
+            else
+            {
+                return new JsonResult(_kintaiDbContext.t_kinmus.Where(a => a.ShainNo.Equals(/*User.Identity.Name*/"U00001") && a.KinmuDt.Substring(0, 6).Equals(now.ToString("yyyyMM"))).Select(a => new { a.KinmuDt, a.DakokuFrDt, a.DakokuFrTm, a.DakokuToDt, a.DakokuToTm, a.KinmuFrDt, a.KinmuFrTm, a.KinmuToDt, a.KinmuToTm }).OrderBy(a => a.KinmuDt));
+            }
         }
     }
 }

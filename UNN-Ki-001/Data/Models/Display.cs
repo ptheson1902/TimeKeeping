@@ -2,8 +2,7 @@
 {
     public class Display
     {
-        internal string koyokeitai_nm;
-
+        public string? koyokeitai_nm;
         public string? shain_no { get; set; }
         public string? name_mei { get; set; }
         public string? shozoku_nm { get; set; }

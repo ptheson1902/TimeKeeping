@@ -25,8 +25,8 @@ namespace UNN_Ki_001.Pages.VariousMaster
             string shozoku_cd = Request.Form["shozoku_cd"];
             string shozoku_nm = Request.Form["shozoku_nm"];
             string valid_flg = Request.Form["valid_flg"];
-            var no = from m_shozoku in _context.shozoku
-                     select new {m_shozoku.shozoku_cd , m_shozoku.shozoku_nm , m_shozoku.valid_flg };
+            var no = from m_shozoku in _context.m_shozoku
+                     select new { m_shozoku.shozoku_cd, m_shozoku.shozoku_nm, m_shozoku.valid_flg };
             // ğŒ‚É‚æ‚éŒŸõ‚·‚é‚±‚Æ(valuenull‚ÍŒŸõğŒ‚É‚È‚ç‚È‚¢‚±‚ÆB)
             if (!string.IsNullOrEmpty(shozoku_cd))
             {
@@ -47,7 +47,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
                 Display d = new Display();
                 d.shozoku_cd = item.shozoku_cd;
                 d.shozoku_nm = item.shozoku_nm;
-                d.valid_flg = item.valid_flg;              
+                d.valid_flg = item.valid_flg;
                 Data.Add(d);
             }
         }

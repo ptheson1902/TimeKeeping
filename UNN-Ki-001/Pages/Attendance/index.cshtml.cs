@@ -41,8 +41,7 @@ namespace UNN_Ki_001.Pages.Attendance
         public async Task OnPostAsync()
         {
             var action = Request.Form["action"];
-            DateTime now = DateTime.Now;
-            ListKinmu = _kintaiDbContext.t_kinmus.Where(e => e.ShainNo.Equals(User.Identity.Name) && e.KinmuDt.Substring(0, 6).Equals(now.ToString("yyyyMM"))).ToList();
+
             switch (action)
             {
                 case "start":
