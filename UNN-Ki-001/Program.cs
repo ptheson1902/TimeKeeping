@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("UserConnection")));
 
 
 // Identity‚ð’Ç‰Á
@@ -22,7 +22,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(options => options.Stores.MaxLeng
 
 // KintaiDbContext
 builder.Services.AddDbContext<KintaiDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("UserConnection")));
 
 builder.Services.AddScoped<KinmuManager>();
 

@@ -105,7 +105,7 @@ namespace UNN_Ki_001.Data.Models
         public string? UpdateUsr { get; set; }
 
         [Column("update_pgm")]
-        public string? UpdatePgm { get; set; }
+        public string? UpdatePgm { get; set; }/*
         [Column("dakoku_fr_date")]
         public DateTime? dakokuFrDate { get; set; }
         [Column("dakoku_to_date")]
@@ -113,6 +113,6 @@ namespace UNN_Ki_001.Data.Models
         [Column("kinmu_fr_date")]
         public DateTime? kinmuFrDate { get; set; }
         [Column("kinmu_to_date")]
-        public DateTime? kinmuToDate { get; set; }
+        public DateTime? kinmuToDate { get; set; }*/
     }
 }

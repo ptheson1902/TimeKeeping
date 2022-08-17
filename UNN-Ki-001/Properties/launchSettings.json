@@ -1,12 +1,5 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:36549",
-      "sslPort": 44354
-    }
-  },
+
   "profiles": {
     "UNN_Ki_001": {
       "commandName": "Project",
@@ -16,23 +9,6 @@
       },
       "applicationUrl": "http://localhost:7165;http://localhost:5165",
       "dotnetRunMessages": true
-    },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "WSL": {
-      "commandName": "WSL2",
-      "launchBrowser": true,
-      "launchUrl": "http://localhost:7165",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_URLS": "http://localhost:7165;http://localhost:5165"
-      },
-      "distributionName": ""
     }
   }
 }

@@ -87,9 +87,17 @@ function day1(i, b) {
     }
     return str;
 }
+function strToDate(str) {
+    var y = str.substring(0, 4)
+    var m = str.substring(4, 6)
+    var d = str.substring(6, 8)
+    str = y + "/" + m + "/" + d
+    return new Date(str);
+}
 let year = new Date().getFullYear()
 let month = new Date().getMonth() + 1
 function Calendar(year, month, e) {
+    $(".calendar-data tr td").remove()
     $(".fc-header .fc-header-center .year").text(year);
     $(".fc-header .fc-header-center .month").text(month);
     var dayOfWeek = new Date(year + "/" + month + "/1").getDay();
@@ -103,20 +111,23 @@ function Calendar(year, month, e) {
         $(".calendar-data tr.week6").append(day1((36 - dayOfWeek), 42 - dayNumOfMonth - dayOfWeek))
     }
 
-    var q = 0;
     $(".fc-day").each(function () {
-        var it = $(this);
+        let it = $(this);
+        let count = 0;
         for (let j = 0; j < e.length; j++) {
             if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt != null && e[j].dakokuFrTm != null && e[j].dakokuToDt != null && e[j].dakokuToTm != null) {
-                it.children().addClass("taikin");
+                count = 1;
             }
-            if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt != null && e[j].dakokuFrTm != null && e[j].dakokuToDt == null && e[j].dakokuToTm == null) {
-                it.children().addClass("shukin");   
-            }
-            if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt == null && e[j].dakokuFrTm == null && e[j].dakokuToDt == null && e[j].dakokuToTm == null) {
-                it.children().addClass("yasumi");
+            else if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt != null && e[j].dakokuFrTm != null && e[j].dakokuToDt == null && e[j].dakokuToTm == null) {
+                count = 2
             }
         }
+        if(count == 1)
+            it.children().addClass("taikin");
+        if(count == 2)
+            it.children().addClass("shukin");
+        if (count == 0 && it.data("date") != "" && new Date() > strToDate(it.data("date").toString()))
+            it.children().addClass("yasumi");
     })
     /*e.forEach(item => {
         var str = "";

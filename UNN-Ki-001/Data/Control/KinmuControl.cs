@@ -4,7 +4,7 @@ namespace UNN_Ki_001.Data.Control
 {
     public class KinmuControl
     {
-        private const string NULL_CHAR = "N/A";
+        //private const string NULL_CHAR = "N/A";
         /// <summary>
         /// KintaiDbContextクラス
         /// </summary>
@@ -128,7 +128,7 @@ namespace UNN_Ki_001.Data.Control
             // 丸め処理の実行
             if (marumeProcess)
             {
-                dc = (mKinmu == null) ? dc : dc.MarumeProcess(mKinmu.KinmuFrMarumeTm, mKinmu.KinmuFrMarumeKbn);
+                dc = (mKinmu == null) ? dc : dc.MarumeProcess(mKinmu.KinmuToMarumeTm, mKinmu.KinmuToMarumeKbn);
             }
 
             // 実績記録を保存
