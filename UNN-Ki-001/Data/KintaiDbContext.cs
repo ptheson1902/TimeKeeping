@@ -14,29 +14,22 @@ namespace UNN_Ki_001.Data
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            DoReload();
-
-            return base.SaveChanges(acceptAllChangesOnSuccess);
-        }
-
-        private void DoReload()
-        {
-            int count = 1;
+            int count = 99;
+            List<string> list = new List<string>();
             while(count != 0)
             {
-                List<string> list = new List<string>();
                 count = 0;
-                foreach (var record in ChangeTracker.Entries<Reloadable>().ToList())
+                foreach(var record in ChangeTracker.Entries<Reloadable>().ToList())
                 {
                     if (!record.Entity.isReloaded)
                     {
                         count++;
-                        Debug.WriteLine(record.ToString());
+                        Debug.Write("リロード実行" + record.ToString());
                         record.Entity.run(this);
                     }
                 }
             }
-
+            return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -14,6 +14,7 @@ namespace UNN_Ki_001.Data.Models
 
         private void Check(KintaiDbContext context)
         {
+            /*
             // 勤務レコードをセレクト
             T_Kinmu? kinmu = context.t_kinmus.Where(e =>
                 e.KigyoCd.Equals(KigyoCd)
@@ -64,7 +65,7 @@ namespace UNN_Ki_001.Data.Models
                 {
                     if (item.DakokuToDate > DakokuFrDate)           // ターゲットの休憩終了時刻がこのレコードの休憩開始時刻より後だった場合
                     {
-                        throw new Exception("休憩開始時間が直前のレコードの休憩時間と重複しています。");
+                        throw new Exception("休憩開始時間が直前のレコードの休憩時間と重複しています。\n開始時刻=" + DakokuFrDate + "\n終了時刻=" + DakokuToDate);
                     }
                 }
             }
@@ -111,7 +112,7 @@ namespace UNN_Ki_001.Data.Models
                 {
                     if (item.DakokuFrDate < DakokuToDate)           // ターゲットの休憩終了時刻がこのレコードの休憩開始時刻より後だった場合
                     {
-                        throw new Exception("休憩終了時間が直後のレコードの休憩時間と重複しています。");
+                        throw new Exception("休憩終了時間が直後のレコードの休憩時間と重複しています。\n開始時刻=" + DakokuFrDate + "\n終了時刻=" + DakokuToDate);
                     }
                 }
             }
@@ -120,8 +121,9 @@ namespace UNN_Ki_001.Data.Models
             if (DakokuToDate != null && DakokuFrDate != null)
             {
                 if (DakokuToDate <= DakokuFrDate)
-                    throw new Exception("休憩開始時刻と休憩終了時刻の関係が不正です。");
+                    throw new Exception("休憩開始時刻と休憩終了時刻の関係が不正です。\n開始時刻=" + DakokuFrDate + "\n終了時刻=" + DakokuToDate);
             }
+            */
         }
 
         public T_Kyukei(string kigyoCd, string shainNo, string kinmuDt, int seqNo)

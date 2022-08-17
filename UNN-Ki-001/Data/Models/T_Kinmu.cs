@@ -32,70 +32,117 @@ namespace UNN_Ki_001.Data.Models
             if (KinmuToDate == null)
                 KinmuToWrite(m_Kinmu, context);
 
+            
+            if(KinmuToDate != null)
+            {
+                var test = ((DateTime)KinmuToDate).ToLocalTime();
+                Debug.WriteLine(test);
+            }
+            
+            
             // 所定時間の計算
             if(Shotei == null)
                 ShoteiWrite(m_Kinmu);
 
             // 休憩時間の計算
-            if (Kyukei == null)
+            if (Kyukei == null && KinmuFrDate != null && KinmuToDate != null)
                 KyukeiWrite(m_Kinmu, context);
-
+            
+            
             // TODO: 総労働時間の計算
             // TODO: 控除時間の計算
         }
 
         private void KyukeiWrite(M_Kinmu? masterRecord, KintaiDbContext context)
         {
-            // 休憩自動追加フラグが有効の場合
-            if(masterRecord != null && masterRecord.KyukeiAutoFlg != null && masterRecord.KyukeiAutoFlg.Equals("1"))
+            if(KinmuFrDate != null && KinmuToDate != null)
             {
-                // 既存の休憩を（もしあれば）すべて削除
-                var target = context.t_Kyukeis
-                    .Where(e => e.KigyoCd.Equals(KigyoCd) && e.ShainNo.Equals(ShainNo) && e.KinmuDt.Equals(KinmuDt));
-                context.RemoveRange(target);
-
-                //// 休憩を自動追加処理
-                List<T_Kyukei> list = new List<T_Kyukei>();
-                int count = 0;
-                int totalMinutes = 0;
-                // - 休憩１
-                if(masterRecord.Kyukei1FrKbn != null && masterRecord.Kyukei1FrTm != null && masterRecord.Kyukei1ToKbn != null && masterRecord.Kyukei1ToTm != null)
+                // 休憩自動追加フラグが有効の場合
+                if (masterRecord != null && masterRecord.KyukeiAutoFlg != null && masterRecord.KyukeiAutoFlg.Equals("1"))
                 {
-                    DateControl frDc = new DateControl(KinmuDt, masterRecord.Kyukei1FrTm, masterRecord.Kyukei1FrKbn);
-                    DateControl toDc = new DateControl(KinmuDt, masterRecord.Kyukei1ToTm, masterRecord.Kyukei1ToKbn);
-                    T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count);
-                    kyukei.DakokuFrDate = frDc.Origin.ToUniversalTime();
-                    kyukei.DakokuToDate = toDc.Origin.ToUniversalTime();
-                    totalMinutes += (int)(toDc.Origin - frDc.Origin).TotalMinutes;
-                    list.Add(kyukei);
-                }
-                // - 休憩２
-                if (masterRecord.Kyukei2FrKbn != null && masterRecord.Kyukei2FrTm != null && masterRecord.Kyukei2ToKbn != null && masterRecord.Kyukei2ToTm != null)
-                {
-                    DateControl frDc = new DateControl(KinmuDt, masterRecord.Kyukei2FrTm, masterRecord.Kyukei2FrKbn);
-                    DateControl toDc = new DateControl(KinmuDt, masterRecord.Kyukei2ToTm, masterRecord.Kyukei2ToKbn);
-                    T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count);
-                    kyukei.DakokuFrDate = frDc.Origin.ToUniversalTime();
-                    kyukei.DakokuToDate = toDc.Origin.ToUniversalTime();
-                    totalMinutes += (int)(toDc.Origin - frDc.Origin).TotalMinutes;
-                    list.Add(kyukei);
-                }
-                // - 休憩３
-                if (masterRecord.Kyukei3FrKbn != null && masterRecord.Kyukei3FrTm != null && masterRecord.Kyukei3ToKbn != null && masterRecord.Kyukei3ToTm != null)
-                {
-                    DateControl frDc = new DateControl(KinmuDt, masterRecord.Kyukei3FrTm, masterRecord.Kyukei3FrKbn);
-                    DateControl toDc = new DateControl(KinmuDt, masterRecord.Kyukei3ToTm, masterRecord.Kyukei3ToKbn);
-                    T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count);
-                    kyukei.DakokuFrDate = frDc.Origin.ToUniversalTime();
-                    kyukei.DakokuToDate = toDc.Origin.ToUniversalTime();
-                    totalMinutes += (int)(toDc.Origin - frDc.Origin).TotalMinutes;
-                    list.Add(kyukei);
-                }
+                    Debug.WriteLine("休憩を自動追加します(勤務コード:" + KinmuCd + ")");
+
+                    // 既存の休憩を（もしあれば）すべて削除
+                    var target = context.t_Kyukeis
+                        .Where(e => e.KigyoCd.Equals(KigyoCd) && e.ShainNo.Equals(ShainNo) && e.KinmuDt.Equals(KinmuDt));
+                    context.RemoveRange(target);
+
+                    //// 休憩を自動追加処理
+                    List<T_Kyukei> list = new List<T_Kyukei>();
+                    int count = 0;
+
+                    // - 休憩１
+                    if (masterRecord.Kyukei1FrKbn != null && masterRecord.Kyukei1FrTm != null && masterRecord.Kyukei1ToKbn != null && masterRecord.Kyukei1ToTm != null)
+                    {
+                        DateControl frDc = new DateControl(KinmuDt, masterRecord.Kyukei1FrTm, masterRecord.Kyukei1FrKbn);
+                        DateControl toDc = new DateControl(KinmuDt, masterRecord.Kyukei1ToTm, masterRecord.Kyukei1ToKbn);
+                        T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count);
+                        kyukei.DakokuFrDate = frDc.Origin.ToUniversalTime();
+                        kyukei.DakokuToDate = toDc.Origin.ToUniversalTime();
+                        list.Add(kyukei);
+                    }
+                    // - 休憩２
+                    if (masterRecord.Kyukei2FrKbn != null && masterRecord.Kyukei2FrTm != null && masterRecord.Kyukei2ToKbn != null && masterRecord.Kyukei2ToTm != null)
+                    {
+                        DateControl frDc = new DateControl(KinmuDt, masterRecord.Kyukei2FrTm, masterRecord.Kyukei2FrKbn);
+                        DateControl toDc = new DateControl(KinmuDt, masterRecord.Kyukei2ToTm, masterRecord.Kyukei2ToKbn);
+                        T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count);
+                        kyukei.DakokuFrDate = frDc.Origin.ToUniversalTime();
+                        kyukei.DakokuToDate = toDc.Origin.ToUniversalTime();
+                        list.Add(kyukei);
+                    }
+                    // - 休憩３
+                    if (masterRecord.Kyukei3FrKbn != null && masterRecord.Kyukei3FrTm != null && masterRecord.Kyukei3ToKbn != null && masterRecord.Kyukei3ToTm != null)
+                    {
+                        DateControl frDc = new DateControl(KinmuDt, masterRecord.Kyukei3FrTm, masterRecord.Kyukei3FrKbn);
+                        DateControl toDc = new DateControl(KinmuDt, masterRecord.Kyukei3ToTm, masterRecord.Kyukei3ToKbn);
+                        T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count);
+                        kyukei.DakokuFrDate = frDc.Origin.ToUniversalTime();
+                        kyukei.DakokuToDate = toDc.Origin.ToUniversalTime();
+                        list.Add(kyukei);
+                    }
 
 
-                // 追加
-                context.AddRange(list);
-                Kyukei = totalMinutes;
+                    // 開始時間と終了時間を確認・修正して追加
+                    int totalMinutes = 0;
+                    foreach (var item in list)
+                    {
+                        if (item.DakokuFrDate != null && item.DakokuToDate != null)
+                        {
+
+                            var kinmuFr = ((DateTime)KinmuFrDate);
+                            var kinmuTo = ((DateTime)KinmuToDate).ToLocalTime();
+                            var kyukeiFr = ((DateTime)item.DakokuFrDate).ToLocalTime();
+                            var kyukeiTo = ((DateTime)item.DakokuToDate).ToLocalTime();
+                            Debug.WriteLine(kinmuFr + "\n" + kinmuTo + "\n" + kyukeiFr + "\n" + kyukeiTo);
+
+                            if (kyukeiFr < kinmuFr)
+                            {
+                                kyukeiFr = kinmuFr;
+                            }
+                            if (kyukeiTo > kinmuTo)
+                            {
+                                kyukeiTo = kinmuTo;
+                            }
+                            if ((kyukeiTo).CompareTo(kyukeiFr) != 0)
+                            {
+                                context.Add(item);
+
+                                int minutes = (int)(kyukeiTo - kyukeiFr).TotalMinutes;
+                                totalMinutes += minutes;
+
+                                item.DakokuToDate = kyukeiTo.ToUniversalTime();
+                                item.DakokuFrDate = kyukeiFr.ToUniversalTime();
+                            } else
+                            {
+                                Debug.WriteLine("ほげほげほげ\n" + item.DakokuFrDate + "\n" + item.DakokuToDate);
+                            }
+                        }
+                    }
+                    Kyukei = totalMinutes;
+                    return;
+                }
+                Kyukei = 0;
             }
         }
 
