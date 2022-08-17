@@ -13,7 +13,13 @@ namespace UNN_Ki_001.Data.Models
             this.KinmuCd = KinmuCd;
         }
 
-        public override void reload(KintaiDbContext context)
+        protected override void Reload(KintaiDbContext context)
+        {
+            if(ShoteiTm == null)
+                ShoteiTm = getShotei();
+        }
+
+        private int getShotei()
         {
             TimeSpan kftm = TimeSpan.FromMinutes(int.Parse(KinmuFrTm == null ? "0" : KinmuFrTm));
             TimeSpan kttm = TimeSpan.FromMinutes(int.Parse(KinmuToTm == null ? "0" : KinmuToTm));
@@ -25,7 +31,7 @@ namespace UNN_Ki_001.Data.Models
             TimeSpan kkttm3 = TimeSpan.FromMinutes(int.Parse(Kyukei3ToTm == null ? "0" : Kyukei3ToTm));
 
             TimeSpan stm = (kftm - kttm - (kkftm1 - kkttm1) - (kkftm2 - kkttm2) - (kkftm3 - kkttm3));
-            ShoteiTm = (int)stm.TotalMinutes;
+            return (int)stm.TotalMinutes;
         }
 
         [Key]
