@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Diagnostics;
 using UNN_Ki_001.Data.Models;
 
 namespace UNN_Ki_001.Data
@@ -13,40 +14,29 @@ namespace UNN_Ki_001.Data
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            /*
-            // M_KINMUレコードの変更があれば、
-            // 紐づいたT_KINMUレコードも再計算にエントリーさせる
-            var mKinmus = ChangeTracker.Entries<M_Kinmu>();
-            if(mKinmus.Count() > 0)
-            {
-                // KinmuCdのリストを取得
-                List<string> list = new List<string>();
-                foreach(var mKinmu in mKinmus)
-                {
-                    list.Add(mKinmu.Entity.KinmuCd);
-                }
-
-                // 該当するT_KINMUレコードを取得
-                var tKinmus = t_kinmus.Where(e => e.KinmuCd != null && list.Contains(e.KinmuCd));
-
-                // Reloadableの対象としてマーク
-                foreach(var tKinmu in tKinmus)
-                {
-                    Entry(tKinmu).State = EntityState.Modified;
-                }
-
-            }
-            */
-
-            // Reloadableを実行
-            var records = ChangeTracker.Entries<Reloadable>();
-            foreach(var record in records)
-            {
-                record.Entity.reload(this);
-            }
-
+            DoReload();
 
             return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        private void DoReload()
+        {
+            int count = 1;
+            while(count != 0)
+            {
+                List<string> list = new List<string>();
+                count = 0;
+                foreach (var record in ChangeTracker.Entries<Reloadable>().ToList())
+                {
+                    if (!record.Entity.isReloaded)
+                    {
+                        count++;
+                        Debug.WriteLine(record.ToString());
+                        record.Entity.run(this);
+                    }
+                }
+            }
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -55,8 +45,11 @@ namespace UNN_Ki_001.Data
                 .HasKey(c => new { c.KigyoCd, c.KinmuCd });
             modelBuilder.Entity<T_Kinmu>()
                 .HasKey(c => new { c.KigyoCd, c.ShainNo, c.KinmuDt });
+            modelBuilder.Entity<T_Kyukei>()
+                .HasKey(c => new { c.KigyoCd, c.ShainNo, c.KinmuDt, c.SeqNo });
         }
 
+        public DbSet<T_Kyukei> t_Kyukeis => Set<T_Kyukei>();
         public DbSet<m_kensakushain> m_shains => Set<m_kensakushain>();
         public DbSet<M_Shokushu> m_test => Set<M_Shokushu>();
         public DbSet<M_Shozoku> shozoku => Set<M_Shozoku>();

@@ -16,7 +16,7 @@ namespace UNN_Ki_001.Data.Models
             KinmuDt = kinmuDt;
         }
 
-        public override void reload(KintaiDbContext context)
+        protected override void Reload(KintaiDbContext context)
         {
 
             // マスターレコードの取得
@@ -25,51 +25,103 @@ namespace UNN_Ki_001.Data.Models
                 .FirstOrDefault();
 
             // 実績開始時間の計算
-            KinmuFrWrite(m_Kinmu);
+            if(KinmuFrDate == null)
+                KinmuFrWrite(m_Kinmu, context);
 
             // 実績終了時間の計算
-            KinmuToWrite(m_Kinmu);
+            if (KinmuToDate == null)
+                KinmuToWrite(m_Kinmu, context);
 
             // 所定時間の計算
-            ShoteiZikan(m_Kinmu);
+            if(Shotei == null)
+                ShoteiWrite(m_Kinmu);
 
-            // TODO: 休憩時間の計算
+            // 休憩時間の計算
+            if (Kyukei == null)
+                KyukeiWrite(m_Kinmu, context);
+
             // TODO: 総労働時間の計算
             // TODO: 控除時間の計算
-            // TODO: 法廷内時間の計算
-            // TODO: 法定外時間の計算
-            // TODO: 深夜時間の計算
-            // TODO: 法定休日時間の計算
         }
 
-        private void ShoteiZikan(M_Kinmu? masterRecord)
+        private void KyukeiWrite(M_Kinmu? masterRecord, KintaiDbContext context)
         {
+            // 休憩自動追加フラグが有効の場合
+            if(masterRecord != null && masterRecord.KyukeiAutoFlg != null && masterRecord.KyukeiAutoFlg.Equals("1"))
+            {
+                // 既存の休憩を（もしあれば）すべて削除
+                var target = context.t_Kyukeis
+                    .Where(e => e.KigyoCd.Equals(KigyoCd) && e.ShainNo.Equals(ShainNo) && e.KinmuDt.Equals(KinmuDt));
+                context.RemoveRange(target);
+
+                //// 休憩を自動追加処理
+                List<T_Kyukei> list = new List<T_Kyukei>();
+                int count = 0;
+                int totalMinutes = 0;
+                // - 休憩１
+                if(masterRecord.Kyukei1FrKbn != null && masterRecord.Kyukei1FrTm != null && masterRecord.Kyukei1ToKbn != null && masterRecord.Kyukei1ToTm != null)
+                {
+                    DateControl frDc = new DateControl(KinmuDt, masterRecord.Kyukei1FrTm, masterRecord.Kyukei1FrKbn);
+                    DateControl toDc = new DateControl(KinmuDt, masterRecord.Kyukei1ToTm, masterRecord.Kyukei1ToKbn);
+                    T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count);
+                    kyukei.DakokuFrDate = frDc.Origin.ToUniversalTime();
+                    kyukei.DakokuToDate = toDc.Origin.ToUniversalTime();
+                    totalMinutes += (int)(toDc.Origin - frDc.Origin).TotalMinutes;
+                    list.Add(kyukei);
+                }
+                // - 休憩２
+                if (masterRecord.Kyukei2FrKbn != null && masterRecord.Kyukei2FrTm != null && masterRecord.Kyukei2ToKbn != null && masterRecord.Kyukei2ToTm != null)
+                {
+                    DateControl frDc = new DateControl(KinmuDt, masterRecord.Kyukei2FrTm, masterRecord.Kyukei2FrKbn);
+                    DateControl toDc = new DateControl(KinmuDt, masterRecord.Kyukei2ToTm, masterRecord.Kyukei2ToKbn);
+                    T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count);
+                    kyukei.DakokuFrDate = frDc.Origin.ToUniversalTime();
+                    kyukei.DakokuToDate = toDc.Origin.ToUniversalTime();
+                    totalMinutes += (int)(toDc.Origin - frDc.Origin).TotalMinutes;
+                    list.Add(kyukei);
+                }
+                // - 休憩３
+                if (masterRecord.Kyukei3FrKbn != null && masterRecord.Kyukei3FrTm != null && masterRecord.Kyukei3ToKbn != null && masterRecord.Kyukei3ToTm != null)
+                {
+                    DateControl frDc = new DateControl(KinmuDt, masterRecord.Kyukei3FrTm, masterRecord.Kyukei3FrKbn);
+                    DateControl toDc = new DateControl(KinmuDt, masterRecord.Kyukei3ToTm, masterRecord.Kyukei3ToKbn);
+                    T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count);
+                    kyukei.DakokuFrDate = frDc.Origin.ToUniversalTime();
+                    kyukei.DakokuToDate = toDc.Origin.ToUniversalTime();
+                    totalMinutes += (int)(toDc.Origin - frDc.Origin).TotalMinutes;
+                    list.Add(kyukei);
+                }
+
+
+                // 追加
+                context.AddRange(list);
+                Kyukei = totalMinutes;
+            }
+        }
+
+        private void ShoteiWrite(M_Kinmu? masterRecord)
+        {
+            Shotei = 0;
             // マスターレコードの取り込み
             if(masterRecord != null && masterRecord.ShoteiTm != null)
             {
                 Shotei = masterRecord.ShoteiTm;
                 return;
             }
-
-            // 勤務データの宣言
-            if(KinmuToDate != null && KinmuFrDate != null)
-            {
-                Shotei = (int)((DateTime)KinmuToDate - (DateTime)KinmuFrDate).TotalMinutes;
-            }
         }
 
-        private void KinmuFrWrite(M_Kinmu? masterRecord)
+        private void KinmuFrWrite(M_Kinmu? masterRecord, KintaiDbContext context)
         {
-            // マスター勤務レコードが存在しない場合
-            if(masterRecord == null)
-            {
-                KinmuFrDate = DakokuFrDate;
-                return;
-            }
-
             // 実績開始時間の計算
-            if (DakokuFrDate != null && KinmuFrDate == null /*←注意:仕様です。*/)
+            if (DakokuFrDate != null)
             {
+                // マスター勤務レコードが存在しない場合
+                if (masterRecord == null)
+                {
+                    KinmuFrDate = DakokuFrDate;
+                    return;
+                }
+
                 DateTime DakokuFrDateLocal = ((DateTime)DakokuFrDate).ToLocalTime();
 
                 // 丸め処理を行う
@@ -88,7 +140,7 @@ namespace UNN_Ki_001.Data.Models
                 KinmuFrDate = result.ToUniversalTime();
             }
         }
-        private void KinmuToWrite(M_Kinmu? masterRecord)
+        private void KinmuToWrite(M_Kinmu? masterRecord, KintaiDbContext context)
         {
             // マスター勤務レコードが存在しない場合
             if (masterRecord == null)
@@ -97,7 +149,7 @@ namespace UNN_Ki_001.Data.Models
                 return;
             }
 
-            if (DakokuToDate != null && KinmuToDate == null /*←仕様です。*/)
+            if (DakokuToDate != null)
             {
                 DateTime DakokuToDateLocal = ((DateTime)DakokuToDate).ToLocalTime();
 
@@ -110,7 +162,36 @@ namespace UNN_Ki_001.Data.Models
                 {
                     KinmuToDate = ((DateTime)KinmuFrDate).ToUniversalTime();
                 }
+
+
             }
+        }
+
+        private void ClearInfo()
+        {
+            Shotei = null;
+            Kyukei = null;
+            Hoteigai = null;
+            Hoteinai = null;
+            Sorodo = null;
+        }
+
+        public void SetKinmuCd(string kinmuCd)
+        {
+            ClearInfo();
+            KinmuCd = kinmuCd;
+        }
+
+        public void SetKinmuFrDate(DateTime dateTime)
+        {
+            KinmuFrDate = dateTime;
+            ClearInfo();
+        }
+
+        public void SetKinmuToDate(DateTime dateTime)
+        {
+            KinmuToDate = dateTime;
+            ClearInfo();
         }
 
         [Key]
@@ -126,7 +207,7 @@ namespace UNN_Ki_001.Data.Models
         public string KinmuDt { get; set; }
 
         [Column("kinmu_cd")]
-        public string? KinmuCd { get; set; }
+        public string? KinmuCd { get; private set; }
 
         [Column("dakoku_fr_date")]
         public DateTime? DakokuFrDate { get; set; }
@@ -135,10 +216,10 @@ namespace UNN_Ki_001.Data.Models
         public DateTime? DakokuToDate { get; set; }
 
         [Column("kinmu_fr_date")]
-        public DateTime? KinmuFrDate { get; set; }
+        public DateTime? KinmuFrDate { get; private set; }
 
         [Column("kinmu_to_date")]
-        public DateTime? KinmuToDate { get; set; }
+        public DateTime? KinmuToDate { get; private set; }
 
         [Column("dakoku_fr_dt")]
         public string? DakokuFrDt { get; private set; }
