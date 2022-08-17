@@ -32,14 +32,13 @@
             <div class="row mb-3 align-items-center">
                <div class="col-10">
                   有効/無効
-                   @if(@Model.Valid_flg!="0") {
                      <label for="valid_flg">有効</label>
                      <input
                         type="radio"
                         name="valid_flg"
                         value="1"
                         id="valid_flg"
-                        checked
+                        @(Model.Valid_flg =="1" ? "checked" : "")
                      />
                      <label for="valid_flg">無効</label>
                      <input
@@ -47,24 +46,8 @@
                         name="valid_flg"
                         value="0"
                         id="valid_flg"
+                        @(Model.Valid_flg =="0" ? "checked" : "")
                      />
-                     }else {
-                     <label for="valid_flg">有効</label>
-                     <input
-                        type="radio"
-                        name="valid_flg"
-                        value="1"
-                        id="valid_flg"
-                     />
-                     <label for="valid_flg">無効</label>
-                     <input
-                        type="radio"
-                        name="valid_flg"
-                        value="0"
-                        id="valid_flg"
-                        checked
-                     />
-                     }
                </div>
             </div>
             <div class="d-flex justify-content-end mt-2">
@@ -83,7 +66,7 @@
                />
                <input
                   type="button"
-                  class="coppy btn btn-secondary mx-3"
+                  class="copy btn btn-secondary mx-3"
                   value="複写"
                />
             </div>
@@ -100,26 +83,24 @@
                   <th class="col-2">有効</th>
                </tr>
             </thead>
-            @if (Model.Data != null) { @foreach (var shozoku in Model.Data) {
-            <tbody class="shozokuData"></tbody>
-            <tr>
-               <td data-bs-toggle="modal" data-bs-target="#updateModal">
-                  <a href="~/VariousMaster/Affiliation/@shozoku.shozoku_cd"
-                     >@shozoku.shozoku_cd</a
-                  >
-               </td>
-               <td>@shozoku.shozoku_nm</td>
-               <td>
-                  @if (@shozoku.valid_flg != "0") {
-                  <input type="checkbox" checked disabled />
-                  } else {
-                  <input type="checkbox" disabled />
-                  }
-               </td>
-             </tr>
+            <tbody class="shozokuData">
+                @if (Model.Data != null) { 
+                    @foreach (var shozoku in Model.Data) {
+                        <tr>
+                            <td data-bs-toggle="modal" data-bs-target="#updateModal">
+                                <a href="~/VariousMaster/Affiliation/@shozoku.shozoku_cd"
+                                    >@shozoku.shozoku_cd</a
+                                >
+                            </td>
+                            <td>@shozoku.shozoku_nm</td>
+                            <td>
+                                <input type="checkbox" value="@shozoku.valid_flg" @(shozoku.valid_flg == "0" ? "" : "checked") disabled />
+                            </td>
+                        </tr>
                     }
                 }
-            </table>
+            </tbody>
+         </table>
       </div>
    </div>
 </div>
@@ -243,41 +224,24 @@
                </div>
                <div class="row mb-3 align-items-center">
                   <div class="col-10">
-                     有効/無効 
-                     @if(@Model.Data1.valid_flg!="0") {
-                     <label for="valid_flg2">有効</label>
+                  有効/無効
+                     <label for="valid_flg">有効</label>
                      <input
                         type="radio"
-                        name="valid_flg2"
+                        name="valid_flg"
                         value="1"
-                        id="valid_flg2"
-                        checked
+                        id="valid_flg"
+                        @(Model.Data1.valid_flg == "1" ? "checked" : "")
                      />
-                     <label for="valid_flg2">無効</label>
+                     <label for="valid_flg">無効</label>
                      <input
                         type="radio"
-                        name="valid_flg2"
+                        name="valid_flg"
                         value="0"
-                        id="valid_flg2"
+                        id="valid_flg"
+                        @(Model.Data1.valid_flg =="0" ? "checked" : "")
                      />
-                     }else {
-                     <label for="valid_flg2">有効</label>
-                     <input
-                        type="radio"
-                        name="valid_flg2"
-                        value="1"
-                        id="valid_flg2"
-                     />
-                     <label for="valid_flg2">無効</label>
-                     <input
-                        type="radio"
-                        name="valid_flg2"
-                        value="0"
-                        id="valid_flg2"
-                        checked
-                     />
-                     }
-                  </div>
+               </div>
                </div>
 
                <div class="d-flex justify-content-end mt-2">
@@ -315,41 +279,5 @@
                 keyboard: false
             });
             myModal.show();
-
-            document.getElementById('mytable').addEventListener('click', function (item) { 
-                var row = item.path[1];
-  
-                var row_value = "";
-  
-                for (var j = 0; j < row.cells.length; j++) {
-  
-                    row_value += row.cells[j].innerHTML;
-                    row_value += " | ";
-                }
-                 alert(row_value);
-                if (row.classList.contains('highlight')) {
-                    row.classList.remove('highlight');
-                } else {
-                    row.classList.add('highlight');
-                }            
-            });
-               
-            @*window.onload = function() {
-            var rows = document.getElementById('mytable').getElementsByTagName('tr');
-            for (var i = 0; i < rows.length; i++) {
-                rows[i].onclick = function() {
-                    var index = -1;
-                    for (var j = 0; j < rows.length; j++) {
-                        if (this == rows[j]) {
-                           index = j;
-                           break;
-                        }
-                    }
-
-                    alert(j);
-                    // do something with index (0 = first row .. 4 = 5th row)
-                };
-            }
-            };*@
         </script>
 }

@@ -1,0 +1,124 @@
+﻿@page "/Attendance/ShainkensakuKinmuhyo/{id:int?}"
+@model UNN_Ki_001.Pages.VariousMaster.ShainSearchModel
+@{ }
+<h1>社員検索</h1>
+<div>
+   <div class="container mt-5" style="max-width: 800px">
+      <form class="card mb-4" method="Post">
+         <div class="card-body">
+            <div class="row mb-3 align-items-center">
+               <label class="col-2" for="shain_no">社員番号</label>
+               <div class="col-5 row">
+                  <input
+                     type="text"
+                     class="form-control"
+                     name="shain_no"
+                     size="30"
+                     maxlength="10"
+                     id="shain_no"
+                     value="@Model.Shain_no"
+                  />
+               </div>
+            </div>
+            <div class="row mb-3 align-items-center">
+               <div class="col-2">氏名</div>
+               <div class="col-5 row align-items-center">
+                  <input
+                     type="text"
+                     class="form-control"
+                     name="name_mei"
+                     id="name_mei"
+                     value="@Model.Name_mei"
+                  />
+               </div>
+            </div>
+            <div class="row mb-3 align-items-center">
+               <div class="col-2">所属</div>
+               <div class="col-10 row align-items-center">
+                  <div class="col-5 row">
+                     <input
+                        type="text"
+                        class="form-control"
+                        name="shozoku_nm"
+                        size="30"
+                        maxlength="5"
+                        id="shozoku_nm"
+                        value="@Model.Shozoku_nm"
+                     />
+                  </div>
+               </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+               <label class="col-2" for="customer_nm">職種</label>
+               <div class="col-5 row">
+                  <input
+                     type="text"
+                     class="form-control"
+                     name="shokushu_nm"
+                     size="30"
+                     maxlength="30"
+                     id="shokushu_nm"
+                     value="@Model.Shokushu_nm"
+                  />
+               </div>
+            </div>
+            <div class="row mb-3 align-items-center">
+               <label class="col-2" for="daily_title">雇用形態</label>
+               <div class="col-5 row">
+                  <input
+                     type="text"
+                     class="form-control"
+                     name="koyokeitai_nm"
+                     size="30"
+                     maxlength="100"
+                     id="koyokeitai_cd"
+                     value="@Model.Koyokeitai_nm"
+                  />
+               </div>
+            </div>
+            <div class="d-flex justify-content-end">
+               <input
+                  type="submit"
+                  class="search btn btn-secondary mx-3"
+                  value="検索"
+               />
+               <input
+                  type="button"
+                  class="clear btn btn-secondary mx-3"
+                  value="クリア"
+               />
+            </div>
+         </div>
+      </form>
+      <form class="card mb-4" method="Post">
+         <table class="table table-bordered">
+            <thead class="table-primary">
+               <tr class="text-center">
+                  <th class="col-2">社員番号</th>
+                  <th class="col-3">氏名</th>
+                  <th class="col-2">所属</th>
+                  <th class="col-2">職種</th>
+                  <th class="col-3">雇用形態</th>
+               </tr>
+            </thead>
+            @if (Model.Data != null) {
+                @foreach (var shain in Model.Data) {
+                    <tbody class="shainData"></tbody>
+                    <tr>
+                        <td>
+                        <a href="~/Attendance/Kinmuhyo/@shain.shain_no"
+                        >@shain.shain_no</a
+                          >
+                        </td>
+                        <td> @shain.name_mei</td>
+                        <td> @shain.shozoku_nm</td>
+                        <td> @shain.shokushu_nm</td>
+                        <td> @shain.koyokeitai_nm</td>
+                    </tr>
+                } 
+            }
+         </table>
+      </form >
+   </div>
+</div>

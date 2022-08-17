@@ -125,3 +125,18 @@ $(".next-month").click(function () {
     }
     calendar()
 })
+
+
+// Hoang 所属メンテナンスの複写機能(Copy)
+$(".shozokuData tr").click(function () {
+
+    $(".shozokuData tr").removeClass("selected bg-light")
+    $(this).addClass("selected bg-light");
+})
+
+$(".copy").click(function () {
+    $(".tsuika").click();
+    $("#tsuikaModal input[name='shozoku_cd1']").val($(".shozokuData tr.selected").children().children().text())
+    $("#tsuikaModal input[name='shozoku_nm1']").val($(".shozokuData tr.selected").children()[1].textContent)
+    $("#tsuikaModal input[name='valid_flg1'][value='" + $(".shozokuData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
+})
