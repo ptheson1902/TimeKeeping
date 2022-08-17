@@ -76,14 +76,14 @@
             <div class="d-flex justify-content-end mt-2">
                <input
                   type="button"
-                  class="search btn btn-secondary mx-3"
+                  class="tsuika btn btn-secondary mx-3"
                   value="追加"
                   data-bs-toggle="modal"
                   data-bs-target="#tsuikaModal"
                />
                <input
                   type="button"
-                  class="search btn btn-secondary mx-3"
+                  class="coppy btn btn-secondary mx-3"
                   value="複写"
                />
             </div>
@@ -92,7 +92,7 @@
       <div class="text-black">@Model.Message</div>
       <div class="text-danger">@Model.ErrorMessage</div>
       <div class="p-2">
-         <table class="table table-bordered">
+         <table class="table table-bordered" id="mytable">
             <thead class="table-primary">
                <tr class="text-center">
                   <th class="col-2">所属コード</th>
@@ -116,7 +116,7 @@
                   <input type="checkbox" disabled />
                   }
                </td>
-                        </tr>
+             </tr>
                     }
                 }
             </table>
@@ -201,10 +201,11 @@
       </div>
    </div>
 </div>
-@*所属メンテナンス修正(社員番号ポップアップ)*@ @if (Model.Data1 != null) {
+@*所属メンテナンス修正(社員番号ポップアップ)*@ 
+@if (Model.Data1 != null) {
 
 <div
-   class="modal fade show d-block"
+   class="modal fade"
    id="updateModal"
    tabindex="-1"
    aria-labelledby="userModalLabel"
@@ -309,4 +310,46 @@
       </div>
    </div>
 </div>
+        <script>
+            var myModal = new bootstrap.Modal(document.getElementById('updateModal'), {
+                keyboard: false
+            });
+            myModal.show();
+
+            document.getElementById('mytable').addEventListener('click', function (item) { 
+                var row = item.path[1];
+  
+                var row_value = "";
+  
+                for (var j = 0; j < row.cells.length; j++) {
+  
+                    row_value += row.cells[j].innerHTML;
+                    row_value += " | ";
+                }
+                 alert(row_value);
+                if (row.classList.contains('highlight')) {
+                    row.classList.remove('highlight');
+                } else {
+                    row.classList.add('highlight');
+                }            
+            });
+               
+            @*window.onload = function() {
+            var rows = document.getElementById('mytable').getElementsByTagName('tr');
+            for (var i = 0; i < rows.length; i++) {
+                rows[i].onclick = function() {
+                    var index = -1;
+                    for (var j = 0; j < rows.length; j++) {
+                        if (this == rows[j]) {
+                           index = j;
+                           break;
+                        }
+                    }
+
+                    alert(j);
+                    // do something with index (0 = first row .. 4 = 5th row)
+                };
+            }
+            };*@
+        </script>
 }

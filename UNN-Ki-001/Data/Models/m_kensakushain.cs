@@ -11,12 +11,17 @@ namespace UNN_Ki_001.Data.Models
         public string? shain_no { get; set; }
         [Column("name_mei")]
         public string? name_mei { get; set; }
+        [Column("shozoku_nm")]
+        public string? shozoku_nm { get; set; }
         [Column("shozoku_cd")]
         public string? shozoku_cd { get; set; }
+        [Column("shokushu_nm")]
+        public string? shokushu_nm { get; set; }
         [Column("shokushu_cd")]
         public string? shokushu_cd { get; set; }
+        [Column("koyokeitai_nm")]
+        public string? koyokeitai_nm { get; set; }
         [Column("koyokeitai_cd")]
         public string? koyokeitai_cd { get; set; }
-        public string? shozoku_nm { get; set; }
     }
 }

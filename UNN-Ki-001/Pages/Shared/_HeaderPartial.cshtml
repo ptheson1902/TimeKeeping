@@ -30,7 +30,7 @@
                                 <a class="nav-link" asp-page="/Attendance/Index">打刻登録</a>
                             </div>
                             <div class="nav-item mx-2">
-                                <a class="nav-link" asp-page="/Attendance/Test">勤務表</a>
+                                <a class="nav-link" asp-page="/Attendance/Kinmuhyo">勤務表</a>
                             </div>
                             @if(User.IsInRole("Admin")){
                                 <div class="nav-item mx-2">
@@ -50,12 +50,7 @@
                                 </div>
                                 <ul
                                     class="dropdown-menu dropdown-menu-end border-0 rounded-4"
-                                >
-                                     <li>
-                                        <a class="dropdown-item" asp-page="/VariousMaster/shainSearch"
-                                            >社員検索</a
-                                        >
-                                    </li>
+                                >                      
                                     <li>
                                         <a class="dropdown-item" asp-page="/VariousMaster/Employee"
                                             >社員マスタ</a

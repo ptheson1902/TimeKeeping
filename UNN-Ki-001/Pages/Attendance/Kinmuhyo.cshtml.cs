@@ -12,6 +12,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
         private readonly KintaiDbContext _context;
         private readonly ApplicationDbContext context1;
         public List<Display> Data = new List<Display>();
+        public Display? Data1;
         public string Shain_no { get; set; }
         public string Name_mei { get; set; }
         public string Shozoku_nm { get; set; }
@@ -25,7 +26,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
         }
         public void OnGet()
         { 
-            Data.Clear();
+            Data.Clear();         
         }
 
         public void OnPost()
@@ -34,8 +35,8 @@ namespace UNN_Ki_001.Pages.VariousMaster
             Shain_no = Request.Form["shain_no"];
             Name_mei = Request.Form["name_mei"];
             Shozoku_nm = Request.Form["shozoku_nm"];
-            Shokushu_nm = Request.Form["shokushu_cd"];
-            Koyokeitai_nm = Request.Form["koyokeitai_cd"];
+            Shokushu_nm = Request.Form["shokushu_nm"];
+            Koyokeitai_nm = Request.Form["koyokeitai_nm"];
             // 所属コード、所属コード、雇用形態コードでJOIN
             var no = from a in _context.shain
                      join b in _context.shozoku
@@ -44,6 +45,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
                      on a.shokushu_cd equals c.shokushu_cd
                      join d in _context.koyokeitai
                      on a.koyokeitai_cd equals d.koyokeitai_cd
+                     orderby a.shain_no    
                      select new {a.shain_no , a.name_mei , b.shozoku_nm , c.shokushu_nm , d.koyokeitai_nm};
 
             // 条件による検索すること(value＝nullは検索条件にならないこと。)

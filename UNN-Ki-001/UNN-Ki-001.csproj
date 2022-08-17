@@ -20,6 +20,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Attendance\workschedule.cshtml.cs" />
+    <Compile Remove="Pages\VariousMaster\shaininfo.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Attendance\workschedule.cshtml" />
+    <Content Remove="Pages\VariousMaster\shaininfo.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.7" />
