@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using UNN_Ki_001.Data;
 using UNN_Ki_001.Data.Models;
@@ -29,10 +30,6 @@ namespace UNN_Ki_001.Pages.Attendance
             _applicationDbContext = applicationDbContext;
             _kintaiDbContext = kintaiDbContext;
             _userManager = userManager;
-        }
-
-        public void OnGet()
-        {
         }
 
         public async Task OnPostAsync()
@@ -62,7 +59,7 @@ namespace UNN_Ki_001.Pages.Attendance
 
                 if(kinmu != null)
                 {
-                    kinmu.DakokuToDate = now.ToUniversalTime();
+                    kinmu.DakokuToDate = now;
                     _kintaiDbContext.SaveChanges();
                     Message = "退勤が出来ました";
                     return;
@@ -86,7 +83,7 @@ namespace UNN_Ki_001.Pages.Attendance
                 {
                     kinmu = new T_Kinmu(user.Kigyo_cd, user.Shain_no, now.ToString("yyyyMMdd"));
                 }
-                kinmu.DakokuFrDate = now.ToUniversalTime();
+                kinmu.DakokuFrDate = now;
                 if (t_Kinmu == null)
                     _kintaiDbContext.Add(kinmu);
                 else

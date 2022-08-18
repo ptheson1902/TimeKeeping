@@ -10,6 +10,7 @@ namespace UNN_Ki_001.Data
         public KintaiDbContext(DbContextOptions<KintaiDbContext> options)
             : base(options)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

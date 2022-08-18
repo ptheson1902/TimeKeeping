@@ -14,116 +14,40 @@ namespace UNN_Ki_001.Data.Models
 
         private void Check(KintaiDbContext context)
         {
-            /*
-            // 勤務レコードをセレクト
-            T_Kinmu? kinmu = context.t_kinmus.Where(e =>
-                e.KigyoCd.Equals(KigyoCd)
-                && e.ShainNo.Equals(ShainNo)
-                && e.KinmuDt.Equals(KinmuDt))
-                .FirstOrDefault();
-
-            // -開始時刻のチェック
-            if (DakokuFrDate != null)
-            {
-                // 出退勤記録に合わせて変形
-                if (kinmu != null)
-                {
-                    if (kinmu.KinmuFrDate != null && kinmu.KinmuFrDate > DakokuFrDate)
-                        DakokuFrDate = ((DateTime)kinmu.KinmuFrDate).ToUniversalTime();
-                }
-
-
-                // 既存レコードの中から直前の完成した休憩レコードを取得
-                var tgt1 = context.t_Kyukeis.Where(e =>
-                    (!e.KinmuDt.Equals(KinmuDt) || !e.SeqNo.Equals(SeqNo))                  // このレコード以外で
-                    && e.KigyoCd.Equals(KigyoCd)                                            // 同一社員の...
-                    && e.ShainNo.Equals(ShainNo)                                            //
-                    && e.DakokuFrDate != null                                               // 休憩終了まで完了した休憩レコードの内...
-                    && e.DakokuToDate != null                                               //
-                    && e.DakokuFrDate <= ((DateTime)DakokuFrDate).ToUniversalTime())         // このレコード以前の休憩時間レコードの
-                    .OrderByDescending(e => e.DakokuFrDate)                                 // 休憩開始時間の降順で
-                    .FirstOrDefault();                                                      // １件目
-
-                // チェンジトラッカーの中から直前の完成した休憩レコードを取得
-                var tgt2 = context.ChangeTracker.Entries<T_Kyukei>().Where(e =>
-                    (!e.Entity.KinmuDt.Equals(KinmuDt) || !e.Entity.SeqNo.Equals(SeqNo))    // このレコード以外で
-                    && e.Entity.KigyoCd.Equals(KigyoCd)                                     // 同一社員の...
-                    && e.Entity.ShainNo.Equals(ShainNo)                                     //
-                    && e.Entity.DakokuFrDate != null                                        // 休憩終了まで完了した休憩レコードの内...
-                    && e.Entity.DakokuToDate != null                                        //
-                    && e.Entity.DakokuFrDate <= ((DateTime)DakokuFrDate).ToUniversalTime())  // このレコード以前の休憩時間レコードの
-                    .OrderByDescending(e => e.Entity.DakokuFrDate)                          // 休憩開始時間の降順で
-                    .FirstOrDefault();                                                      // １件目
-                // 検証対象のリストを作成
-                List<T_Kyukei> list = new List<T_Kyukei>();
-                if (tgt1 != null)
-                    list.Add(tgt1);
-                if (tgt2 != null)
-                    list.Add(tgt2.Entity);
-                // 休憩時間が重複していないかの検証を実行
-                foreach (var item in list)
-                {
-                    if (item.DakokuToDate > DakokuFrDate)           // ターゲットの休憩終了時刻がこのレコードの休憩開始時刻より後だった場合
-                    {
-                        throw new Exception("休憩開始時間が直前のレコードの休憩時間と重複しています。\n開始時刻=" + DakokuFrDate + "\n終了時刻=" + DakokuToDate);
-                    }
-                }
-            }
-
-            // -終了時刻のチェック
-            if (DakokuToDate != null)
-            {
-                // 出退勤記録に合わせて変形
-                if (kinmu != null)
-                {
-                    if (kinmu.KinmuToDate != null && kinmu.KinmuToDate < DakokuToDate)
-                        DakokuToDate = ((DateTime)kinmu.KinmuToDate).ToUniversalTime();
-                }
-
-                // 既存レコードの中から直後の完成した休憩レコードを取得
-                var tgt1 = context.t_Kyukeis.Where(e =>
-                    (!e.KinmuDt.Equals(KinmuDt) || !e.SeqNo.Equals(SeqNo))                  // このレコード以外で
-                    && e.KigyoCd.Equals(KigyoCd)                                            // 同一社員の...
-                    && e.ShainNo.Equals(ShainNo)                                            //
-                    && e.DakokuFrDate != null                                               // 休憩終了まで完了した休憩レコードの内...
-                    && e.DakokuToDate != null                                               //
-                    && e.DakokuToDate >= ((DateTime)DakokuToDate).ToUniversalTime())         // このレコード以降の休憩時間レコードの
-                    .OrderBy(e => e.DakokuToDate)                                           // 休憩開始時間の昇順で
-                    .FirstOrDefault();                                                      // １件目
-
-                // チェンジトラッカーの中から直後の完成した休憩レコードを取得
-                var tgt2 = context.ChangeTracker.Entries<T_Kyukei>().Where(e =>
-                    (!e.Entity.KinmuDt.Equals(KinmuDt) || !e.Entity.SeqNo.Equals(SeqNo))    // このレコード以外で
-                    && e.Entity.KigyoCd.Equals(KigyoCd)                                     // 同一社員の...
-                    && e.Entity.ShainNo.Equals(ShainNo)                                     //
-                    && e.Entity.DakokuFrDate != null                                        // 休憩終了まで完了した休憩レコードの内...
-                    && e.Entity.DakokuToDate != null                                        //
-                    && e.Entity.DakokuToDate >= ((DateTime)DakokuToDate).ToUniversalTime())  // このレコード以前の休憩時間レコードの
-                    .OrderBy(e => e.Entity.DakokuToDate)                                    // 休憩開始時間の降順で
-                    .FirstOrDefault();                                                      // １件目
-                // 検証対象のリストを作成
-                List<T_Kyukei> list = new List<T_Kyukei>();
-                if (tgt1 != null)
-                    list.Add(tgt1);
-                if (tgt2 != null)
-                    list.Add(tgt2.Entity);
-                // 休憩時間が重複していないかの検証を実行
-                foreach (var item in list)
-                {
-                    if (item.DakokuFrDate < DakokuToDate)           // ターゲットの休憩終了時刻がこのレコードの休憩開始時刻より後だった場合
-                    {
-                        throw new Exception("休憩終了時間が直後のレコードの休憩時間と重複しています。\n開始時刻=" + DakokuFrDate + "\n終了時刻=" + DakokuToDate);
-                    }
-                }
-            }
-
-            // 開始時間と終了時間のチェック
+            // 完成した休憩記録なら
             if (DakokuToDate != null && DakokuFrDate != null)
-            {
-                if (DakokuToDate <= DakokuFrDate)
+            { 
+                // 開始時間と終了時間の関係を確認
+                if (DakokuToDate < DakokuFrDate)
                     throw new Exception("休憩開始時刻と休憩終了時刻の関係が不正です。\n開始時刻=" + DakokuFrDate + "\n終了時刻=" + DakokuToDate);
+
+                // 休憩時間を計算
+                Kyukei = (int)(((DateTime)DakokuToDate) - ((DateTime)DakokuFrDate)).TotalMinutes;
+
+                // 姉妹レコードと時間が重複していないかどうかの確認
+                var list = context.t_Kyukeis
+                    .Where(e => e.KigyoCd.Equals(KigyoCd) && e.ShainNo.Equals(ShainNo) && e.KinmuDt.Equals(KinmuDt) && e.DakokuFrDate != null && e.DakokuToDate != null)
+                    .OrderBy(e => e.DakokuFrDate)
+                    .ToList();
+                foreach(var item in list)
+                {
+                    // 開始時間と終了時間、少なくともどちらかが重複している場合例外をスロー
+                    if((DakokuFrDate < item.DakokuFrDate && item.DakokuFrDate < DakokuToDate) ||
+                        (DakokuFrDate < item.DakokuToDate && item.DakokuToDate < DakokuToDate))
+                    {
+                        throw new Exception("休憩時間が既存のレコードと重複してしまいます。");
+                    }
+                }
+
+                // 勤務レコードの再計算をトリガーする
+                var kinmu = context.t_kinmus
+                    .Where(e => e.KigyoCd.Equals(KigyoCd) && e.ShainNo.Equals(ShainNo) && e.KinmuDt.Equals(KinmuDt) && e.Kyukei != null)
+                    .FirstOrDefault();
+                if(kinmu != null)
+                {
+                    context.Attach((T_Kinmu)kinmu);
+                }
             }
-            */
         }
 
         public T_Kyukei(string kigyoCd, string shainNo, string kinmuDt, int seqNo)
