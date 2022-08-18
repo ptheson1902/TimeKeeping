@@ -19,25 +19,28 @@ namespace UNN_Ki_001.Pages.Attendance
         public string? ShozokuName { get; set; }
         public string? ShokushuName { get; set; }
         public string? KoyokeitaiName { get; set; }
+        public string? Kigyo_cd { get; set; }
 
         public void OnGet(string? id)
         {
             ShainNo = id;
-            var no = from a in _context.shain
-                     join b in _context.shozoku
-                     on a.shozoku_cd equals b.shozoku_cd
-                     join c in _context.shokushu
-                     on a.shokushu_cd equals c.shokushu_cd
-                     join d in _context.koyokeitai
-                     on a.koyokeitai_cd equals d.koyokeitai_cd
-                     where a.shain_no == id
-                     select new {a.name_mei, b.shozoku_nm, c.shokushu_nm, d.koyokeitai_nm };
+            var no = from a in _context.m_shains
+                     join b in _context.m_shozokus
+                     on a.ShozokuCd equals b.ShozokuCd
+                     join c in _context.m_shokushus
+                     on a.ShokushuCd equals c.ShokushuCd
+                     join d in _context.m_koyokeitais
+                     on a.KoyokeitaiCd equals d.KoyokeitaiCd
+                     where a.ShainNo == id
+                     orderby a.ShainNo
+                     select new { a.ShainNo, a.NameMei, b.ShozokuNm, c.ShokushuNm, d.KoyokeitaiNm , a.KigyoCd};
             foreach (var item in no)
             {
-                ShainName = item.name_mei;
-                ShokushuName = item.shokushu_nm;
-                ShozokuName = item.shozoku_nm;
-                KoyokeitaiName = item.koyokeitai_nm;
+                ShainName = item.NameMei;
+                ShokushuName = item.ShokushuNm;
+                ShozokuName = item.ShozokuNm;
+                KoyokeitaiName = item.KoyokeitaiNm;
+                Kigyo_cd = item.KigyoCd;
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿@page "/VariousMaster/Affiliation/{id:int?}"
+﻿@page "/VariousMaster/Shozoku/{id:int?}"
 @model UNN_Ki_001.Pages.VariousMaster.AffiliationModel 
 @{
 }
@@ -83,12 +83,12 @@
                   <th class="col-2">有効</th>
                </tr>
             </thead>
-            <tbody class="shozokuData">
+            <tbody class="shozokuData ">
                 @if (Model.Data != null) { 
                     @foreach (var shozoku in Model.Data) {
                         <tr>
                             <td data-bs-toggle="modal" data-bs-target="#updateModal">
-                                <a href="~/VariousMaster/Affiliation/@shozoku.shozoku_cd"
+                                <a href="~/VariousMaster/Shozoku/@shozoku.shozoku_cd"
                                     >@shozoku.shozoku_cd</a
                                 >
                             </td>
@@ -258,7 +258,7 @@
                      value="update"
                      name="update_action"
                   >
-                     更新
+                     修正
                   </button>
                   <button
                      type="submit"

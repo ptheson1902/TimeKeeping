@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Models\m_kensakushain.cs" />
     <Compile Remove="Pages\Attendance\workschedule.cshtml.cs" />
     <Compile Remove="Pages\VariousMaster\shaininfo.cshtml.cs" />
   </ItemGroup>

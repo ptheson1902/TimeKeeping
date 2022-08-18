@@ -7,6 +7,8 @@ namespace UNN_Ki_001.Data.Models
     public class m_kensakushain
     {
         [Key]
+        [Column("kigyo_cd")]
+        public string? kigyo_cd { get; set; }
         [Column("shain_no")]
         public string? shain_no { get; set; }
         [Column("name_mei")]
