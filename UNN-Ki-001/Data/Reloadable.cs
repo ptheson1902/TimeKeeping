@@ -15,6 +15,7 @@ namespace UNN_Ki_001.Data
             isReloaded = false;
         }
 
+
         public void run(KintaiDbContext context)
         {
             isReloaded = true;

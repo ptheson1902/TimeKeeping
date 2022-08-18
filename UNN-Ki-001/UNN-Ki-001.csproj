@@ -41,7 +41,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Attendance\Record\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
