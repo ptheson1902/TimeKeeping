@@ -1,0 +1,148 @@
+﻿@page
+@model UNN_Ki_001.Pages.VariousMaster.KinmuModel
+@{
+}
+<h1>勤務マスタメンテナンス</h1>
+<div>
+   <div class="container mt-5" style="max-width: 70%">
+      <form class="card mb-4" method="Post">
+         <div class="card-body">
+            <div class="row mb-3 align-items-center">
+               <label class="col-5" for="shokushu_cd">勤務コード</label>
+               <input
+                  type="text"
+                  class="form-control"
+                  name="kinmu_cd"
+                  size="30"
+                  maxlength="10"
+                  id="kinmu_cd"
+                  value = "@Model.Kinmu_cd"
+                />
+            </div>
+            <div class="row mb-3 align-items-center">
+               <label class="col-5">勤務名</label>
+               <input
+                  type="text"
+                  class="form-control"
+                  name="kinmu_nm"
+                  id="kinmu_nm"
+                  value = "@Model.Kinmu_nm"
+               />
+            </div>
+             <div class="row mb-3 align-items-center">
+               <label class="col-5">勤務分類</label>
+               <input
+                  type="text"
+                  class="form-control"
+                  name="kinmu_bunrui"
+                  id="kinmu_bunrui"
+                  value = "@Model.Kinmu_bunrui"
+               />
+            </div>
+            <div class="row mb-3 align-items-center">
+               <div class="col-10">
+                  有効/無効
+                     <label for="valid_flg">有効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg"
+                        value="1"
+                        id="valid_flg"
+                        @(Model.Valid_flg =="1" ? "checked" : "")
+                     />
+                     <label for="valid_flg">無効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg"
+                        value="0"
+                        id="valid_flg"
+                        @(Model.Valid_flg =="0" ? "checked" : "")
+                     />
+               </div>
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+               <input type="hidden" value="search" name="action" />
+               <button type="submit" class="search btn btn-secondary mx-3">
+                  検索
+               </button>
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+               <input
+                  type="button"
+                  class="tsuika btn btn-secondary mx-3"
+                  value="追加"
+                  data-bs-toggle="modal"
+                  data-bs-target="#tsuikaModal"
+               />
+               <input
+                  type="button"
+                  class="skCopy btn btn-secondary mx-3"
+                  value="複写"
+               />
+            </div>
+         </div>
+      </form>
+     @* <div class="text-black">@Model.Message</div>
+      <div class="text-danger">@Model.ErrorMessage</div>*@
+      <div class="p-2">
+         <table class="table table-bordered" id="mytable">
+            <thead class="table-primary">
+               <tr class="text-center">
+                  <th class="col-2">職種コード</th>
+                  <th class="col-3">職種名</th>
+                  <th class="col-2">勤務分類</th>
+                  <th class="col-2">勤務時間</th>
+                  <th class="col-2">休憩時間</th>
+                  <th class="col-1">有効</th>
+               </tr>
+            </thead>
+            <tbody class="shokushuData ">
+                @if (Model.Data != null) { 
+                    @foreach (var kinmu in Model.Data) {
+                        <tr>
+                            <td  data-bs-toggle="modal" data-bs-target="#updateModal">
+                                <div class="shokushu_cd text-decoration-underline text-primary">@kinmu.kinmu_cd</div>
+                            </td>
+                            <td>@kinmu.kinmu_nm</td>
+                            @if(@kinmu.kinmu_bunrui == "01")
+                                {
+                                    <td>通常勤務</td>
+                                }
+                                else if(@kinmu.kinmu_bunrui == "02")
+                                {
+                                    <td>自社指定休暇</td>
+                                }
+                                else if(@kinmu.kinmu_bunrui == "03")
+                                {
+                                    <td>法定休日</td>
+                                }
+                                
+                                else if(@kinmu.kinmu_bunrui == "05")
+                                {
+                                    <td>代休</td>
+                                }
+                                else if(@kinmu.kinmu_bunrui == "06")
+                                {
+                                    <td>有給休暇（全休）</td>
+                                }
+                                else if(@kinmu.kinmu_bunrui == "07")
+                                {
+                                    <td>AM有給</td>
+                                }
+                                else if(@kinmu.kinmu_bunrui == "08")
+                                {
+                                    <td>PM有給</td>
+                                }
+                                <td></td>
+                                <td></td>
+                            <td>
+                                <input type="checkbox" value="@kinmu.valid_flg" @(kinmu.valid_flg == "0" ? "" : "checked") disabled />
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>

@@ -1,0 +1,268 @@
+﻿@page
+@model UNN_Ki_001.Pages.VariousMaster.ShokushuModel
+@{
+}
+<h1>職種マスタメンテナンス</h1>
+<div>
+   <div class="container mt-5" style="max-width: 500px">
+      <form class="card mb-4" method="Post">
+         <div class="card-body">
+            <div class="row mb-3 align-items-center">
+               <label class="col-5" for="shokushu_cd">職種コード</label>
+               <input
+                  type="text"
+                  class="form-control"
+                  name="shokushu_cd"
+                  size="30"
+                  maxlength="10"
+                  id="shokushu_cd"
+                  value = "@Model.Shokushu_cd"
+                />
+            </div>
+            <div class="row mb-3 align-items-center">
+               <label class="col-5">職種名</label>
+               <input
+                  type="text"
+                  class="form-control"
+                  name="shokushu_nm"
+                  id="shokushu_nm"
+                  value = "@Model.Shokushu_nm"
+               />
+            </div>
+            <div class="row mb-3 align-items-center">
+               <div class="col-10">
+                  有効/無効
+                     <label for="valid_flg">有効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg"
+                        value="1"
+                        id="valid_flg"
+                        @(Model.Valid_flg =="1" ? "checked" : "")
+                     />
+                     <label for="valid_flg">無効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg"
+                        value="0"
+                        id="valid_flg"
+                        @(Model.Valid_flg =="0" ? "checked" : "")
+                     />
+               </div>
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+               <input type="hidden" value="search" name="action" />
+               <button type="submit" class="search btn btn-secondary mx-3">
+                  検索
+               </button>
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+               <input
+                  type="button"
+                  class="tsuika btn btn-secondary mx-3"
+                  value="追加"
+                  data-bs-toggle="modal"
+                  data-bs-target="#tsuikaModal"
+               />
+               <input
+                  type="button"
+                  class="skCopy btn btn-secondary mx-3"
+                  value="複写"
+               />
+            </div>
+         </div>
+      </form>
+      <div class="text-black">@Model.Message</div>
+      <div class="text-danger">@Model.ErrorMessage</div>
+      <div class="p-2">
+         <table class="table table-bordered" id="mytable">
+            <thead class="table-primary">
+               <tr class="text-center">
+                  <th class="col-2">職種コード</th>
+                  <th class="col-3">職種名</th>
+                  <th class="col-2">有効</th>
+               </tr>
+            </thead>
+            <tbody class="shokushuData ">
+                @if (Model.Data != null) { 
+                    @foreach (var shokushu in Model.Data) {
+                        <tr>
+                            <td  data-bs-toggle="modal" data-bs-target="#updateModal">
+                                <div class="shokushu_cd text-decoration-underline text-primary">@shokushu.shokushu_cd</div>
+                            </td>
+                            <td>@shokushu.shokushu_nm</td>
+                            <td>
+                                <input type="checkbox" value="@shokushu.valid_flg" @(shokushu.valid_flg == "0" ? "" : "checked") disabled />
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>
+
+@*職種メンテナンス登録(追加ポップアップ)*@
+<div
+   class="modal fade"
+   id="tsuikaModal"
+   tabindex="-1"
+   aria-labelledby="userModalLabel"
+   aria-hidden="true"
+>
+   <div class="modal-dialog modal-lg">
+      <div class="tsuikaModalContent modal-content" style="width: 60%">
+         <div class="modal-header">
+            <div class="d-flex justify-content-between w-100"></div>
+         </div>
+         <form class="card mb-4" method="Post">
+            <div class="card-body">
+               <div class="row mb-3 align-items-center">
+                  <label class="col-5" for="shokushu_cd1">職種コード</label>
+                  <input
+                     type="text"
+                     class="form-control"
+                     name="shokushu_cd1"
+                     size="30"
+                     maxlength="10"
+                     id="shokushu_cd1"
+                  />
+               </div>
+               <div class="row mb-3 align-items-center">
+                  <label class="col-5" for="shokushu_nm1">職種名</label>
+                  <input
+                     type="text"
+                     class="form-control"
+                     name="shokushu_nm1"
+                     id="shokushu_nm1"
+                  />
+               </div>
+               <div class="row mb-3 align-items-center">
+                  <div class="col-10">
+                     有効/無効
+                     <label for="valid_flg1">有効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg1"
+                        value="1"
+                        id="valid_flg1"
+                     />
+                     <label for="valid_flg">無効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg1"
+                        value="0"
+                        id="valid_flg1"
+                     />
+                  </div>
+               </div>
+
+               <div class="d-flex justify-content-end mt-2">
+                  <input
+                     type="button"
+                     class="cancel btn btn-secondary mx-3"
+                     value="キャンセル"
+                     class="btn modal-close btn-warning"
+                     data-bs-dismiss="modal"
+                  />
+                  <button
+                     type="submit"
+                     class="register btn btn-secondary mx-3"
+                     value="register"
+                     name="register_action"
+                  >
+                     登録
+                  </button>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+@*職種メンテナンス修正(職種番号ポップアップ)*@ 
+<div
+   class="modal fade"
+   id="updateModal"
+   tabindex="-1"
+   aria-labelledby="userModalLabel"
+   aria-hidden="true"
+>
+   <div class="modal-dialog modal-lg">
+      <div class="udateModalContent modal-content" style="width: 60%">
+         <div class="modal-header">
+            <div class="d-flex justify-content-between w-100"></div>
+         </div>
+         <form class="card mb-4" method="Post">
+            <div class="card-body">
+               <div class="row mb-3 align-items-center">
+                  <label class="col-5" for="shokushu_cd2">所属コード</label>
+                  <input
+                     type="text"
+                     class="form-control"
+                     name="shokushu_cd2"
+                     size="30"
+                     maxlength="10"
+                     id="shokushu_cd2"   
+                     readonly
+                  />
+               </div>
+               <div class="row mb-3 align-items-center">
+                  <label class="col-5" for="shokushu_nm2">所属名</label>
+                  <input
+                     type="text"
+                     class="form-control"
+                     name="shokushu_nm2"
+                     id="shozoku_nm2"
+                  />
+               </div>
+               <div class="row mb-3 align-items-center">
+                  <div class="col-10">
+                  有効/無効
+                     <label for="valid_flg2">有効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg2"
+                        value="1"
+                        id="valid_flg2"
+                     />
+                     <label for="valid_flg">無効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg2"
+                        value="0"
+                        id="valid_flg2"
+                     />
+               </div>
+               </div>
+
+               <div class="d-flex justify-content-end mt-2">
+                  <input
+                     type="button"
+                     class="updateCancel btn btn-secondary mx-3"
+                     value="キャンセル"
+                     class="btn modal-close btn-warning"
+                     data-bs-dismiss="modal"
+                  />
+                  <button
+                     type="submit"
+                     class="register btn btn-secondary mx-3"
+                     value="update"
+                     name="update_action"
+                  >
+                     修正
+                  </button>
+                  <button
+                     type="submit"
+                     class="delete btn btn-secondary mx-3"
+                     value="delete"
+                     name="delete_action"
+                  >
+                     削除
+                  </button>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
