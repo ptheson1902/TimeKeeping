@@ -9,7 +9,7 @@
         public string? valid_flg { get; set; }
         public string? shokushu_cd { get; set; }
         public string? shokushu_nm { get; set; }
-        public string? sksvalid_flg { get; set; }
+        public string? koyokeitai_cd { get; set; }
         public string? koyokeitai_nm { get; set; }
         
        

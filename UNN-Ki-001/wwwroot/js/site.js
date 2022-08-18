@@ -138,15 +138,16 @@ $(".shozokuData tr").click(function () {
 
     $(".shozokuData tr").removeClass("selected bg-light")
     $(this).addClass("selected bg-light");
+    $(".szcopy").click(function () {
+        $(".tsuika").click();
+        $("#tsuikaModal input[name='shozoku_cd1']").val($(".shozokuData tr.selected").children().children().text())
+        $("#tsuikaModal input[name='shozoku_nm1']").val($(".shozokuData tr.selected").children()[1].textContent)
+        $("#tsuikaModal input[name='valid_flg1']").attr("checked", false);
+        $("#tsuikaModal input[name='valid_flg1'][value='" + $(".shozokuData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
+    })
 })
 
-$(".copy").click(function () {
-    $(".tsuika").click();
-    $("#tsuikaModal input[name='shozoku_cd1']").val($(".shozokuData tr.selected").children().children().text())
-    $("#tsuikaModal input[name='shozoku_nm1']").val($(".shozokuData tr.selected").children()[1].textContent)
-    $("#tsuikaModal input[name='valid_flg1']").attr("checked", false);
-    $("#tsuikaModal input[name='valid_flg1'][value='" + $(".shozokuData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
-})
+
 
 //  職種コードをクリックする時、修正・削除のポップアップが表示
 $(".shokushu_cd").click(function () {
@@ -160,12 +161,33 @@ $(".shokushuData tr").click(function () {
 
     $(".shokushuData tr").removeClass("selected bg-light")
     $(this).addClass("selected bg-light");
+    $(".skCopy").click(function () {
+        $(".tsuika").click();
+        $("#tsuikaModal input[name='shokushu_cd1']").val($(".shokushuData tr.selected").children().children().text())
+        $("#tsuikaModal input[name='shokushu_nm1']").val($(".shokushuData tr.selected").children()[1].textContent)
+        $("#tsuikaModal input[name='valid_flg1']").attr("checked", false);
+        $("#tsuikaModal input[name='valid_flg1'][value='" + $(".shokushuData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
+    })
 })
 
-$(".skCopy").click(function () {
-    $(".tsuika").click();
-    $("#tsuikaModal input[name='shokushu_cd1']").val($(".shokushuData tr.selected").children().children().text())
-    $("#tsuikaModal input[name='shokushu_nm1']").val($(".shokushuData tr.selected").children()[1].textContent)
-    $("#tsuikaModal input[name='valid_flg1']").attr("checked", false);
-    $("#tsuikaModal input[name='valid_flg1'][value='" + $(".shokushuData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
+//  雇用形態コードをクリックする時、修正・削除のポップアップが表示
+$(".shokushu_cd").click(function () {
+    $("#updateModal input[name='koyokeitai_cd2']").val($(this).text())
+    $("#updateModal input[name='koyokeitai_nm2']").val($(this).parent().next().text())
+    $("#updateModal input[name='valid_flg2']").attr("checked", false);
+    $("#updateModal input[name='valid_flg2'][value='" + $(this).parent().next().next().children().val() + "']").attr("checked", true)
 })
+// 雇用形態メンテナンスの複写機能(Copy)
+$(".koyokeitaiData tr").click(function () {
+
+    $(".koyokeitaiData tr").removeClass("selected bg-light")
+    $(this).addClass("selected bg-light");
+    $(".kyktCopy").click(function () {
+        $(".tsuika").click();
+        $("#tsuikaModal input[name='koyokeitai_cd1']").val($(".koyokeitaiData tr.selected").children().children().text())
+        $("#tsuikaModal input[name='koyokeitai_nm1']").val($(".koyokeitaiData tr.selected").children()[1].textContent)
+        $("#tsuikaModal input[name='valid_flg1']").attr("checked", false);
+        $("#tsuikaModal input[name='valid_flg1'][value='" + $(".koyokeitaiData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
+    })
+})
+
