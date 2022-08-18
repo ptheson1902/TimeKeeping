@@ -26,17 +26,9 @@ namespace UNN_Ki_001.Pages.VariousMaster
             context1 = application;
         }
 
-        public void OnGet(int? id)
+        public void OnGet()
         {
-            Data.Clear();
-            if(id != null)
-            { 
-                M_Shozoku sz = _context.m_shozokus.Where(e => e.ShozokuCd.Equals(id.ToString())).FirstOrDefault();
-                Data1 = new Display();
-                Data1.shozoku_nm = sz.ShozokuNm;
-                Data1.shozoku_cd = sz.ShozokuCd;
-                Data1.valid_flg = sz.ValidFlg;
-            }
+           
         }
         public void OnPost()
         {

@@ -1,4 +1,4 @@
-﻿@page "/VariousMaster/Shozoku/{id:int?}"
+﻿@page 
 @model UNN_Ki_001.Pages.VariousMaster.ShozokuModel 
 @{
 }
@@ -83,14 +83,12 @@
                   <th class="col-2">有効</th>
                </tr>
             </thead>
-            <tbody class="shozokuData ">
+            <tbody class="shozokuData">
                 @if (Model.Data != null) { 
                     @foreach (var shozoku in Model.Data) {
                         <tr>
                             <td data-bs-toggle="modal" data-bs-target="#updateModal">
-                                <a href="~/VariousMaster/Shozoku/@shozoku.shozoku_cd"
-                                    >@shozoku.shozoku_cd</a
-                                >
+                                   <div class="shozoku_cd text-decoration-underline text-primary">@shozoku.shozoku_cd</div> 
                             </td>
                             <td>@shozoku.shozoku_nm</td>
                             <td>
@@ -183,8 +181,6 @@
    </div>
 </div>
 @*所属メンテナンス修正(社員番号ポップアップ)*@ 
-@if (Model.Data1 != null) {
-
 <div
    class="modal fade"
    id="updateModal"
@@ -209,7 +205,6 @@
                      maxlength="10"
                      id="shozoku_cd2"   
                      readonly
-                     value="@Model.Data1.shozoku_cd"
                   />
                </div>
                <div class="row mb-3 align-items-center">
@@ -219,7 +214,6 @@
                      class="form-control"
                      name="shozoku_nm2"
                      id="shozoku_nm2"
-                     value="@Model.Data1.shozoku_nm"
                   />
                </div>
                <div class="row mb-3 align-items-center">
@@ -231,7 +225,6 @@
                         name="valid_flg2"
                         value="1"
                         id="valid_flg2"
-                        @(Model.Data1.valid_flg == "1" ? "checked" : "")
                      />
                      <label for="valid_flg">無効</label>
                      <input
@@ -239,7 +232,6 @@
                         name="valid_flg2"
                         value="0"
                         id="valid_flg2"
-                        @(Model.Data1.valid_flg =="0" ? "checked" : "")
                      />
                </div>
                </div>
@@ -274,10 +266,3 @@
       </div>
    </div>
 </div>
-        <script>
-            var myModal = new bootstrap.Modal(document.getElementById('updateModal'), {
-                keyboard: false
-            });
-            myModal.show();
-        </script>
-}

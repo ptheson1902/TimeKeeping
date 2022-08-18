@@ -24,17 +24,17 @@ namespace UNN_Ki_001.Pages.VariousMaster
             context1 = application;
         }
 
-        public void OnGet(int? id)
+        public void OnGet()
         {
-            Data.Clear();
+/*            Data.Clear();
             if (id != null)
-            {
+            {@
                 M_Shokushu sks = _context.m_shokushus.Where(e => e.ShokushuCd.Equals(id.ToString())).FirstOrDefault();
                 Data1 = new Display();
                 Data1.shokushu_nm = sks.ShokushuNm;
                 Data1.shokushu_cd = sks.ShokushuCd;
                 Data1.valid_flg = @sks.ValidFlg;
-            }
+            }*/
         }
         public void OnPost()
         {
@@ -190,7 +190,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
             }
             if (valid_flg2 != null && shokushu_nm2 != "")
             {
-                M_Shokushu sk = _context.m_shokushus.Where(e => e.ShokushuNm.Equals(shokushu_cd2)).FirstOrDefault();
+                M_Shokushu sk = _context.m_shokushus.Where(e => e.ShokushuCd.Equals(shokushu_cd2)).FirstOrDefault();
                 sk.ShokushuNm = shokushu_nm2;
                 _context.m_shokushus.Remove(sk);
                 var a = _context.SaveChanges();

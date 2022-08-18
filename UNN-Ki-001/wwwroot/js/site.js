@@ -126,8 +126,14 @@ $(".next-month").click(function () {
     calendar()
 })
 
-
-// Hoang 所属メンテナンスの複写機能(Copy)
+// 所属コードをクリックする時、修正・削除のポップアップが表示
+$(".shozoku_cd").click(function () {
+    $("#updateModal input[name='shozoku_cd2']").val($(this).text())
+    $("#updateModal input[name='shozoku_nm2']").val($(this).parent().next().text())
+    $("#updateModal input[name='valid_flg2']").attr("checked", false);
+    $("#updateModal input[name='valid_flg2'][value='" + $(this).parent().next().next().children().val() + "']").attr("checked", true)
+})
+//  所属メンテナンスの複写機能(Copy)
 $(".shozokuData tr").click(function () {
 
     $(".shozokuData tr").removeClass("selected bg-light")
@@ -138,9 +144,18 @@ $(".copy").click(function () {
     $(".tsuika").click();
     $("#tsuikaModal input[name='shozoku_cd1']").val($(".shozokuData tr.selected").children().children().text())
     $("#tsuikaModal input[name='shozoku_nm1']").val($(".shozokuData tr.selected").children()[1].textContent)
+    $("#tsuikaModal input[name='valid_flg1']").attr("checked", false);
     $("#tsuikaModal input[name='valid_flg1'][value='" + $(".shozokuData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
 })
-// Hoang `職種メンテナンスの複写機能(Copy)
+
+//  職種コードをクリックする時、修正・削除のポップアップが表示
+$(".shokushu_cd").click(function () {
+    $("#updateModal input[name='shokushu_cd2']").val($(this).text())
+    $("#updateModal input[name='shokushu_nm2']").val($(this).parent().next().text())
+    $("#updateModal input[name='valid_flg2']").attr("checked", false);
+    $("#updateModal input[name='valid_flg2'][value='" + $(this).parent().next().next().children().val() + "']").attr("checked", true)
+})
+// 職種メンテナンスの複写機能(Copy)
 $(".shokushuData tr").click(function () {
 
     $(".shokushuData tr").removeClass("selected bg-light")
@@ -151,5 +166,6 @@ $(".skCopy").click(function () {
     $(".tsuika").click();
     $("#tsuikaModal input[name='shokushu_cd1']").val($(".shokushuData tr.selected").children().children().text())
     $("#tsuikaModal input[name='shokushu_nm1']").val($(".shokushuData tr.selected").children()[1].textContent)
+    $("#tsuikaModal input[name='valid_flg1']").attr("checked", false);
     $("#tsuikaModal input[name='valid_flg1'][value='" + $(".shokushuData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
 })
