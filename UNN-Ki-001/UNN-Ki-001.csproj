@@ -22,11 +22,13 @@
   <ItemGroup>
     <Compile Remove="Data\Models\m_kensakushain.cs" />
     <Compile Remove="Pages\Attendance\workschedule.cshtml.cs" />
+    <Compile Remove="Pages\VariousMaster\Employee.cshtml.cs" />
     <Compile Remove="Pages\VariousMaster\shaininfo.cshtml.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="Pages\Attendance\workschedule.cshtml" />
+    <Content Remove="Pages\VariousMaster\Employee.cshtml" />
     <Content Remove="Pages\VariousMaster\shaininfo.cshtml" />
   </ItemGroup>
 
@@ -48,7 +50,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Attendance\Record\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

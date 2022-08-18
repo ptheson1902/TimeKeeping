@@ -1,5 +1,5 @@
-﻿@page "/Attendance/ShainkensakuKinmuhyo/{id:int?}"
-@model UNN_Ki_001.Pages.VariousMaster.ShainSearchModel
+﻿@page "/Attendance/Record/Search/{id:int?}"
+@model UNN_Ki_001.Pages.Attendance.Record.Search
 @{ }
 <h1>社員検索</h1>
 <div>
@@ -107,7 +107,7 @@
                     <tbody class="shainData"></tbody>
                     <tr>
                         <td>
-                        <a href="~/Attendance/Kinmuhyo/@shain.shain_no"
+                        <a href="~/Attendance/Record/Index/@shain.shain_no"
                         >@shain.shain_no</a
                           >
                         </td>

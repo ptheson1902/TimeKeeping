@@ -11,6 +11,9 @@
         public string? shokushu_nm { get; set; }
         public string? koyokeitai_cd { get; set; }
         public string? koyokeitai_nm { get; set; }
+        public string? kinmu_cd { get; set; }
+        public string ?kinmu_nm { get; set; }
+        public string ?kinmu_bunrui {  get; set; }
         
        
     }

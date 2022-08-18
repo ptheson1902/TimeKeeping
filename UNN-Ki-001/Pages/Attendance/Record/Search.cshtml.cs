@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using UNN_Ki_001.Data;
 using UNN_Ki_001.Data.Models;
-namespace UNN_Ki_001.Pages.VariousMaster
+namespace UNN_Ki_001.Pages.Attendance.Record
 {
     [AllowAnonymous]
-    public class ShainSearchModel : PageModel
+    public class Search : PageModel
     {
         private readonly KintaiDbContext _context;
         private readonly ApplicationDbContext context1;
@@ -19,7 +19,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
         public string Shokushu_nm { get; set; }
         public string Koyokeitai_nm { get; set; }
 
-        public ShainSearchModel(UNN_Ki_001.Data.KintaiDbContext context, ApplicationDbContext application)
+        public Search(UNN_Ki_001.Data.KintaiDbContext context, ApplicationDbContext application)
         {
             _context = context;
             context1 = application;

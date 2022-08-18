@@ -4,13 +4,13 @@ using System.Diagnostics;
 using UNN_Ki_001.Data;
 using UNN_Ki_001.Data.Models;
 
-namespace UNN_Ki_001.Pages.Attendance
+namespace UNN_Ki_001.Pages.Attendance.Record
 {
-    public class Kinmuhyo1Model : PageModel
+    public class IndexModel : PageModel
     {
         private readonly KintaiDbContext _context;
         public List<Display> Data = new List<Display>();
-        public Kinmuhyo1Model(KintaiDbContext context)
+        public IndexModel(KintaiDbContext context)
         {
             _context = context;
         }
