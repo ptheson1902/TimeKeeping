@@ -20,16 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Models\m_kensakushain.cs" />
-    <Compile Remove="Pages\Attendance\workschedule.cshtml.cs" />
-    <Compile Remove="Pages\VariousMaster\Employee.cshtml.cs" />
-    <Compile Remove="Pages\VariousMaster\shaininfo.cshtml.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Pages\Attendance\workschedule.cshtml" />
-    <Content Remove="Pages\VariousMaster\Employee.cshtml" />
-    <Content Remove="Pages\VariousMaster\shaininfo.cshtml" />
+    <Compile Remove="Data\Models\T_KinmuOld.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,7 +35,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.7" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.5" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.6" />
     <PackageReference Include="PagedList" Version="1.17.0" />
     <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
   </ItemGroup>
