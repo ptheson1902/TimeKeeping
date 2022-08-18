@@ -26,21 +26,21 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             ShainNo = id;
             var no = from a in _context.m_shains
                      join b in _context.m_shozokus
-                     on a.ShozokuCd equals b.ShozokuCd
+                     on a.shozoku_cd equals b.ShozokuCd
                      join c in _context.m_shokushus
-                     on a.ShokushuCd equals c.ShokushuCd
+                     on a.shokushu_cd equals c.ShokushuCd
                      join d in _context.m_koyokeitais
-                     on a.KoyokeitaiCd equals d.KoyokeitaiCd
-                     where a.ShainNo == id
-                     orderby a.ShainNo
-                     select new { a.ShainNo, a.NameMei, b.ShozokuNm, c.ShokushuNm, d.KoyokeitaiNm , a.KigyoCd};
+                     on a.koyokeitai_cd equals d.KoyokeitaiCd
+                     where a.shain_no == id
+                     orderby a.shain_no
+                     select new { a.shain_no, a.name_mei, b.ShozokuNm, c.ShokushuNm, d.KoyokeitaiNm , a.kigyo_cd};
             foreach (var item in no)
             {
-                ShainName = item.NameMei;
+                ShainName = item.name_mei;
                 ShokushuName = item.ShokushuNm;
                 ShozokuName = item.ShozokuNm;
                 KoyokeitaiName = item.KoyokeitaiNm;
-                Kigyo_cd = item.KigyoCd;
+                Kigyo_cd = item.kigyo_cd;
             }
         }
     }

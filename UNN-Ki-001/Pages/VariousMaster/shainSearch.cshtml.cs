@@ -4,74 +4,67 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using UNN_Ki_001.Data;
 using UNN_Ki_001.Data.Models;
-namespace UNN_Ki_001.Pages.Attendance.Record
+namespace UNN_Ki_001.Pages.VariousMaster
 {
     [AllowAnonymous]
-    public class Search : PageModel
+    public class ShainSearchModel : PageModel
     {
         private readonly KintaiDbContext _context;
         private readonly ApplicationDbContext context1;
         public List<Display> Data = new List<Display>();
-        public Display? Data1;
-        public string Shain_no { get; set; }
-        public string Name_mei { get; set; }
-        public string Shozoku_nm { get; set; }
-        public string Shokushu_nm { get; set; }
-        public string Koyokeitai_nm { get; set; }
-
-        public Search(UNN_Ki_001.Data.KintaiDbContext context, ApplicationDbContext application)
+        
+        public ShainSearchModel(UNN_Ki_001.Data.KintaiDbContext context, ApplicationDbContext application)
         {
             _context = context;
             context1 = application;
         }
         public void OnGet()
         { 
-            Data.Clear();         
+            Data.Clear();
         }
 
         public void OnPost()
         {
             // フォームからValueを受け取る。
-            Shain_no = Request.Form["shain_no"];
-            Name_mei = Request.Form["name_mei"];
-            Shozoku_nm = Request.Form["shozoku_nm"];
-            Shokushu_nm = Request.Form["shokushu_nm"];
-            Koyokeitai_nm = Request.Form["koyokeitai_nm"];
+            string shain_no = Request.Form["shain_no"];
+            string name_mei = Request.Form["name_mei"];
+            string shozoku_nm = Request.Form["shozoku_cd"];
+            string shokushu_nm = Request.Form["shokushu_cd"];
+            string koyokeitai_nm = Request.Form["koyokeitai_cd"];
             // 所属コード、所属コード、雇用形態コードでJOIN
             var no = from a in _context.m_shains
                      join b in _context.m_shozokus
-                     on a.shozoku_cd equals b.ShozokuCd
+                     on a.shokushu_cd equals b.ShozokuCd
                      join c in _context.m_shokushus
                      on a.shokushu_cd equals c.ShokushuCd
                      join d in _context.m_koyokeitais
                      on a.koyokeitai_cd equals d.KoyokeitaiCd
-                     orderby a.shain_no    
-                     select new {a.shain_no, a.name_mei , b.ShozokuNm , c.ShokushuNm , d.KoyokeitaiNm};
+                     select new {a.shain_no , a.name_mei , b.ShozokuNm , c.ShokushuNm , d.KoyokeitaiNm};
 
             // 条件による検索すること(value＝nullは検索条件にならないこと。)
-            if (!string.IsNullOrEmpty(Shain_no))
+            if (!string.IsNullOrEmpty(shain_no))
             {
-                no = no.Where(e => e.shain_no.Equals(Shain_no) );
+                no = no.Where(e => e.shain_no.Equals(shain_no) );
             }
 
-           if (!string.IsNullOrEmpty(Name_mei))
+           if (!string.IsNullOrEmpty(name_mei))
             {
-                no = no.Where(e => e.name_mei.Equals(Name_mei));
+                no = no.Where(e => e.name_mei.Equals(name_mei));
             }
 
-            if (!string.IsNullOrEmpty(Shozoku_nm))
+            if (!string.IsNullOrEmpty(shozoku_nm))
             {
-                no = no.Where(e => e.ShozokuNm.Equals(Shozoku_nm) );
+                no = no.Where(e => e.ShozokuNm.Equals(shozoku_nm) );
             }
 
-            if (!string.IsNullOrEmpty(Shokushu_nm))
+            if (!string.IsNullOrEmpty(shokushu_nm))
             {
-                no = no.Where(e => e.ShokushuNm.Equals(Shokushu_nm) );
+                no = no.Where(e => e.ShokushuNm.Equals(shokushu_nm) );
             }
 
-            if (!string.IsNullOrEmpty(Koyokeitai_nm))
+            if (!string.IsNullOrEmpty(koyokeitai_nm))
             {
-                no = no.Where(e => e.KoyokeitaiNm.Equals(Koyokeitai_nm));
+                no = no.Where(e => e.KoyokeitaiNm.Equals(koyokeitai_nm));
             }
 
 
@@ -83,6 +76,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 d.shozoku_nm = item.ShozokuNm;
                 d.shokushu_nm = item.ShokushuNm;
                 d.koyokeitai_nm = item.KoyokeitaiNm;
+
                 Data.Add(d);
             }
         }
