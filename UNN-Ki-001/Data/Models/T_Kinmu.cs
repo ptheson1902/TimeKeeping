@@ -64,7 +64,7 @@ namespace UNN_Ki_001.Data.Models
             // 実績時間の整合性を確認・修正
             if (KinmuFrDate != null && KinmuToDate != null)
             {
-                // 総労働時間がマイナスになるようなら訂正する(丸め処理によっては必要である）
+                // 総労働時間がマイナスになるようなら訂正する(丸め処理によっては必要になる）
                 if(KinmuFrDate > KinmuToDate)
                 {
                     KinmuToDate = KinmuFrDate;

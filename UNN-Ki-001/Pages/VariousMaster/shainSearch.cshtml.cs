@@ -33,13 +33,13 @@ namespace UNN_Ki_001.Pages.VariousMaster
             string koyokeitai_nm = Request.Form["koyokeitai_cd"];
             // 所属コード、所属コード、雇用形態コードでJOIN
             var no = from a in _context.m_shains
-                     join b in _context.m_shozokus
-                     on a.shokushu_cd equals b.ShozokuCd
-                     join c in _context.m_shokushus
-                     on a.shokushu_cd equals c.ShokushuCd
-                     join d in _context.m_koyokeitais
-                     on a.koyokeitai_cd equals d.KoyokeitaiCd
-                     select new {a.shain_no , a.name_mei , b.ShozokuNm , c.ShokushuNm , d.KoyokeitaiNm};
+                     join b in _context.shozoku
+                     on a.shozoku_cd equals b.shozoku_cd
+                     join c in _context.m_test
+                     on a.shokushu_cd equals c.shokushu_cd
+                     join d in _context.koyokeitai
+                     on a.koyokeitai_cd equals d.koyokeitai_cd
+                     select new {a.shain_no , a.name_mei , b.shozoku_nm , c.shokushu_nm , d.koyokeitai_nm};
 
             // 条件による検索すること(value＝nullは検索条件にならないこと。)
             if (!string.IsNullOrEmpty(shain_no))
