@@ -140,3 +140,16 @@ $(".copy").click(function () {
     $("#tsuikaModal input[name='shozoku_nm1']").val($(".shozokuData tr.selected").children()[1].textContent)
     $("#tsuikaModal input[name='valid_flg1'][value='" + $(".shozokuData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
 })
+// Hoang `職種メンテナンスの複写機能(Copy)
+$(".shokushuData tr").click(function () {
+
+    $(".shokushuData tr").removeClass("selected bg-light")
+    $(this).addClass("selected bg-light");
+})
+
+$(".skCopy").click(function () {
+    $(".tsuika").click();
+    $("#tsuikaModal input[name='shokushu_cd1']").val($(".shokushuData tr.selected").children().children().text())
+    $("#tsuikaModal input[name='shokushu_nm1']").val($(".shokushuData tr.selected").children()[1].textContent)
+    $("#tsuikaModal input[name='valid_flg1'][value='" + $(".shokushuData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
+})

@@ -1,32 +1,32 @@
-﻿@page "/VariousMaster/Shozoku/{id:int?}"
-@model UNN_Ki_001.Pages.VariousMaster.ShozokuModel 
+﻿@page  "/VariousMaster/Shokushu/{id:int?}"
+@model UNN_Ki_001.Pages.VariousMaster.ShokushuModel
 @{
 }
-<h1>所属マスタメンテナンス</h1>
+<h1>職種マスタメンテナンス</h1>
 <div>
    <div class="container mt-5" style="max-width: 500px">
       <form class="card mb-4" method="Post">
          <div class="card-body">
             <div class="row mb-3 align-items-center">
-               <label class="col-5" for="shozoku_cd">所属コード</label>
+               <label class="col-5" for="shokushu_cd">職種コード</label>
                <input
                   type="text"
                   class="form-control"
-                  name="shozoku_cd"
+                  name="shokushu_cd"
                   size="30"
                   maxlength="10"
-                  id="shozoku_cd"
-                  value = "@Model.Shozoku_cd"
-               />
+                  id="shokushu_cd"
+                  value = "@Model.Shokushu_cd"
+                />
             </div>
             <div class="row mb-3 align-items-center">
-               <label class="col-5">所属名</label>
+               <label class="col-5">職種名</label>
                <input
                   type="text"
                   class="form-control"
-                  name="shozoku_nm"
-                  id="shozoku_nm"
-                  value = "@Model.Shozoku_nm"
+                  name="shokushu_nm"
+                  id="shokushu_nm"
+                  value = "@Model.Shokushu_nm"
                />
             </div>
             <div class="row mb-3 align-items-center">
@@ -66,7 +66,7 @@
                />
                <input
                   type="button"
-                  class="copy btn btn-secondary mx-3"
+                  class="skCopy btn btn-secondary mx-3"
                   value="複写"
                />
             </div>
@@ -78,23 +78,23 @@
          <table class="table table-bordered" id="mytable">
             <thead class="table-primary">
                <tr class="text-center">
-                  <th class="col-2">所属コード</th>
-                  <th class="col-3">所属名</th>
+                  <th class="col-2">職種コード</th>
+                  <th class="col-3">職種名</th>
                   <th class="col-2">有効</th>
                </tr>
             </thead>
-            <tbody class="shozokuData ">
+            <tbody class="shokushuData ">
                 @if (Model.Data != null) { 
-                    @foreach (var shozoku in Model.Data) {
+                    @foreach (var shokushu in Model.Data) {
                         <tr>
                             <td data-bs-toggle="modal" data-bs-target="#updateModal">
-                                <a href="~/VariousMaster/Shozoku/@shozoku.shozoku_cd"
-                                    >@shozoku.shozoku_cd</a
+                                <a href="~/VariousMaster/Shokushu/@shokushu.shokushu_cd"
+                                    >@shokushu.shokushu_cd</a
                                 >
                             </td>
-                            <td>@shozoku.shozoku_nm</td>
+                            <td>@shokushu.shokushu_nm</td>
                             <td>
-                                <input type="checkbox" value="@shozoku.valid_flg" @(shozoku.valid_flg == "0" ? "" : "checked") disabled />
+                                <input type="checkbox" value="@shokushu.valid_flg" @(shokushu.valid_flg == "0" ? "" : "checked") disabled />
                             </td>
                         </tr>
                     }
@@ -105,7 +105,7 @@
    </div>
 </div>
 
-@*所属メンテナンス登録(追加ポップアップ)*@
+@*職種メンテナンス登録(追加ポップアップ)*@
 <div
    class="modal fade"
    id="tsuikaModal"
@@ -121,23 +121,23 @@
          <form class="card mb-4" method="Post">
             <div class="card-body">
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="shozoku_cd1">所属コード</label>
+                  <label class="col-5" for="shokushu_cd1">職種コード</label>
                   <input
                      type="text"
                      class="form-control"
-                     name="shozoku_cd1"
+                     name="shokushu_cd1"
                      size="30"
                      maxlength="10"
-                     id="shozoku_cd1"
+                     id="shokushu_cd1"
                   />
                </div>
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="shozoku_nm1">所属名</label>
+                  <label class="col-5" for="shokushu_nm1">職種名</label>
                   <input
                      type="text"
                      class="form-control"
-                     name="shozoku_nm1"
-                     id="shozoku_nm1"
+                     name="shokushu_nm1"
+                     id="shokushu_nm1"
                   />
                </div>
                <div class="row mb-3 align-items-center">
@@ -182,7 +182,7 @@
       </div>
    </div>
 </div>
-@*所属メンテナンス修正(社員番号ポップアップ)*@ 
+@*職種メンテナンス修正(職種番号ポップアップ)*@ 
 @if (Model.Data1 != null) {
 
 <div
@@ -200,26 +200,26 @@
          <form class="card mb-4" method="Post">
             <div class="card-body">
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="shozoku_cd2">所属コード</label>
+                  <label class="col-5" for="shokushu_cd2">所属コード</label>
                   <input
                      type="text"
                      class="form-control"
-                     name="shozoku_cd2"
+                     name="shokushu_cd2"
                      size="30"
                      maxlength="10"
-                     id="shozoku_cd2"   
+                     id="shokushu_cd2"   
                      readonly
-                     value="@Model.Data1.shozoku_cd"
+                     value="@Model.Data1.shokushu_cd"
                   />
                </div>
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="shozoku_nm2">所属名</label>
+                  <label class="col-5" for="shokushu_nm2">所属名</label>
                   <input
                      type="text"
                      class="form-control"
-                     name="shozoku_nm2"
+                     name="shokushu_nm2"
                      id="shozoku_nm2"
-                     value="@Model.Data1.shozoku_nm"
+                     value="@Model.Data1.shokushu_nm"
                   />
                </div>
                <div class="row mb-3 align-items-center">
