@@ -1,5 +1,5 @@
-﻿@page 
-@model UNN_Ki_001.Pages.VariousMaster.ShainSearchModel
+﻿@page "/Attendance/Record/Search/{id:int?}"
+@model UNN_Ki_001.Pages.Attendance.Record.Search
 @{ }
 <h1>社員検索</h1>
 <div>
@@ -16,6 +16,7 @@
                      size="30"
                      maxlength="10"
                      id="shain_no"
+                     value="@Model.Shain_no"
                   />
                </div>
             </div>
@@ -27,6 +28,7 @@
                      class="form-control"
                      name="name_mei"
                      id="name_mei"
+                     value="@Model.Name_mei"
                   />
                </div>
             </div>
@@ -37,10 +39,11 @@
                      <input
                         type="text"
                         class="form-control"
-                        name="shozoku_cd"
+                        name="shozoku_nm"
                         size="30"
                         maxlength="5"
-                        id="shozoku_cd"
+                        id="shozoku_nm"
+                        value="@Model.Shozoku_nm"
                      />
                   </div>
                </div>
@@ -52,10 +55,11 @@
                   <input
                      type="text"
                      class="form-control"
-                     name="shokushu_cd"
+                     name="shokushu_nm"
                      size="30"
                      maxlength="30"
-                     id="shokushu_cd"
+                     id="shokushu_nm"
+                     value="@Model.Shokushu_nm"
                   />
                </div>
             </div>
@@ -65,10 +69,11 @@
                   <input
                      type="text"
                      class="form-control"
-                     name="koyokeitai_cd"
+                     name="koyokeitai_nm"
                      size="30"
                      maxlength="100"
                      id="koyokeitai_cd"
+                     value="@Model.Koyokeitai_nm"
                   />
                </div>
             </div>
@@ -86,8 +91,7 @@
             </div>
          </div>
       </form>
-
-      <div class="p-2">
+      <form class="card mb-4" method="Post">
          <table class="table table-bordered">
             <thead class="table-primary">
                <tr class="text-center">
@@ -102,7 +106,11 @@
                 @foreach (var shain in Model.Data) {
                     <tbody class="shainData"></tbody>
                     <tr>
-                        <td> @shain.shain_no</td>
+                        <td>
+                        <a href="~/Attendance/Record/Index/@shain.shain_no"
+                        >@shain.shain_no</a
+                          >
+                        </td>
                         <td> @shain.name_mei</td>
                         <td> @shain.shozoku_nm</td>
                         <td> @shain.shokushu_nm</td>
@@ -111,6 +119,6 @@
                 } 
             }
          </table>
-      </div>
+      </form >
    </div>
 </div>
