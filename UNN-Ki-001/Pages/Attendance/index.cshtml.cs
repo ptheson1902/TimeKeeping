@@ -40,7 +40,7 @@ namespace UNN_Ki_001.Pages.Attendance
             var today = _kintaiDbContext.t_kinmus.
                 Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && a.KinmuDt.Equals(now.ToString("yyyyMMdd")))
                 .FirstOrDefault();
-            if (today == null)
+            if (today == null || (today.KinmuFrDate == null && today.KinmuToDate == null))
             {
                 var old = _kintaiDbContext.t_kinmus
                     .Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && Convert.ToInt32(a.KinmuDt) < d)

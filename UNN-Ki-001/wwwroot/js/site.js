@@ -177,3 +177,7 @@ function GetData(year, month) {
     })
 }
 GetData(year, month);
+
+if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+}
