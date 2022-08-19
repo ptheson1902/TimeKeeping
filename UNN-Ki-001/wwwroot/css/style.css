@@ -188,10 +188,11 @@ body {
         margin-top: 0;
     }
 
-        .main .container-fluid {
-            margin: 0 0 5rem 0 !important;
-            flex-direction: column;
-        }
+    .main .container-fluid {
+        margin: 0 0 5rem 0 !important;
+        flex-direction: column;
+        align-items: center !important;
+    }
 }
 
 @media (max-width: 429px) {
@@ -211,54 +212,55 @@ body {
         margin-top: 0;
     }
 
-        .main .container-fluid {
-            margin: 20px 0 !important;
-            flex-direction: column;
-        }
+    .main .container-fluid {
+        margin: 20px 0 !important;
+        flex-direction: column;
+        align-items: center !important;
+    }
 
-            .main .container-fluid .left {
-                margin: 0 !important;
-            }
+    .main .container-fluid .left {
+        margin: 0 !important;
+    }
 
-                .main .container-fluid .left .date {
-                    margin: 0.5rem 0 !important;
-                    font-size: 1rem;
-                    line-height: 1;
-                }
+    .main .container-fluid .left .date {
+        margin: 0.5rem 0 !important;
+        font-size: 1rem;
+        line-height: 1;
+    }
 
-                .main .container-fluid .left .time {
-                    margin: 0 !important;
-                    font-size: 5rem;
-                    line-height: 1;
-                }
+    .main .container-fluid .left .time {
+        margin: 0 !important;
+        font-size: 5rem;
+        line-height: 1;
+    }
 
-                .main .container-fluid .left .button {
-                    margin: 1rem 0 !important;
-                }
+    .main .container-fluid .left .button {
+        margin: 1rem 0 !important;
+    }
 
-                    .main .container-fluid .left .button .in, .main .container-fluid .left .button .out {
-                        font-size: 1rem;
-                        width: 8rem;
-                        height: 4rem;
-                        border-radius: 2rem;
-                    }
+    .main .container-fluid .left .button .in, .main .container-fluid .left .button .out {
+        font-size: 1rem;
+        width: 8rem;
+        height: 4rem;
+        border-radius: 2rem;
+    }
 
-            .main .container-fluid .right {
-                margin: 1rem 0 !important;
-                min-width: 15rem !important;
-            }
+    .main .container-fluid .right {
+        margin: 1rem 0 !important;
+        min-width: 15rem !important;
+    }
 
-                .main .container-fluid .right .panel .title {
-                    font-size: 1rem;
-                }
+    .main .container-fluid .right .panel .title {
+        font-size: 1rem;
+    }
 
-                .main .container-fluid .right .panel .fc-content tr {
-                    height: 2rem !important;
-                }
+    .main .container-fluid .right .panel .fc-content tr {
+        height: 2rem !important;
+    }
 
-                .main .container-fluid .right .panel .fc-content tbody tr {
-                    height: 3rem !important;
-                }
+    .main .container-fluid .right .panel .fc-content tbody tr {
+        height: 3rem !important;
+    }
 
     .phone-wrapper {
         width: 100%;
