@@ -11,7 +11,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
     [Authorize(Policy = "Rookie")]
     public class IndexModel : BasePageModel
     {
-        public List<Display> Data = new List<Display>();
+        public List<string> tgtList = new List<string>();
 
         public IndexModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
@@ -19,24 +19,34 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
         public IActionResult OnGet()
         {
-            // セッションからターゲットのリストを取得する
-            List<string>? sessionList = HttpContext.Session.GetObject<List<string>>("target");
-            List<string> tgtList = new List<string>();
-
-            if(sessionList == null || sessionList.Count == 0)
+            // 管理者権限が有れば、セッションから検索対象を読み取りリストに追加する
+            if (User.IsInRole("Admin"))
             {
-                var shain = GetCurrentUserShainAsync().Result;
-                if(shain == null)
+                // 検索対象が存在しなければNotFound
+                List<string>? sesList = HttpContext.Session.GetObject<List<string>>("target");
+                if(sesList == null || sesList.Count == 0)
                 {
-
+                    return NotFound();
                 }
-                tgtList.Add()
-            } else
+
+                tgtList.AddRange(sesList);
+            }
+            // 一般権限で有れば、自分自身をリストに追加
+            else
             {
-                tgtList.AddRange(sessionList);
+                var me = GetCurrentUserShainAsync().Result;
+                
+                // 社員情報と紐づいてなければ、トップページへリダイレクト
+                if(me == null)
+                {
+                    return RedirectToPage("/");
+                }
+
+                tgtList.Add(me.ShainNo);
             }
 
-            return RedirectToPage("/Attendance/Record/Search");
+
+            return Page();
         }
 
         public void OnPost()

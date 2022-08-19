@@ -1,8 +1,18 @@
-﻿@page "/Attendance/Record/Index/{id}"
+﻿@page
 @model UNN_Ki_001.Pages.Attendance.Record.IndexModel
 @{
+    ViewData["Title"] = "打刻登録";
 }
- <h1>勤務表</h1>
+ <h1>@ViewData["Title"]</h1>
+
+@{
+    foreach(var item in Model.tgtList)
+    {
+        @item;
+    }
+}
+
+
 
       
    
