@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace UNN_Ki_001.Data.Models
 {
     [Table("m_kinmu", Schema = "public")]
-    public class M_Kinmu : Reloadable
+    public class M_Kinmu
     {
         public M_Kinmu(string KigyoCd, string KinmuCd)
         {
@@ -13,23 +13,18 @@ namespace UNN_Ki_001.Data.Models
             this.KinmuCd = KinmuCd;
         }
 
-        public void reload()
+        public void shoteiCal()
         {
-
-            TimeSpan kftm = TimeSpan.FromMinutes(int.Parse(KinmuFrTm == null ? "0" : KinmuFrTm));
-            TimeSpan kttm = TimeSpan.FromMinutes(int.Parse(KinmuToTm == null ? "0" : KinmuToTm));
-            TimeSpan kkftm1 = TimeSpan.FromMinutes(int.Parse(Kyukei1FrTm == null ? "0" : Kyukei1FrTm));
-            TimeSpan kkttm1 = TimeSpan.FromMinutes(int.Parse(Kyukei1ToTm == null ? "0" : Kyukei1ToTm));
-            TimeSpan kkftm2 = TimeSpan.FromMinutes(int.Parse(Kyukei2FrTm == null ? "0" : Kyukei2FrTm));
-            TimeSpan kkttm2 = TimeSpan.FromMinutes(int.Parse(Kyukei2ToTm == null ? "0" : Kyukei2ToTm));
-            TimeSpan kkftm3 = TimeSpan.FromMinutes(int.Parse(Kyukei3FrTm == null ? "0" : Kyukei3FrTm));
-            TimeSpan kkttm3 = TimeSpan.FromMinutes(int.Parse(Kyukei3ToTm == null ? "0" : Kyukei3ToTm));
-
-            TimeSpan stm = (kftm - kttm - (kkftm1 - kkttm1) - (kkftm2 - kkttm2) - (kkftm3 - kkttm3));
-            ShoteiTm = (int)stm.TotalMinutes;
-            
+            DateTime kftm = DateTime.ParseExact(KinmuFrTm == null ? "0000" : KinmuFrTm, "HHmm", null);
+            DateTime kttm = DateTime.ParseExact(KinmuToTm == null ? "0000" : KinmuToTm, "HHmm", null);
+            DateTime kkftm1 = DateTime.ParseExact(Kyukei1FrTm == null ? "0000" : Kyukei1FrTm, "HHmm", null);
+            DateTime kkttm1 = DateTime.ParseExact(Kyukei1ToTm == null ? "0000" : Kyukei1ToTm, "HHmm", null);
+            DateTime kkftm2 = DateTime.ParseExact(Kyukei2FrTm == null ? "0000" : Kyukei2FrTm, "HHmm", null);
+            DateTime kkttm2 = DateTime.ParseExact(Kyukei2ToTm == null ? "0000" : Kyukei2ToTm, "HHmm", null);
+            DateTime kkftm3 = DateTime.ParseExact(Kyukei3FrTm == null ? "0000" : Kyukei3FrTm, "HHmm", null);
+            DateTime kkttm3 = DateTime.ParseExact(Kyukei3ToTm == null ? "0000" : Kyukei3ToTm, "HHmm", null);
+            ShoteiTm = ((int)((kttm - kftm) - (kkttm1 - kkftm1) - (kkttm2 - kkftm2) - (kkttm3 - kkftm3)).TotalMinutes).ToString();
         }
-
         [Key]
         [Column("kigyo_cd")]
         public string KigyoCd { get; set; }
@@ -46,13 +41,12 @@ namespace UNN_Ki_001.Data.Models
 
         [Column("kinmu_fr_tm")]
         public string? KinmuFrTm { get; set; }
-
+        
         [Column("kinmu_to_tm")]
         public string? KinmuToTm { get; set; }
 
         [Column("kyukei1_fr_tm")]
         public string? Kyukei1FrTm { get; set; }
-
 
         [Column("kyukei1_to_tm")]
         public string? Kyukei1ToTm { get; set; }
@@ -72,8 +66,8 @@ namespace UNN_Ki_001.Data.Models
         [Column("kyukei_auto_flg")]
         public string? KyukeiAutoFlg { get; set; }
 
-        [Column("shotei_tm")]
-        public int? ShoteiTm { get; private set; }
+        [Column("shotei_tm_back")]
+        public string? ShoteiTm { get; set; }
 
         [Column("kinmu_fr_ctrl_flg")]
         public string? KinmuFrCtrlFlg { get; set; }

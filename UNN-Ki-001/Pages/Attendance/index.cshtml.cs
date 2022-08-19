@@ -1,13 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Npgsql;
 using System.Data;
-using System.Diagnostics;
-using System.Linq;
 using UNN_Ki_001.Data;
 using UNN_Ki_001.Data.Control;
 using UNN_Ki_001.Data.Models;
@@ -18,7 +12,6 @@ namespace UNN_Ki_001.Pages.Attendance
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
-        private readonly ApplicationDbContext _applicationDbContext;
         private readonly KintaiDbContext _kintaiDbContext;
         private readonly UserManager<AppUser> _userManager;
         private T_Kinmu? kinmu { get; set; }
@@ -27,11 +20,10 @@ namespace UNN_Ki_001.Pages.Attendance
         public List<T_Kinmu?> ListKinmu { get; set; }
         public string? Message { get; set; }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public IndexModel(ILogger<IndexModel> logger, ApplicationDbContext applicationDbContext, KintaiDbContext context, KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager)
+        public IndexModel(ILogger<IndexModel> logger,KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             _logger = logger;
-            _applicationDbContext = applicationDbContext;
             _kintaiDbContext = kintaiDbContext;
             _userManager = userManager;
         }
@@ -43,8 +35,8 @@ namespace UNN_Ki_001.Pages.Attendance
             var today = _kintaiDbContext.t_kinmus.Where(a => a.KigyoCd.Equals(user.Kigyo_cd) && a.ShainNo.Equals(user.Shain_no) && a.KinmuDt.Equals(now.ToString("yyyyMMdd"))).FirstOrDefault();
             if (today == null)
             {
-                var old = _kintaiDbContext.t_kinmus.Where(a => a.KigyoCd.Equals(user.Kigyo_cd) && a.ShainNo.Equals(user.Shain_no)).OrderByDescending(e => e.KinmuDt).FirstOrDefault();
-                if((old.DakokuFrDt != null && old.DakokuFrTm != null && old.DakokuToDt != null && old.DakokuToTm != null) ||(old.DakokuFrDt == null && old.DakokuFrTm == null && old.DakokuToDt == null && old.DakokuToTm != null))
+                var old = _kintaiDbContext.t_kinmus.Where(a => a.KigyoCd.Equals(user.Kigyo_cd) && a.ShainNo.Equals(user.Shain_no) && a.ShainNo.Equals(user.Shain_no) && int.Parse(a.KinmuDt) < int.Parse(now.ToString("yyyyMMdd"))).OrderByDescending(e => e.KinmuDt).FirstOrDefault();
+                if(old != null && (old.dakokuFrDate != null && old.kinmuFrDate != null && old.dakokuToDate != null && old.kinmuToDate != null) || old != null && (old.dakokuFrDate == null && old.kinmuFrDate == null && old.dakokuToDate == null && old.kinmuToDate != null))
                 {
                     IsShukin = null;
                     IsTaikin = "disabled";
@@ -52,10 +44,10 @@ namespace UNN_Ki_001.Pages.Attendance
             }
             else
             {
-                if(today.DakokuFrDt != null && today.DakokuFrTm != null && today.DakokuToDt == null && today.DakokuToTm == null){
+                if(today.dakokuFrDate != null && today.kinmuFrDate != null && today.dakokuToDate == null && today.kinmuToDate == null){
                     IsShukin = "disabled";
                     IsTaikin = null;
-                }else if(today.DakokuFrDt != null && today.DakokuFrTm != null && today.DakokuToDt != null && today.DakokuToTm != null)
+                }else if(today.dakokuFrDate != null && today.kinmuFrDate != null && today.dakokuToDate != null && today.kinmuToDate != null)
                 {
                     IsShukin = "disabled";
                     IsTaikin = "disabled";
@@ -70,7 +62,6 @@ namespace UNN_Ki_001.Pages.Attendance
 
         public async Task OnPostAsync()
         {
-            var now = DateTime.Now;
             var action = Request.Form["action"];
             var user = await _userManager.FindByNameAsync(User.Identity?.Name);
             switch (action)
@@ -112,14 +103,26 @@ namespace UNN_Ki_001.Pages.Attendance
         private async Task StartAsync(AppUser user)
         {
             var now = DateTime.Now;
-            kinmu = new(user.Kigyo_cd, user.Shain_no, now.ToString("yyyyMMdd"));
-            kinmu.KinmuCd = "K001";
-            KinmuControl kc = new KinmuControl(kinmu, _kintaiDbContext);
-            kinmu = kc.DakokuStart();
-            kinmu.CreateUsr = user.Shain_no;
-            kinmu.UpdateDt = DateTime.UtcNow;
-            kinmu.UpdateUsr = user.Shain_no;
-            _kintaiDbContext.Add(kinmu);
+            kinmu = _kintaiDbContext.t_kinmus
+                .Where(e => e.KigyoCd.Equals(user.Kigyo_cd) && e.ShainNo.Equals(user.Shain_no) && e.KinmuDt.Equals(now.ToString("yyyyMMdd")))
+                .FirstOrDefault();
+            if(kinmu == null)
+            {
+                kinmu = new(user.Kigyo_cd, user.Shain_no, now.ToString("yyyyMMdd"));
+                kinmu.KinmuCd = "K001";
+                kinmu.CreateUsr = user.Shain_no;
+                KinmuControl kc = new KinmuControl(kinmu, _kintaiDbContext);
+                kinmu = kc.DakokuStart();
+                _kintaiDbContext.Add(kinmu);
+            }
+            else
+            {
+                KinmuControl kc = new KinmuControl(kinmu, _kintaiDbContext);
+                kinmu = kc.DakokuStart();
+                kinmu.UpdateUsr = user.Shain_no;
+                kinmu.UpdateDt = DateTime.UtcNow;
+                _kintaiDbContext.Update(kinmu);
+            }
             await _kintaiDbContext.SaveChangesAsync();
             Message = "出勤が出来ました";
         }

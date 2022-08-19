@@ -24,6 +24,9 @@ function getdate() {
     if (m < 10) {
         m = "0" + m;
     }
+    if (h < 10) {
+        h = "0" + h;
+    }
     $(".main .left .time").text(h + " : " + m);
     setTimeout(function () { getdate() }, 1);
 }
@@ -87,6 +90,10 @@ function day1(i, b) {
     }
     return str;
 }
+
+// yyyyMMdd文字列を日付に交換するfunction()
+// params str
+// return 日付
 function strToDate(str) {
     var y = str.substring(0, 4)
     var m = str.substring(4, 6)
@@ -94,8 +101,16 @@ function strToDate(str) {
     str = y + "/" + m + "/" + d
     return new Date(str);
 }
+
+// 今年
 let year = new Date().getFullYear()
+// 今月
 let month = new Date().getMonth() + 1
+
+// 実のカレンダーが作成
+// @param year
+// @param month
+// @param e (月によってデータベースからデーターを取得)
 function Calendar(year, month, e) {
     $(".calendar-data tr td").remove()
     $(".fc-header .fc-header-center .year").text(year);
@@ -115,10 +130,10 @@ function Calendar(year, month, e) {
         let it = $(this);
         let count = 0;
         for (let j = 0; j < e.length; j++) {
-            if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt != null && e[j].dakokuFrTm != null && e[j].dakokuToDt != null && e[j].dakokuToTm != null) {
+            if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDate != null && e[j].kinmuFrDate != null && e[j].dakokuToDate != null && e[j].kinmuToDate != null) {
                 count = 1;
             }
-            else if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDt != null && e[j].dakokuFrTm != null && e[j].dakokuToDt == null && e[j].dakokuToTm == null) {
+            else if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDate != null && e[j].kinmuFrDate != null && e[j].dakokuToDate == null && e[j].kinmuToDate == null) {
                 count = 2
             }
         }
@@ -126,65 +141,10 @@ function Calendar(year, month, e) {
             it.children().addClass("taikin");
         if(count == 2)
             it.children().addClass("shukin");
-        if (count == 0 && it.data("date") != "" && new Date() > strToDate(it.data("date").toString()))
+        if (count == 0 && it.data("date") != "" && new Date(new Date().getTime() - 86400000) > strToDate(it.data("date").toString()))
             it.children().addClass("yasumi");
     })
-    /*e.forEach(item => {
-        var str = "";
-        if (q < 7 - dayOfWeek) {
-            str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
-        "<div class=''>" +
-        "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
-        "</div>" +
-        "</td>"
-    $(".calendar-data tr.week1").append(str);
-    q++;
-}
-else if (q < 14 - dayOfWeek) {
-    str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
-        "<div class=''>" +
-        "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
-        "</div>" +
-        "</td>"
-    $(".calendar-data tr.week2").append(str);
-    q++;
-} else if (q < 21 - dayOfWeek) {
-    str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
-        "<div class=''>" +
-        "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
-        "</div>" +
-        "</td>"
-    $(".calendar-data tr.week3").append(str);
-    q++;
-} else if (q < 28 - dayOfWeek) {
-    str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
-        "<div class=''>" +
-        "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
-        "</div>" +
-        "</td>"
-    $(".calendar-data tr.week4").append(str);
-    q++;
-} else if (q < 35 - dayOfWeek) {
-    str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
-        "<div class=''>" +
-        "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
-        "</div>" +
-        "</td>"
-    $(".calendar-data tr.week5").append(str);
-    q++;
-} else {
-    str += "<td class='fc-day px-2' data-date='" + *//*new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2)*//*item.kinmuDt + "'>" +
-        "<div class=''>" +
-        "<div class='fc-day-number py-2'>" + item.kinmuDt.substring(6, 8) + "</div>" +
-        "</div>" +
-        "</td>"
-    $(".calendar-data tr.week6").append(str);
-    q++;
-}
-})*/
-
 };
-GetData(year, month);
 
 $(".prev-month").click(function () {
     $(".calendar-data tr td").remove()
@@ -215,3 +175,4 @@ function GetData(year, month) {
         }
     })
 }
+GetData(year, month);
