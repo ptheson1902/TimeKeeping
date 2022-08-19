@@ -25,7 +25,15 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
             if(sessionList == null || sessionList.Count == 0)
             {
-                
+                var shain = GetCurrentUserShainAsync().Result;
+                if(shain == null)
+                {
+
+                }
+                tgtList.Add()
+            } else
+            {
+                tgtList.AddRange(sessionList);
             }
 
             return RedirectToPage("/Attendance/Record/Search");
