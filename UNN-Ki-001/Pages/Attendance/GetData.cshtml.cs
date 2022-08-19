@@ -24,11 +24,11 @@ namespace UNN_Ki_001.Pages.Attendance
             DateTime now = DateTime.Now;
             if (month != null)
             {
-                return new JsonResult(_kintaiDbContext.t_kinmus.Where(a => a.ShainNo.Equals(User.Identity.Name) && a.KinmuDt.Substring(0, 6).Equals(((DateTime)month).ToString("yyyyMM"))).Select(a => new { a.KinmuDt, a.DakokuFrDate, a.KinmuFrDate, a.DakokuToDate, a.KinmuToDate }).OrderBy(a => a.KinmuDt));
+                return new JsonResult(_kintaiDbContext.t_kinmus.Where(a => a.ShainNo.Equals(User.Identity.Name) && a.KinmuDt.Substring(0, 6).Equals(((DateTime)month).ToString("yyyyMM"))).Select(a => new { a.KinmuDt, a.KinmuFrDate, a.KinmuToDate }).OrderBy(a => a.KinmuDt));
             }
             else
             {
-                return new JsonResult(_kintaiDbContext.t_kinmus.Where(a => a.ShainNo.Equals(User.Identity.Name) && a.KinmuDt.Substring(0, 6).Equals(now.ToString("yyyyMM"))).Select(a => new { a.KinmuDt, a.DakokuFrDate, a.KinmuFrDate, a.DakokuToDate, a.KinmuToDate }).OrderBy(a => a.KinmuDt));
+                return new JsonResult(_kintaiDbContext.t_kinmus.Where(a => a.ShainNo.Equals(User.Identity.Name) && a.KinmuDt.Substring(0, 6).Equals(now.ToString("yyyyMM"))).Select(a => new { a.KinmuDt, a.KinmuFrDate, a.KinmuToDate }).OrderBy(a => a.KinmuDt));
             }
         }
     }
