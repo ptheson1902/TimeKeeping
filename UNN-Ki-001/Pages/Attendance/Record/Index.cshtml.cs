@@ -19,6 +19,13 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
         public IActionResult OnGet()
         {
+            // セッションからターゲットのリストを取得する
+            List<string>? tgtList = HttpContext.Session.GetObject<List<string>>("target");
+
+            if(tgtList == null)
+            {
+
+            }
             return RedirectToPage("/Attendance/Record/Search");
         }
 
