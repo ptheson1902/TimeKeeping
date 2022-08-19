@@ -14,24 +14,15 @@ using UNN_Ki_001.Data.Models;
 namespace UNN_Ki_001.Pages.Attendance
 {
     [Authorize(Policy = "Rookie")]
-    public class IndexModel : PageModel
+    public class IndexModel : BasePageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-        private readonly ApplicationDbContext _applicationDbContext;
-        private readonly KintaiDbContext _kintaiDbContext;
-        private readonly UserManager<AppUser> _userManager;
-        //private T_Kinmu? kinmu { get; set; }
         public string? Taikin { get; set; }
         public string? Shukin { get; set; }
         public string? Message { get; set; }
         private DateTime now = DateTime.Now;
 
-        public IndexModel(ILogger<IndexModel> logger, ApplicationDbContext applicationDbContext, KintaiDbContext context, KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager)
-       {
-            _logger = logger;
-            _applicationDbContext = applicationDbContext;
-            _kintaiDbContext = kintaiDbContext;
-            _userManager = userManager;
+        public IndexModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
+        {
         }
 
         public void OnGet()
@@ -71,20 +62,6 @@ namespace UNN_Ki_001.Pages.Attendance
                     Taikin = "disabled";
                 }
             }
-        }
-
-        private async Task<M_Shain?> GetCurrentUserShainAsync()
-        {
-            if (User == null || User.Identity == null)
-            {
-                return null;
-            }
-
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            M_Shain? shain = _kintaiDbContext.m_shains
-                .Where(e => e.KigyoCd.Equals(user.Kigyo_cd) && e.ShainNo.Equals(user.Shain_no))
-                .FirstOrDefault();
-            return shain;
         }
 
         public void OnPost()
@@ -132,8 +109,7 @@ namespace UNN_Ki_001.Pages.Attendance
                 Message = "退勤可能なレコードが存在しません。";
                 return;
             }
-            kinmu.DakokuToDate = now;
-           // _kintaiDbContext.t_kinmus.Update(kinmu);
+            kinmu.DakokuToDate = DateTime.Now;
         }
 
         private void Start(M_Shain shain)
@@ -146,11 +122,6 @@ namespace UNN_Ki_001.Pages.Attendance
             if(kinmu == null)
             {
                 kinmu = new T_Kinmu(shain.KigyoCd, shain.ShainNo, now.ToString("yyyyMMdd"));
-                //_kintaiDbContext.t_kinmus.Add(kinmu);
-            }
-            else
-            {
-               // _kintaiDbContext.t_kinmus.Update(kinmu);
             }
 
             kinmu.DakokuFrDate = DateTime.Now;
