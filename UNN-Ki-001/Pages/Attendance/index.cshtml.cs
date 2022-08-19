@@ -19,23 +19,24 @@ namespace UNN_Ki_001.Pages.Attendance
         public string? Taikin { get; set; }
         public string? Shukin { get; set; }
         public string? Message { get; set; }
+        private M_Shain? shain { get;}
         private DateTime now = DateTime.Now;
 
         public IndexModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
+            shain = GetCurrentUserShainAsync().Result;
         }
         public IActionResult OnGet()
         {
-            M_Shain? shain = GetCurrentUserShainAsync().Result;
             if (shain == null)
                 return RedirectToPage("/");
-            DisabledButton();
+            else
+                DisabledButton(shain);
             return Page();
         }
-        private void DisabledButton()
+        private void DisabledButton(M_Shain shain)
         {
             int d = int.Parse(now.ToString("yyyyMMdd"));
-            M_Shain? shain = GetCurrentUserShainAsync().Result;
             var today = _kintaiDbContext.t_kinmus.
                 Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && a.KinmuDt.Equals(now.ToString("yyyyMMdd")))
                 .FirstOrDefault();
@@ -73,7 +74,6 @@ namespace UNN_Ki_001.Pages.Attendance
 
         public void OnPost()
         {
-            M_Shain? shain = GetCurrentUserShainAsync().Result;
             if (shain == null)
             {
                 Message = "ユーザーに社員が登録されていません。";
@@ -100,7 +100,7 @@ namespace UNN_Ki_001.Pages.Attendance
                 Debug.WriteLine(e.Message);
                 Message = "打刻に失敗しました。";
             }
-            DisabledButton();
+            DisabledButton(shain);
         }
 
         private void End(M_Shain shain)
