@@ -6,12 +6,19 @@ namespace UNN_Ki_001.Data.Models
     [Table("m_shain", Schema = "public")]
     public class M_Shain
     {
+        public M_Shain(string kigyoCd, string shainNo)
+        {
+            KigyoCd = kigyoCd;
+            ShainNo = shainNo;
+        }
+
         [Key]
         [Column("kigyo_cd")]
-        public string? KigyoCd { get;  set; }
+        public string KigyoCd { get;  set; }
 
+        [Key]
         [Column("shain_no")]
-        public string? ShainNo { get; set; }
+        public string ShainNo { get; set; }
 
         [Column("name_sei")]
         public string? NameSei { get; set; }

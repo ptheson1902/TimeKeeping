@@ -56,8 +56,17 @@ builder.Services.AddAuthorization(options =>
 // Cookie設定
 builder.Services.ConfigureApplicationCookie(options =>
 {
+    options.Cookie.Name = ".UNN.Session";
     options.AccessDeniedPath = "/Account/AccessDenied";
     options.LoginPath = "/Account/Login";
+});
+
+// セッションの使用を有効化
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
 builder.Services.AddRazorPages();
@@ -80,6 +89,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();

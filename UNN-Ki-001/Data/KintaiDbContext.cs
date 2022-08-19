@@ -44,7 +44,7 @@ namespace UNN_Ki_001.Data
         }
 
         public DbSet<T_Kyukei> t_Kyukeis => Set<T_Kyukei>();
-        public DbSet<m_kensakushain> m_shains => Set<m_kensakushain>();
+        public DbSet<M_Shain> m_shains => Set<M_Shain>();
         public DbSet<M_Shokushu> m_shokushus => Set<M_Shokushu>();
         public DbSet<M_Shozoku> m_shozokus => Set<M_Shozoku>();
         public DbSet<M_Koyokeitai> m_koyokeitais => Set<M_Koyokeitai>();

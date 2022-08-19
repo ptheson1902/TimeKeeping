@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
@@ -6,6 +7,7 @@ using UNN_Ki_001.Data.Models;
 
 namespace UNN_Ki_001.Pages.Attendance.Record
 {
+    [Authorize(Policy = "Rookie")]
     public class IndexModel : PageModel
     {
         private readonly KintaiDbContext _context;
@@ -21,8 +23,10 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         public string? KoyokeitaiName { get; set; }
         public string? Kigyo_cd { get; set; }
 
-        public void OnGet(string? id)
+        public IActionResult OnGet(string? id)
         {
+            return RedirectToPage("/Attendance/Record/Search");
+            /*
             ShainNo = id;
             var no = from a in _context.m_shains
                      join b in _context.m_shozokus
@@ -41,7 +45,12 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 ShozokuName = item.ShozokuNm;
                 KoyokeitaiName = item.KoyokeitaiNm;
                 Kigyo_cd = item.kigyo_cd;
-            }
+            }*/
+        }
+
+        public void OnPost()
+        {
+
         }
     }
 }
