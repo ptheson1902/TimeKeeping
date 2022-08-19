@@ -20,7 +20,6 @@ namespace UNN_Ki_001.Pages.Attendance
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly KintaiDbContext _kintaiDbContext;
         private readonly UserManager<AppUser> _userManager;
-        private M_Shain? Shain { get; }
         private T_Kinmu? kinmu { get; set; }
         public string? Taikin { get; set; }
         public string? Shukin { get; set; }
@@ -34,14 +33,14 @@ namespace UNN_Ki_001.Pages.Attendance
             _userManager = userManager;
         }
 
-        public async Task OnGetAsync()
+        public void OnGet()
         {
             var now = DateTime.Now;
-            var user = await _userManager.FindByNameAsync(User.Identity?.Name);
-            var today = _kintaiDbContext.t_kinmus.Where(a => a.KigyoCd.Equals(user.Kigyo_cd) && a.ShainNo.Equals(user.Shain_no) && a.KinmuDt.Equals(now.ToString("yyyyMMdd"))).FirstOrDefault();
+            var shain = GetCurrentUserShainAsync().Result;
+            var today = _kintaiDbContext.t_kinmus.Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && a.KinmuDt.Equals(now.ToString("yyyyMMdd"))).FirstOrDefault();
             if (today == null)
             {
-                var old = _kintaiDbContext.t_kinmus.Where(a => a.KigyoCd.Equals(user.Kigyo_cd) && a.ShainNo.Equals(user.Shain_no) && a.ShainNo.Equals(user.Shain_no) && int.Parse(a.KinmuDt) < int.Parse(now.ToString("yyyyMMdd"))).OrderByDescending(e => e.KinmuDt).FirstOrDefault();
+                var old = _kintaiDbContext.t_kinmus.Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && int.Parse(a.KinmuDt) < int.Parse(now.ToString("yyyyMMdd"))).OrderByDescending(e => e.KinmuDt).FirstOrDefault();
                 if (old != null && (old.DakokuFrDate != null && old.KinmuFrDate != null && old.DakokuToDate != null && old.KinmuToDate != null) || old != null && (old.DakokuFrDate == null && old.KinmuFrDate == null && old.DakokuToDate == null && old.KinmuToDate != null))
                 {
                     Shukin = null;
@@ -67,11 +66,6 @@ namespace UNN_Ki_001.Pages.Attendance
                 }
             }
         }
-
-        public async Task OnPostAsync()
-
-
-
 
         private async Task<M_Shain?> GetCurrentUserShainAsync()
         {
@@ -114,8 +108,9 @@ namespace UNN_Ki_001.Pages.Attendance
             } catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
-                Message = "打刻中に失敗しました。";
+                Message = "打刻に失敗しました。";
             }
+            OnGet();
         }
 
         private void End(M_Shain shain)
