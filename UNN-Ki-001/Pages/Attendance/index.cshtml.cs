@@ -132,8 +132,8 @@ namespace UNN_Ki_001.Pages.Attendance
                 Message = "退勤可能なレコードが存在しません。";
                 return;
             }
-            kinmu.DakokuFrDate = now;
-            _kintaiDbContext.t_kinmus.Update(kinmu);
+            kinmu.DakokuToDate = now;
+           // _kintaiDbContext.t_kinmus.Update(kinmu);
         }
 
         private void Start(M_Shain shain)
@@ -146,12 +146,14 @@ namespace UNN_Ki_001.Pages.Attendance
             if(kinmu == null)
             {
                 kinmu = new T_Kinmu(shain.KigyoCd, shain.ShainNo, now.ToString("yyyyMMdd"));
-                _kintaiDbContext.t_kinmus.Add(kinmu);
+                //_kintaiDbContext.t_kinmus.Add(kinmu);
             }
             else
             {
-                _kintaiDbContext.t_kinmus.Update(kinmu);
+               // _kintaiDbContext.t_kinmus.Update(kinmu);
             }
+
+            kinmu.DakokuFrDate = DateTime.Now;
         }
     }
 }

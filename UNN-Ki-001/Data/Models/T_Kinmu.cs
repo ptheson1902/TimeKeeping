@@ -235,7 +235,7 @@ namespace UNN_Ki_001.Data.Models
                 {
                     item.DakokuFrDate = kinmuFrDate;
                 }
-                if (item.DakokuToDate > kinmuToDate)
+                if (item.DakokuToDate < kinmuToDate)
                 {
                     item.DakokuToDate = kinmuToDate;
                 }
