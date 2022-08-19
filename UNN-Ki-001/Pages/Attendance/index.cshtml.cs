@@ -20,10 +20,11 @@ namespace UNN_Ki_001.Pages.Attendance
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly KintaiDbContext _kintaiDbContext;
         private readonly UserManager<AppUser> _userManager;
-        private T_Kinmu? kinmu { get; set; }
+        //private T_Kinmu? kinmu { get; set; }
         public string? Taikin { get; set; }
         public string? Shukin { get; set; }
         public string? Message { get; set; }
+        private DateTime now = DateTime.Now;
 
         public IndexModel(ILogger<IndexModel> logger, ApplicationDbContext applicationDbContext, KintaiDbContext context, KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager)
        {
@@ -35,12 +36,17 @@ namespace UNN_Ki_001.Pages.Attendance
 
         public void OnGet()
         {
-            var now = DateTime.Now;
-            var shain = GetCurrentUserShainAsync().Result;
-            var today = _kintaiDbContext.t_kinmus.Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && a.KinmuDt.Equals(now.ToString("yyyyMMdd"))).FirstOrDefault();
+            int d = int.Parse(now.ToString("yyyyMMdd"));
+            M_Shain? shain = GetCurrentUserShainAsync().Result;
+            var today = _kintaiDbContext.t_kinmus.
+                Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && a.KinmuDt.Equals(now.ToString("yyyyMMdd")))
+                .FirstOrDefault();
             if (today == null)
             {
-                var old = _kintaiDbContext.t_kinmus.Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && int.Parse(a.KinmuDt) < int.Parse(now.ToString("yyyyMMdd"))).OrderByDescending(e => e.KinmuDt).FirstOrDefault();
+                var old = _kintaiDbContext.t_kinmus
+                    .Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && Convert.ToInt32(a.KinmuDt) < d)
+                    .OrderByDescending(e => e.KinmuDt)
+                    .FirstOrDefault();
                 if (old != null && (old.DakokuFrDate != null && old.KinmuFrDate != null && old.DakokuToDate != null && old.KinmuToDate != null) || old != null && (old.DakokuFrDate == null && old.KinmuFrDate == null && old.DakokuToDate == null && old.KinmuToDate != null))
                 {
                     Shukin = null;
@@ -69,13 +75,13 @@ namespace UNN_Ki_001.Pages.Attendance
 
         private async Task<M_Shain?> GetCurrentUserShainAsync()
         {
-            if(User == null || User.Identity == null)
+            if (User == null || User.Identity == null)
             {
                 return null;
             }
 
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var shain = _kintaiDbContext.m_shains
+            M_Shain? shain = _kintaiDbContext.m_shains
                 .Where(e => e.KigyoCd.Equals(user.Kigyo_cd) && e.ShainNo.Equals(user.Shain_no))
                 .FirstOrDefault();
             return shain;
@@ -83,7 +89,7 @@ namespace UNN_Ki_001.Pages.Attendance
 
         public void OnPost()
         {
-            var shain = GetCurrentUserShainAsync().Result;
+            M_Shain? shain = GetCurrentUserShainAsync().Result;
             if (shain == null)
             {
                 Message = "ユーザーに社員が登録されていません。";
@@ -115,34 +121,36 @@ namespace UNN_Ki_001.Pages.Attendance
 
         private void End(M_Shain shain)
         {
-            var now = DateTime.Now;
-            var today = int.Parse(now.ToString("yyyyMMdd"));
-            var kinmu = _kintaiDbContext.t_kinmus
-                .Where(e => e.KigyoCd.Equals(shain.KigyoCd) && e.ShainNo.Equals(shain.ShainNo) && e.KinmuToDate == null && int.Parse(e.KinmuDt) < today)
-                .OrderByDescending(e => e.KinmuDt)
-                .FirstOrDefault();
+            int today = int.Parse(now.ToString("yyyyMMdd"));
+            T_Kinmu? kinmu = _kintaiDbContext.t_kinmus
+                    .Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && a.KinmuFrDate != null && a.KinmuToDate == null && Convert.ToInt32(a.KinmuDt) <= today)
+                    .OrderByDescending(e => e.KinmuDt)
+                    .FirstOrDefault();
 
             if (kinmu == null)
             {
                 Message = "退勤可能なレコードが存在しません。";
                 return;
             }
-
             kinmu.DakokuFrDate = now;
+            _kintaiDbContext.t_kinmus.Update(kinmu);
         }
 
-        private  void Start(M_Shain shain)
+        private void Start(M_Shain shain)
         {
-            var now = DateTime.Now;
-            var today = int.Parse(now.ToString("yyyyMMdd"));
-            var kinmu = _kintaiDbContext.t_kinmus
-            .Where(e => e.KigyoCd.Equals(shain.KigyoCd) && e.KinmuDt.Equals(today) && e.ShainNo.Equals(shain.ShainNo) && e.KinmuFrDate == null)
+            T_Kinmu? kinmu = _kintaiDbContext.t_kinmus
+            .Where(e => e.KigyoCd.Equals(shain.KigyoCd) && e.KinmuDt.Equals(now.ToString("yyyyMMdd")) && e.ShainNo.Equals(shain.ShainNo) && e.KinmuFrDate == null)
             .FirstOrDefault();
 
             // 該当レコードがなかったら新規作成
             if(kinmu == null)
             {
-                kinmu = new T_Kinmu(shain.KigyoCd, shain.ShainNo, today.ToString());
+                kinmu = new T_Kinmu(shain.KigyoCd, shain.ShainNo, now.ToString("yyyyMMdd"));
+                _kintaiDbContext.t_kinmus.Add(kinmu);
+            }
+            else
+            {
+                _kintaiDbContext.t_kinmus.Update(kinmu);
             }
         }
     }
