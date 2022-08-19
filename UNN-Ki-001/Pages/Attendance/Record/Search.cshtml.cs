@@ -6,6 +6,7 @@ using UNN_Ki_001.Data;
 using UNN_Ki_001.Data.Models;
 namespace UNN_Ki_001.Pages.Attendance.Record
 {
+
     [AllowAnonymous]
     public class Search : PageModel
     {
@@ -31,6 +32,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
         public void OnPost()
         {
+            /*
             // フォームからValueを受け取る。
             Shain_no = Request.Form["shain_no"];
             Name_mei = Request.Form["name_mei"];
@@ -85,6 +87,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 d.koyokeitai_nm = item.KoyokeitaiNm;
                 Data.Add(d);
             }
+            */
         }
     }
 }
