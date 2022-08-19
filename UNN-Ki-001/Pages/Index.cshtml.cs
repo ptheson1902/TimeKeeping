@@ -17,7 +17,7 @@ namespace UNN_Ki_001.Pages
         public IActionResult OnGet()
         {
             // ログイン前ならログインページへリダイレクト
-            if (User.Identity != null && User.Identity.IsAuthenticated)
+            if (User == null || User.Identity == null || !User.Identity.IsAuthenticated)
             {
                 return RedirectToPage("/Account/Login");
             }
