@@ -157,53 +157,46 @@
                                 <a class="nav-link" asp-page="/Attendance/Index">打刻登録</a>
                             </div>
                             <div class="nav-item mx-2">
-                                <a class="nav-link"  asp-page="/WorkSchedule">勤務表</a>
+                                <a class="nav-link"  asp-page="/Attendance/Record/Search">勤務表</a>
                             </div>
-                            <div class="nav-item mx-2">
-                                <a class="nav-link" asp-page="/Register">ユーザー登録</a>
-                            </div>
-                            <div class="nav-item mx-2">
-                                <a class="nav-link" asp-page="/Setting">基本設定</a>
-                            </div>
-                            <div class="nav-item dropdown ms-2">
-                                <div
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <div class="nav-item mx-2">
+                                    <a class="nav-link" asp-page="/Register">ユーザー登録</a>
+                                </div>
+                                <div class="nav-item mx-2">
+                                    <a class="nav-link" asp-page="/Setting">基本設定</a>
+                                </div>
+                                <div class="nav-item dropdown ms-2">
+                                    <div
                                     class="nav-link dropdown-toggle"
                                     role="button"
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
                                 >
-                                    各種マスタ登録
-                                </div>
-                                <ul
+                                        各種マスタ登録
+                                    </div>
+                                    <ul
                                     class="dropdown-menu dropdown-menu-end border-0 rounded-4"
                                 >
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/VariousMaster/Employee"
-                                            >社員マスタ</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/VariousMaster/Affiliation"
-                                            >所属マスタ</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/VariousMaster/Job"
-                                            >職種マスタ</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/VariousMaster/EmploymentForm"
-                                            >雇用形態マスタ</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/VariousMaster/Work"
-                                            >勤務</a
-                                        >
-                                    </li>
-                                </ul>
-                            </div>
+                                        <li>
+                                            <a class="dropdown-item" asp-page="/VariousMaster/">社員マスタ</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-page="/VariousMaster/Shozoku">所属マスタ</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-page="/VariousMaster/Shokushu">職種マスタ</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-page="/VariousMaster/Koyokeitai">雇用形態マスタ</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-page="/VariousMaster/Kinmu">勤務マスター</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
                             <div class="loginUserInfo dropdown">
                                 <a
                                     class="nav-link dropdown-toggle d-flex justify-content-end align-items-center"
