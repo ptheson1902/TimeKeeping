@@ -24,9 +24,13 @@ namespace UNN_Ki_001.Pages.Attendance
         public IndexModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
         }
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            M_Shain? shain = GetCurrentUserShainAsync().Result;
+            if (shain == null)
+                return RedirectToPage("/");
             DisabledButton();
+            return Page();
         }
         private void DisabledButton()
         {
