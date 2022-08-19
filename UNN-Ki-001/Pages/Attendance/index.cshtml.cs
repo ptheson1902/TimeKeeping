@@ -21,6 +21,9 @@ namespace UNN_Ki_001.Pages.Attendance
         private readonly KintaiDbContext _kintaiDbContext;
         private readonly UserManager<AppUser> _userManager;
         private M_Shain? Shain { get; }
+        private T_Kinmu? kinmu { get; set; }
+        public string? Taikin { get; set; }
+        public string? Shukin { get; set; }
         public string? Message { get; set; }
 
         public IndexModel(ILogger<IndexModel> logger, ApplicationDbContext applicationDbContext, KintaiDbContext context, KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager)
@@ -31,6 +34,41 @@ namespace UNN_Ki_001.Pages.Attendance
             _userManager = userManager;
         }
 
+        public async Task OnGetAsync()
+        {
+            var now = DateTime.Now;
+            var user = await _userManager.FindByNameAsync(User.Identity?.Name);
+            var today = _kintaiDbContext.t_kinmus.Where(a => a.KigyoCd.Equals(user.Kigyo_cd) && a.ShainNo.Equals(user.Shain_no) && a.KinmuDt.Equals(now.ToString("yyyyMMdd"))).FirstOrDefault();
+            if (today == null)
+            {
+                var old = _kintaiDbContext.t_kinmus.Where(a => a.KigyoCd.Equals(user.Kigyo_cd) && a.ShainNo.Equals(user.Shain_no) && a.ShainNo.Equals(user.Shain_no) && int.Parse(a.KinmuDt) < int.Parse(now.ToString("yyyyMMdd"))).OrderByDescending(e => e.KinmuDt).FirstOrDefault();
+                if (old != null && (old.DakokuFrDate != null && old.KinmuFrDate != null && old.DakokuToDate != null && old.KinmuToDate != null) || old != null && (old.DakokuFrDate == null && old.KinmuFrDate == null && old.DakokuToDate == null && old.KinmuToDate != null))
+                {
+                    Shukin = null;
+                    Taikin = "disabled";
+                }
+            }
+            else
+            {
+                if (today.DakokuFrDate != null && today.KinmuFrDate != null && today.DakokuToDate == null && today.KinmuToDate == null)
+                {
+                    Shukin = "disabled";
+                    Taikin = null;
+                }
+                else if (today.DakokuFrDate != null && today.KinmuFrDate != null && today.DakokuToDate != null && today.KinmuToDate != null)
+                {
+                    Shukin = "disabled";
+                    Taikin = "disabled";
+                }
+                else
+                {
+                    Shukin = null;
+                    Taikin = "disabled";
+                }
+            }
+        }
+
+        public async Task OnPostAsync()
 
 
 

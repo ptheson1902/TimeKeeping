@@ -30,7 +30,7 @@
         /// <param name="date"></param>
         /// <param name="time"></param>
         public DateControl(string date, string time = "0000", string? kbn = "0")
-            : this(DateTime.ParseExact(date + time, "yyyyMMddHHmm", null), kbn){}
+            : this(DateTime.ParseExact(date + time, "yyyyMMddHHmm", null), kbn) { }
 
         public DateTime Origin { get; }
 
@@ -52,17 +52,17 @@
             {
                 // 計算用の型へキャストする
                 DateTime dateTime = DateTime.ParseExact(Date + Time, "yyyyMMddHHmm", null);
-                TimeSpan ts = TimeSpan.FromMinutes((double)marumeTm);
+                TimeSpan ts = TimeSpan.FromMinutes((int)marumeTm);
 
                 if (marumeKbn.Equals("1"))
                 {
                     // 切り上げ処理
-                    dateTime = new DateTime(((dateTime.Ticks + ts.Ticks - 1) / ts.Ticks) * ts.Ticks, dateTime.Kind);
+                    dateTime = new DateTime((dateTime.Ticks + ts.Ticks - 1) / ts.Ticks * ts.Ticks, dateTime.Kind);
                 }
                 else
                 {
                     // 切り下げ処理
-                    dateTime = new DateTime((((dateTime.Ticks + ts.Ticks) / ts.Ticks) - 1) * ts.Ticks, dateTime.Kind);
+                    dateTime = new DateTime(((dateTime.Ticks + ts.Ticks) / ts.Ticks - 1) * ts.Ticks, dateTime.Kind);
                 }
 
                 DateControl result = new DateControl(dateTime);

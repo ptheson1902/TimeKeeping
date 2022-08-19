@@ -24,18 +24,19 @@ function getdate() {
     if (m < 10) {
         m = "0" + m;
     }
+    if (h < 10) {
+        h = "0" + h;
+    }
     $(".main .left .time").text(h + " : " + m);
     setTimeout(function () { getdate() }, 1);
 }
 getdate()
-
-
 // Calendar
 function day(i) {
     var str = "";
     let j = 0;
     while (j < 7) {
-        str += "<td class='fc-day px-2' data-date='" + new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2) + "'>" +
+        str += "<td class='fc-day px-2' data-date='" + year + ("0" + month).slice(-2) + ("0" + i).slice(-2) + "'>" +
             "<div class=''>" +
             "<div class='fc-day-number py-2'>" + i + "</div>" +
             "</div>" +
@@ -56,7 +57,7 @@ function day(i, b) {
                 "</div>" +
                 "</td>"
         } else {
-            str += "<td class='fc-day px-2' data-date='" + new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2) + "'>" +
+            str += "<td class='fc-day px-2' data-date='" + year + ("0" + month).slice(-2) + ("0" + i).slice(-2) + "'>" +
                 "<div class=''>" +
                 "<div class='fc-day-number py-2'>" + i + "</div>" +
                 "</div>" +
@@ -72,7 +73,7 @@ function day1(i, b) {
     let j = 0;
     while (j < 7) {
         if (j < 7 - b) {
-            str += "<td class='fc-day px-2' data-date='" + new Date().getFullYear() + ("0" + (new Date().getMonth() + 1)).slice(-2) + ("0" + i).slice(-2) + "'>" +
+            str += "<td class='fc-day px-2' data-date='" + year + ("0" + month).slice(-2) + ("0" + i).slice(-2) + "'>" +
                 "<div class=''>" +
                 "<div class='fc-day-number py-2'>" + i + "</div>" +
                 "</div>" +
@@ -89,14 +90,34 @@ function day1(i, b) {
     }
     return str;
 }
+
+// yyyyMMdd文字列を日付に交換するfunction()
+// params str
+// return 日付
+function strToDate(str) {
+    var y = str.substring(0, 4)
+    var m = str.substring(4, 6)
+    var d = str.substring(6, 8)
+    str = y + "/" + m + "/" + d
+    return new Date(str);
+}
+
+// 今年
 let year = new Date().getFullYear()
+// 今月
 let month = new Date().getMonth() + 1
-function calendar() {
+
+// 実のカレンダーが作成
+// @param year
+// @param month
+// @param e (月によってデータベースからデーターを取得)
+function Calendar(year, month, e) {
+    $(".calendar-data tr td").remove()
     $(".fc-header .fc-header-center .year").text(year);
     $(".fc-header .fc-header-center .month").text(month);
     var dayOfWeek = new Date(year + "/" + month + "/1").getDay();
-    var dayNumOfMonth = new Date(year , month, 0).getDate()
-    $(".calendar-data tr.week1").append(day(1, dayOfWeek))
+    var dayNumOfMonth = new Date(year, month, 0).getDate()
+    $(".calendar-data tr.week1").append(day(1, dayOfWeek));
     $(".calendar-data tr.week2").append(day(8 - dayOfWeek))
     $(".calendar-data tr.week3").append(day(15 - dayOfWeek))
     $(".calendar-data tr.week4").append(day(22 - dayOfWeek))
@@ -104,90 +125,55 @@ function calendar() {
     if (dayNumOfMonth - 35 + dayOfWeek > 0) {
         $(".calendar-data tr.week6").append(day1((36 - dayOfWeek), 42 - dayNumOfMonth - dayOfWeek))
     }
-}
-calendar();
+
+    $(".fc-day").each(function () {
+        let it = $(this);
+        let count = 0;
+        for (let j = 0; j < e.length; j++) {
+            if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDate != null && e[j].kinmuFrDate != null && e[j].dakokuToDate != null && e[j].kinmuToDate != null) {
+                count = 1;
+            }
+            else if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDate != null && e[j].kinmuFrDate != null && e[j].dakokuToDate == null && e[j].kinmuToDate == null) {
+                count = 2
+            }
+        }
+        if(count == 1)
+            it.children().addClass("taikin");
+        if(count == 2)
+            it.children().addClass("shukin");
+        if (count == 0 && it.data("date") != "" && new Date(new Date().getTime() - 86400000) > strToDate(it.data("date").toString()))
+            it.children().addClass("yasumi");
+    })
+};
 
 $(".prev-month").click(function () {
     $(".calendar-data tr td").remove()
     month--;
     if (month == 0) {
-        year --;
+        year--;
         month = 12;
     }
-    calendar()
+    GetData(year, month);
 })
 $(".next-month").click(function () {
     $(".calendar-data tr td").remove()
     month++;
     if (month == 13) {
-        year ++;
+        year++;
         month = 1;
     }
-    calendar()
+    GetData(year, month);
 })
 
-// 所属コードをクリックする時、修正・削除のポップアップが表示
-$(".shozoku_cd").click(function () {
-    $("#updateModal input[name='shozoku_cd2']").val($(this).text())
-    $("#updateModal input[name='shozoku_nm2']").val($(this).parent().next().text())
-    $("#updateModal input[name='valid_flg2']").attr("checked", false);
-    $("#updateModal input[name='valid_flg2'][value='" + $(this).parent().next().next().children().val() + "']").attr("checked", true)
-})
-//  所属メンテナンスの複写機能(Copy)
-$(".shozokuData tr").click(function () {
-
-    $(".shozokuData tr").removeClass("selected bg-light")
-    $(this).addClass("selected bg-light");
-    $(".szcopy").click(function () {
-        $(".tsuika").click();
-        $("#tsuikaModal input[name='shozoku_cd1']").val($(".shozokuData tr.selected").children().children().text())
-        $("#tsuikaModal input[name='shozoku_nm1']").val($(".shozokuData tr.selected").children()[1].textContent)
-        $("#tsuikaModal input[name='valid_flg1']").attr("checked", false);
-        $("#tsuikaModal input[name='valid_flg1'][value='" + $(".shozokuData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
+function GetData(year, month) {
+    $.ajax({
+        url: "/Attendance/GetData/" + year + "-" + month,
+        method: "get",
+        Cache: "false",
+        success: function (e) {
+            console.log(e)
+            Calendar(year, month, e);
+        }
     })
-})
-
-
-
-//  職種コードをクリックする時、修正・削除のポップアップが表示
-$(".shokushu_cd").click(function () {
-    $("#updateModal input[name='shokushu_cd2']").val($(this).text())
-    $("#updateModal input[name='shokushu_nm2']").val($(this).parent().next().text())
-    $("#updateModal input[name='valid_flg2']").attr("checked", false);
-    $("#updateModal input[name='valid_flg2'][value='" + $(this).parent().next().next().children().val() + "']").attr("checked", true)
-})
-// 職種メンテナンスの複写機能(Copy)
-$(".shokushuData tr").click(function () {
-
-    $(".shokushuData tr").removeClass("selected bg-light")
-    $(this).addClass("selected bg-light");
-    $(".skCopy").click(function () {
-        $(".tsuika").click();
-        $("#tsuikaModal input[name='shokushu_cd1']").val($(".shokushuData tr.selected").children().children().text())
-        $("#tsuikaModal input[name='shokushu_nm1']").val($(".shokushuData tr.selected").children()[1].textContent)
-        $("#tsuikaModal input[name='valid_flg1']").attr("checked", false);
-        $("#tsuikaModal input[name='valid_flg1'][value='" + $(".shokushuData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
-    })
-})
-
-//  雇用形態コードをクリックする時、修正・削除のポップアップが表示
-$(".shokushu_cd").click(function () {
-    $("#updateModal input[name='koyokeitai_cd2']").val($(this).text())
-    $("#updateModal input[name='koyokeitai_nm2']").val($(this).parent().next().text())
-    $("#updateModal input[name='valid_flg2']").attr("checked", false);
-    $("#updateModal input[name='valid_flg2'][value='" + $(this).parent().next().next().children().val() + "']").attr("checked", true)
-})
-// 雇用形態メンテナンスの複写機能(Copy)
-$(".koyokeitaiData tr").click(function () {
-
-    $(".koyokeitaiData tr").removeClass("selected bg-light")
-    $(this).addClass("selected bg-light");
-    $(".kyktCopy").click(function () {
-        $(".tsuika").click();
-        $("#tsuikaModal input[name='koyokeitai_cd1']").val($(".koyokeitaiData tr.selected").children().children().text())
-        $("#tsuikaModal input[name='koyokeitai_nm1']").val($(".koyokeitaiData tr.selected").children()[1].textContent)
-        $("#tsuikaModal input[name='valid_flg1']").attr("checked", false);
-        $("#tsuikaModal input[name='valid_flg1'][value='" + $(".koyokeitaiData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
-    })
-})
-
+}
+GetData(year, month);

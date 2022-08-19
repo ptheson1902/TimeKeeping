@@ -106,6 +106,8 @@ namespace UNN_Ki_001.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                user.Kigyo_cd = "C001";
+                user.Shain_no = Input.UserName;
 
                 // ユーザー名を設定する
                 await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
