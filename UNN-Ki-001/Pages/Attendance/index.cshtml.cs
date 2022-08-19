@@ -16,11 +16,6 @@ namespace UNN_Ki_001.Pages.Attendance
     [Authorize(Policy = "Rookie")]
     public class IndexModel : BasePageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-        private readonly ApplicationDbContext _applicationDbContext;
-        private readonly KintaiDbContext _kintaiDbContext;
-        private readonly UserManager<AppUser> _userManager;
-        //private T_Kinmu? kinmu { get; set; }
         public string? Taikin { get; set; }
         public string? Shukin { get; set; }
         public string? Message { get; set; }
@@ -29,7 +24,6 @@ namespace UNN_Ki_001.Pages.Attendance
         public IndexModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
         }
-
         public void OnGet()
         {
             DisabledButton();
@@ -130,8 +124,6 @@ namespace UNN_Ki_001.Pages.Attendance
             // 該当レコードがなかったら新規作成
             if(kinmu == null)
                 kinmu = new T_Kinmu(shain.KigyoCd, shain.ShainNo, now.ToString("yyyyMMdd"));
-            }
-
             kinmu.DakokuFrDate = DateTime.Now;
         }
     }
