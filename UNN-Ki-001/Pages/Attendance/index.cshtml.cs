@@ -16,25 +16,24 @@ namespace UNN_Ki_001.Pages.Attendance
     [Authorize(Policy = "Rookie")]
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-        private readonly ApplicationDbContext _applicationDbContext;
         private readonly KintaiDbContext _kintaiDbContext;
         private readonly UserManager<AppUser> _userManager;
-        //private T_Kinmu? kinmu { get; set; }
         public string? Taikin { get; set; }
         public string? Shukin { get; set; }
         public string? Message { get; set; }
         private DateTime now = DateTime.Now;
 
-        public IndexModel(ILogger<IndexModel> logger, ApplicationDbContext applicationDbContext, KintaiDbContext context, KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager)
-       {
-            _logger = logger;
-            _applicationDbContext = applicationDbContext;
+        public IndexModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager)
+        {
             _kintaiDbContext = kintaiDbContext;
             _userManager = userManager;
         }
 
         public void OnGet()
+        {
+            DisabledButton();
+        }
+        private void DisabledButton()
         {
             int d = int.Parse(now.ToString("yyyyMMdd"));
             M_Shain? shain = GetCurrentUserShainAsync().Result;
@@ -47,7 +46,7 @@ namespace UNN_Ki_001.Pages.Attendance
                     .Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && Convert.ToInt32(a.KinmuDt) < d)
                     .OrderByDescending(e => e.KinmuDt)
                     .FirstOrDefault();
-                if (old != null && (old.DakokuFrDate != null && old.KinmuFrDate != null && old.DakokuToDate != null && old.KinmuToDate != null) || old != null && (old.DakokuFrDate == null && old.KinmuFrDate == null && old.DakokuToDate == null && old.KinmuToDate != null))
+                if (old != null && (old.KinmuFrDate != null && old.KinmuToDate != null) || old != null && (old.KinmuFrDate == null && old.KinmuToDate != null))
                 {
                     Shukin = null;
                     Taikin = "disabled";
@@ -55,12 +54,12 @@ namespace UNN_Ki_001.Pages.Attendance
             }
             else
             {
-                if (today.DakokuFrDate != null && today.KinmuFrDate != null && today.DakokuToDate == null && today.KinmuToDate == null)
+                if (today.KinmuFrDate != null && today.KinmuToDate == null)
                 {
                     Shukin = "disabled";
                     Taikin = null;
                 }
-                else if (today.DakokuFrDate != null && today.KinmuFrDate != null && today.DakokuToDate != null && today.KinmuToDate != null)
+                else if ( today.KinmuFrDate != null && today.KinmuToDate != null)
                 {
                     Shukin = "disabled";
                     Taikin = "disabled";
@@ -116,7 +115,7 @@ namespace UNN_Ki_001.Pages.Attendance
                 Debug.WriteLine(e.Message);
                 Message = "打刻に失敗しました。";
             }
-            OnGet();
+            DisabledButton();
         }
 
         private void End(M_Shain shain)
@@ -133,7 +132,6 @@ namespace UNN_Ki_001.Pages.Attendance
                 return;
             }
             kinmu.DakokuToDate = now;
-           // _kintaiDbContext.t_kinmus.Update(kinmu);
         }
 
         private void Start(M_Shain shain)
@@ -144,15 +142,8 @@ namespace UNN_Ki_001.Pages.Attendance
 
             // 該当レコードがなかったら新規作成
             if(kinmu == null)
-            {
                 kinmu = new T_Kinmu(shain.KigyoCd, shain.ShainNo, now.ToString("yyyyMMdd"));
-                //_kintaiDbContext.t_kinmus.Add(kinmu);
-            }
-            else
-            {
-               // _kintaiDbContext.t_kinmus.Update(kinmu);
-            }
-
+            kinmu.CreateUsr = shain.ShainNo;
             kinmu.DakokuFrDate = DateTime.Now;
         }
     }

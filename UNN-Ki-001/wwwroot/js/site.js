@@ -130,10 +130,10 @@ function Calendar(year, month, e) {
         let it = $(this);
         let count = 0;
         for (let j = 0; j < e.length; j++) {
-            if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDate != null && e[j].kinmuFrDate != null && e[j].dakokuToDate != null && e[j].kinmuToDate != null) {
+            if (e[j].kinmuDt == it.data("date") && e[j].kinmuFrDate != null && e[j].kinmuToDate != null) {
                 count = 1;
             }
-            else if (e[j].kinmuDt == it.data("date") && e[j].dakokuFrDate != null && e[j].kinmuFrDate != null && e[j].dakokuToDate == null && e[j].kinmuToDate == null) {
+            else if (e[j].kinmuDt == it.data("date") && e[j].kinmuFrDate != null && e[j].kinmuToDate == null) {
                 count = 2
             }
         }
