@@ -68,11 +68,6 @@ namespace UNN_Ki_001.Pages.Attendance
             }
         }
 
-        public async Task OnPostAsync()
-
-
-
-
         private async Task<M_Shain?> GetCurrentUserShainAsync()
         {
             if(User == null || User.Identity == null)
