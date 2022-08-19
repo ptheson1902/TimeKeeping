@@ -20,12 +20,22 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         public IActionResult OnGet()
         {
             // セッションからターゲットのリストを取得する
-            List<string>? tgtList = HttpContext.Session.GetObject<List<string>>("target");
+            List<string>? sessionList = HttpContext.Session.GetObject<List<string>>("target");
+            List<string> tgtList = new List<string>();
 
-            if(tgtList == null)
+            if(sessionList == null || sessionList.Count == 0)
             {
+                var shain = GetCurrentUserShainAsync().Result;
+                if(shain == null)
+                {
 
+                }
+                tgtList.Add()
+            } else
+            {
+                tgtList.AddRange(sessionList);
             }
+
             return RedirectToPage("/Attendance/Record/Search");
         }
 
