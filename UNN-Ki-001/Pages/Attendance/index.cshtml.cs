@@ -24,8 +24,11 @@ namespace UNN_Ki_001.Pages.Attendance
         public IndexModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
         }
-
         public void OnGet()
+        {
+            DisabledButton();
+        }
+        private void DisabledButton()
         {
             int d = int.Parse(now.ToString("yyyyMMdd"));
             M_Shain? shain = GetCurrentUserShainAsync().Result;
@@ -38,7 +41,7 @@ namespace UNN_Ki_001.Pages.Attendance
                     .Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && Convert.ToInt32(a.KinmuDt) < d)
                     .OrderByDescending(e => e.KinmuDt)
                     .FirstOrDefault();
-                if (old != null && (old.DakokuFrDate != null && old.KinmuFrDate != null && old.DakokuToDate != null && old.KinmuToDate != null) || old != null && (old.DakokuFrDate == null && old.KinmuFrDate == null && old.DakokuToDate == null && old.KinmuToDate != null))
+                if (old != null && (old.KinmuFrDate != null && old.KinmuToDate != null) || old != null && (old.KinmuFrDate == null && old.KinmuToDate != null))
                 {
                     Shukin = null;
                     Taikin = "disabled";
@@ -46,12 +49,12 @@ namespace UNN_Ki_001.Pages.Attendance
             }
             else
             {
-                if (today.DakokuFrDate != null && today.KinmuFrDate != null && today.DakokuToDate == null && today.KinmuToDate == null)
+                if (today.KinmuFrDate != null && today.KinmuToDate == null)
                 {
                     Shukin = "disabled";
                     Taikin = null;
                 }
-                else if (today.DakokuFrDate != null && today.KinmuFrDate != null && today.DakokuToDate != null && today.KinmuToDate != null)
+                else if ( today.KinmuFrDate != null && today.KinmuToDate != null)
                 {
                     Shukin = "disabled";
                     Taikin = "disabled";
@@ -93,7 +96,7 @@ namespace UNN_Ki_001.Pages.Attendance
                 Debug.WriteLine(e.Message);
                 Message = "打刻に失敗しました。";
             }
-            OnGet();
+            DisabledButton();
         }
 
         private void End(M_Shain shain)
@@ -120,10 +123,7 @@ namespace UNN_Ki_001.Pages.Attendance
 
             // 該当レコードがなかったら新規作成
             if(kinmu == null)
-            {
                 kinmu = new T_Kinmu(shain.KigyoCd, shain.ShainNo, now.ToString("yyyyMMdd"));
-            }
-
             kinmu.DakokuFrDate = DateTime.Now;
         }
     }
