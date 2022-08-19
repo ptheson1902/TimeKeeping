@@ -19,7 +19,6 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
         public IActionResult OnGet()
         {
-            
             return RedirectToPage("/Attendance/Record/Search");
         }
 
