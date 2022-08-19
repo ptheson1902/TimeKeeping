@@ -171,6 +171,7 @@ function GetData(year, month) {
         method: "get",
         Cache: "false",
         success: function (e) {
+            console.log(e)
             Calendar(year, month, e);
         }
     })

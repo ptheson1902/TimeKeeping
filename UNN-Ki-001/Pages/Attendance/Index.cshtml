@@ -17,11 +17,11 @@
             <div class="button my-5 row">
                 <form method="post" class="col-6">
                     <input type="hidden" value="start" name="action" />
-                        <button type="submit" class="border-0 in me-3" @Model.IsShukin>出勤</button>
+                        <button type="submit" class="border-0 in me-3" @Model.Shukin>出勤</button>
                 </form>
                 <form method="post" class="col-6">
                     <input type="hidden" value="end" name="action" />
-                        <button type="submit" class="border-0 out" @Model.IsTaikin>退勤</button>
+                        <button type="submit" class="border-0 out" @Model.Taikin>退勤</button>
                 </form>
             </div>
             <div class="text-danger"> @Model.Message </div>

@@ -1,4 +1,4 @@
-﻿namespace UNN_Ki_001.Data.Control
+﻿namespace UNN_Ki_001.Data.Models
 {
     public class DateControl
     {
@@ -30,7 +30,7 @@
         /// <param name="date"></param>
         /// <param name="time"></param>
         public DateControl(string date, string time = "0000", string? kbn = "0")
-            : this(DateTime.ParseExact(date + time, "yyyyMMddHHmm", null), kbn){}
+            : this(DateTime.ParseExact(date + time, "yyyyMMddHHmm", null), kbn) { }
 
         public DateTime Origin { get; }
 
