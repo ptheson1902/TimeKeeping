@@ -41,6 +41,8 @@ namespace UNN_Ki_001.Data
                 .HasKey(c => new { c.KigyoCd, c.ShainNo, c.KinmuDt });
             modelBuilder.Entity<T_Kyukei>()
                 .HasKey(c => new { c.KigyoCd, c.ShainNo, c.KinmuDt, c.SeqNo });
+            modelBuilder.Entity<M_Shain>()
+                .HasKey(c => new { c.KigyoCd, c.ShainNo });
         }
 
         public DbSet<T_Kyukei> t_Kyukeis => Set<T_Kyukei>();

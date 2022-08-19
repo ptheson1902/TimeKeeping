@@ -32,7 +32,7 @@ namespace UNN_Ki_001.Data.Models
         [Column("name_kana_mei")]
         public string? NameKanaMei { get; set; }
 
-        [Column("nyusya_dt")]
+        [Column("nyusha_dt")]
         public string? NyusyaDt { get; set; }
 
         [Column("taishoku_dt")]
