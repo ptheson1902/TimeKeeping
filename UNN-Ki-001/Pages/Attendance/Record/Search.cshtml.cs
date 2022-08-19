@@ -40,23 +40,23 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             // 所属コード、所属コード、雇用形態コードでJOIN
             var no = from a in _context.m_shains
                      join b in _context.m_shozokus
-                     on a.shozoku_cd equals b.ShozokuCd
+                     on a.ShozokuCd equals b.ShozokuCd
                      join c in _context.m_shokushus
-                     on a.shokushu_cd equals c.ShokushuCd
+                     on a.ShokushuCd equals c.ShokushuCd
                      join d in _context.m_koyokeitais
-                     on a.koyokeitai_cd equals d.KoyokeitaiCd
-                     orderby a.shain_no    
-                     select new {a.shain_no, a.name_mei , b.ShozokuNm , c.ShokushuNm , d.KoyokeitaiNm};
+                     on a.KoyokeitaiCd equals d.KoyokeitaiCd
+                     orderby a.ShainNo    
+                     select new {a.ShainNo, a.NameMei , b.ShozokuNm , c.ShokushuNm , d.KoyokeitaiNm};
 
             // 条件による検索すること(value＝nullは検索条件にならないこと。)
             if (!string.IsNullOrEmpty(Shain_no))
             {
-                no = no.Where(e => e.shain_no.Equals(Shain_no) );
+                no = no.Where(e => e.ShainNo.Equals(Shain_no) );
             }
 
            if (!string.IsNullOrEmpty(Name_mei))
             {
-                no = no.Where(e => e.name_mei.Equals(Name_mei));
+                no = no.Where(e => e.NameMei.Equals(Name_mei));
             }
 
             if (!string.IsNullOrEmpty(Shozoku_nm))
@@ -78,8 +78,8 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             foreach (var item in no)
             {
                 Display d = new Display();
-                d.shain_no = item.shain_no;
-                d.name_mei = item.name_mei;
+                d.shain_no = item.ShainNo;
+                d.name_mei = item.NameMei;
                 d.shozoku_nm = item.ShozokuNm;
                 d.shokushu_nm = item.ShokushuNm;
                 d.koyokeitai_nm = item.KoyokeitaiNm;

@@ -30,7 +30,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 {
 
                 }
-                tgtList.Add()
+                //tgtList.Add()
             } else
             {
                 tgtList.AddRange(sessionList);

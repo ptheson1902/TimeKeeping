@@ -19,15 +19,15 @@ namespace UNN_Ki_001.Pages.Attendance
         public string? Taikin { get; set; }
         public string? Shukin { get; set; }
         public string? Message { get; set; }
-        private M_Shain? shain { get;}
+        private M_Shain? shain;
         private DateTime now = DateTime.Now;
 
         public IndexModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
-            shain = GetCurrentUserShainAsync().Result;
         }
         public IActionResult OnGet()
         {
+            shain = GetCurrentUserShainAsync().Result;
             if (shain == null)
                 return RedirectToPage("/");
             else
@@ -74,6 +74,7 @@ namespace UNN_Ki_001.Pages.Attendance
 
         public void OnPost()
         {
+            shain = GetCurrentUserShainAsync().Result;
             if (shain == null)
             {
                 Message = "ユーザーに社員が登録されていません。";
