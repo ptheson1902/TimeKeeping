@@ -20,7 +20,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         [BindProperty]
         public InputModel Input { get; set; } = new InputModel();
 
-        public List<M_Shain> _targetList = new List<M_Shain>();
+        public List<M_Shain> _targetList = new();
 
         private static readonly string _TEMP_SEARCH_RESULT_LIST = "tempsearchresultlistsearch";
 
@@ -34,9 +34,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 _targetList.Add(me);
                 var tempList = CreateRecordList(_targetList);
                 // セッションに格納して勤務表ページへ飛ぶ
-                HttpContext.Session.SetObj(Constants.RECORD_SEARCH_LIST, tempList);
-                HttpContext.Session.SetInt32(Constants.RECORD_SEARCH_CURRENT_INDEX, 0);
-                return GotoRecord();
+                return SendToKinmuhyo(tempList, 0);
             }
             return Page();
         }
@@ -49,8 +47,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 // 一時データをセッションから削除
                 HttpContext.Session.Remove(_TEMP_SEARCH_RESULT_LIST);
                 // 決定データをセッションに格納して勤務表ページへ飛ぶ
-                return GotoRecord(getData, index
-                    );
+                return SendToKinmuhyo(getData, index);
             }
 
             // セレクト
@@ -111,11 +108,15 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             return tempList;
         }
 
-        public IActionResult GotoRecord(List<ShainSearchRecord> list, int currentIndex)
+        public IActionResult SendToKinmuhyo(List<ShainSearchRecord>? list, int index)
         {
-            // 決定データをセッションに格納して勤務表ページへ飛ぶ
-            HttpContext.Session.SetObj(Constants.RECORD_SEARCH_LIST, list);
-            HttpContext.Session.SetInt32(Constants.RECORD_SEARCH_CURRENT_INDEX, currentIndex);
+            if(list != null)
+            {
+                // 決定データをセッションに格納して勤務表ページへ飛ぶ
+                var resultList = new ShainSearchRecordList(list, index);
+                HttpContext.Session.SetObj(Constants.SEARCH_RECORD_LIST, list);
+            }
+
             return RedirectToPage("/Attendance/Record/Index");
         }
 
