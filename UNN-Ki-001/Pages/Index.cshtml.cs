@@ -30,13 +30,12 @@ namespace UNN_Ki_001.Pages
             }
 
             // 管理者権限を持っていれば社員検索画面へリダイレクト
-            return AdminDedicatedRedirect("/Attendance/Record/Search");
-        }
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToPage("/Attendance/Record/Search");
+            }
 
-        [Authorize(Policy = "Admin")]
-        private IActionResult AdminDedicatedRedirect(string path)
-        {
-            return RedirectToPage(path);
+            return RedirectToPage("/Account/AccessDenied");
         }
         
         public IActionResult OnPost()

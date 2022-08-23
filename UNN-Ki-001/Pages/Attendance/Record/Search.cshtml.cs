@@ -26,11 +26,21 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
         public IActionResult OnGet()
         {
+
+
             // 一般権限の場合、自身のみを追加して勤務表へ
-            if (User.IsInRole("Rookie"))
+            if (!User.IsInRole("Admin"))
             {
-                // 自身のみが追加されたリストを作成
+                // 現在の社員を取得
                 var me = GetCurrentUserShainAsync().Result;
+
+                if(me == null)
+                {
+                    // 何の権限も持たない場合はIndexページへ
+                    return RedirectToPage("/Index");
+                }
+
+                // 自身のみが追加されたリストを作成
                 _targetList.Add(me);
                 var tempList = CreateRecordList(_targetList);
                 // セッションに格納して勤務表ページへ飛ぶ
