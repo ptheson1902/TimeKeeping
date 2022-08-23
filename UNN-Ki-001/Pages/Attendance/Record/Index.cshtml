@@ -1,16 +1,15 @@
 ﻿@page
 @model UNN_Ki_001.Pages.Attendance.Record.IndexModel
+@using Data.Models;
 @{
     ViewData["Title"] = "打刻登録";
+    ShainSearchRecord target = (ShainSearchRecord)ViewData["target"]!; // ← NotNullable宣言しています。気を付けて
 }
  <h1>@ViewData["Title"]</h1>
 
-@{
-    foreach(var item in Model.tgtList)
-    {
-        @item;
-    }
-}
+氏名=@target.ShainNm;
+企業コード=@target.KigyoCd
+
 
 
 

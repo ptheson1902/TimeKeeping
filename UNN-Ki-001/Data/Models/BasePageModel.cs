@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace UNN_Ki_001.Data.Models
@@ -30,6 +31,9 @@ namespace UNN_Ki_001.Data.Models
             
             
             var shain = _kintaiDbContext.m_shains
+                .Include(shain => shain.Shokushu)
+                .Include(shain => shain.Shozoku)
+                .Include(shain => shain.Koyokeitai)
                 .Where(e => e.KigyoCd != null && e.KigyoCd.Equals(user.Kigyo_cd) && e.ShainNo != null && e.ShainNo.Equals(user.Shain_no))
                 .FirstOrDefault();
             return shain;
