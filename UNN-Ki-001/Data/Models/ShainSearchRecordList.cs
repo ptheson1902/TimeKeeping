@@ -4,36 +4,36 @@
     {
         public ShainSearchRecordList(List<ShainSearchRecord> list, int index)
         {
-            this.ResultList = list;
+            this.List = list;
             this.CurrentIndex = index;
         }
 
-        public List<ShainSearchRecord> ResultList { get; }
+        public List<ShainSearchRecord> List { get; }
         public int CurrentIndex { get; private set; }
 
-        public ShainSearchRecord CurrentElem
+        public ShainSearchRecord Current
         {
             get
             {
-                return ResultList[CurrentIndex];
+                return List[CurrentIndex];
             }
         }
 
-        public ShainSearchRecord NextElem
+        public ShainSearchRecord Next
         {
             get
             {
                 CurrentIndex++;
-                return CurrentElem;
+                return Current;
             }
         }
 
-        public ShainSearchRecord PrevElem
+        public ShainSearchRecord Prev
         {
             get
             {
                 CurrentIndex--;
-                return CurrentElem;
+                return Current;
             }
         }
     }
