@@ -22,24 +22,35 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
         public List<M_Shain> _targetList = new List<M_Shain>();
 
-        public void OnGet()
+        private static readonly string _TEMP_SEARCH_RESULT_LIST = "tempsearchresultlistsearch";
+
+        public IActionResult OnGet()
         {
             // 一般権限の場合、自身のみを追加して勤務表へ
             if (User.IsInRole("Rookie"))
             {
-                
+                // 自身のみが追加されたリストを作成
+                var me = GetCurrentUserShainAsync().Result;
+                _targetList.Add(me);
+                var tempList = CreateRecordList(_targetList);
+                // セッションに格納して勤務表ページへ飛ぶ
+                HttpContext.Session.SetObj(Constants.RECORD_SEARCH_LIST, tempList);
+                HttpContext.Session.SetInt32(Constants.RECORD_SEARCH_CURRENT_INDEX, 0);
+                return GotoRecord();
             }
+            return Page();
         }
         public IActionResult OnPost(string command, int index)
         {
             if (command != null && command.Equals("sub"))
             {
-                // ここまだ
-
-                // セッションに格納して勤務表ページへ飛ぶ
-                HttpContext.Session.SetObj(Constants.RECORD_SEARCH_LIST, _targetList);
-                HttpContext.Session.SetInt32(Constants.RECORD_SEARCH_CURRENT_INDEX, index);
-                return GotoRecord();
+                // 一時データをセッションから取得
+                var getData = HttpContext.Session.GetObject<List<ShainSearchRecord>>(_TEMP_SEARCH_RESULT_LIST);
+                // 一時データをセッションから削除
+                HttpContext.Session.Remove(_TEMP_SEARCH_RESULT_LIST);
+                // 決定データをセッションに格納して勤務表ページへ飛ぶ
+                return GotoRecord(getData, index
+                    );
             }
 
             // セレクト
@@ -63,11 +74,48 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     && shain.Shokushu.ShokushuNm != null
                     && shain.Shokushu.ShokushuNm.Contains(Input.ShokushuName!))
                 .ToList();
+
+            var tempList = CreateRecordList(_targetList);
+            HttpContext.Session.SetObj(_TEMP_SEARCH_RESULT_LIST, tempList);
+
+
             return Page();
         }
 
-        public IActionResult GotoRecord()
+        private List<ShainSearchRecord> CreateRecordList(List<M_Shain> shainList)
         {
+            List<ShainSearchRecord> tempList = new();
+            foreach (var item in shainList)
+            {
+                ShainSearchRecord temp = new();
+                temp.KigyoCd = item.KigyoCd;
+                temp.ShainNo = item.ShainNo;
+                temp.ShainNm = (item.NameSei + item.NameMei).Replace(" ", "");
+                temp.ShokushuCd = item.ShokushuCd;
+                if (item.Shokushu != null)
+                {
+                    temp.ShokushuNm = item.Shokushu.ShokushuNm;
+                }
+                temp.ShozokuCd = item.ShozokuCd;
+                if (item.Shozoku != null)
+                {
+                    temp.ShozokuNm = item.Shozoku.ShozokuNm;
+                }
+                temp.KoyokeitaiCd = item.KoyokeitaiCd;
+                if (item.Koyokeitai != null)
+                {
+                    temp.KoyokeitaiNm = item.Koyokeitai.KoyokeitaiNm;
+                }
+                tempList.Add(temp);
+            }
+            return tempList;
+        }
+
+        public IActionResult GotoRecord(List<ShainSearchRecord> list, int currentIndex)
+        {
+            // 決定データをセッションに格納して勤務表ページへ飛ぶ
+            HttpContext.Session.SetObj(Constants.RECORD_SEARCH_LIST, list);
+            HttpContext.Session.SetInt32(Constants.RECORD_SEARCH_CURRENT_INDEX, currentIndex);
             return RedirectToPage("/Attendance/Record/Index");
         }
 
