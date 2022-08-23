@@ -83,6 +83,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     shain.Shokushu != null
                     && shain.Shokushu.ShokushuNm != null
                     && shain.Shokushu.ShokushuNm.Contains(Input.ShokushuName!))
+                .OrderBy(shain => shain.ShainNo)
                 .ToList();
 
             // 検索結果をシリアライズ可能なListにしてセッションに一時データとして格納
