@@ -18,10 +18,5 @@ namespace UNN_Ki_001.Data.Models
         [Column("shime_dt")]
         public int? ShimeDt { get; set; }
 
-        /*
-        public int CalcShimeDt(int year, int month)
-        {
-            if (month > 12) throw new Exception();
-        }*/
     }
 }
