@@ -41,7 +41,7 @@ namespace UNN_Ki_001.Data.Models
 
                 // 勤務レコードの再計算をトリガーする
                 var kinmu = context.t_kinmus
-                    .Where(e => e.KigyoCd.Equals(KigyoCd) && e.ShainNo.Equals(ShainNo) && e.KinmuDt.Equals(KinmuDt) && e.Kyukei != null)
+                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuDt!.Equals(KinmuDt) && e.Kyukei != null)
                     .FirstOrDefault();
                 if(kinmu != null)
                 {

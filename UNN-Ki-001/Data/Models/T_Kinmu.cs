@@ -236,7 +236,7 @@ namespace UNN_Ki_001.Data.Models
                 }
 
                 // 休憩時間を勤務実績時間の枠に押し込める
-                if (item.DakokuToDate > kinmuToDate) // 休憩終わり時間
+                if (item.DakokuToDate > kinmuToDate || item.DakokuFrDate > item.DakokuToDate) // 休憩終わり時間
                 {
                     item.DakokuToDate = kinmuToDate;
                 }
@@ -245,12 +245,11 @@ namespace UNN_Ki_001.Data.Models
                     item.DakokuFrDate = kinmuFrDate;
                 }
 
-
                 // 結果として意味を喪失していないレコードのみを選択して休憩時間を計算
                 if (item.DakokuFrDate < item.DakokuToDate)
-                {
                     totalMinutes += (int)((DateTime)item.DakokuToDate - (DateTime)item.DakokuFrDate).TotalMinutes;
-                }
+                else
+                    item.DakokuFrDate = item.DakokuToDate;
             }
             return totalMinutes;
         }
