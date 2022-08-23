@@ -23,7 +23,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             if (User.IsInRole("Admin"))
             {
                 // åüçıëŒè€Ç™ë∂ç›ÇµÇ»ÇØÇÍÇŒNotFound
-                List<M_Shain>? sesList = HttpContext.Session.GetObject<List<M_Shain>>(Constants.RECORD_SEARCH_LIST);
+                List<M_Shain>? sesList = HttpContext.Session.GetObject<List<M_Shain>>(Constants.SEARCH_RECORD_LIST);
                 if(sesList == null || sesList.Count == 0)
                 {
                     return NotFound();

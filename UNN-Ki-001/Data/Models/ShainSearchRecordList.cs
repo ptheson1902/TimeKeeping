@@ -4,11 +4,6 @@
     {
         public ShainSearchRecordList(List<ShainSearchRecord> list, int index)
         {
-            if(list.Count == 0)
-            {
-                throw new Exception("RecordSearchOptionにサイズが０のリストが渡されました。");
-            }
-
             this.ResultList = list;
             this.CurrentIndex = index;
         }
