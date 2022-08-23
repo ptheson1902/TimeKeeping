@@ -41,7 +41,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         public IActionResult OnPost(string command, int index)
         {
             // 行選択時の処理
-            if (command != null && command.Equals("sub") && index <= 0)
+            if (command != null && command.Equals("sub") && index >= 0)
             {
 
                 // 一時データをセッションから取得
