@@ -37,13 +37,13 @@ namespace UNN_Ki_001.Pages.Attendance
         private void DisabledButton(M_Shain shain)
         {
             var today = _kintaiDbContext.t_kinmus.
-                Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && a.KinmuDt.Equals(now.ToString("yyyyMMdd")))
+                Where(a => a.KigyoCd!.Equals(shain.KigyoCd) && a.ShainNo!.Equals(shain.ShainNo) && a.KinmuDt!.Equals(now.ToString("yyyyMMdd")))
                 .FirstOrDefault();
             if (today == null || (today.KinmuFrDate == null && today.KinmuToDate == null))
             {
                 int d = int.Parse(now.ToString("yyyyMMdd"));
                 var old = _kintaiDbContext.t_kinmus
-                    .Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && Convert.ToInt32(a.KinmuDt) < d)
+                    .Where(a => a.KigyoCd!.Equals(shain.KigyoCd) && a.ShainNo!.Equals(shain.ShainNo) && Convert.ToInt32(a.KinmuDt) < d)
                     .OrderByDescending(e => e.KinmuDt)
                     .FirstOrDefault();
                 if ((old != null && ((old.KinmuFrDate != null && old.KinmuToDate != null) || (old.KinmuFrDate == null && old.KinmuToDate == null))) || old == null)
@@ -112,7 +112,7 @@ namespace UNN_Ki_001.Pages.Attendance
             int kyo = int.Parse(now.ToString("yyyyMMdd"));
             int kino = int.Parse(now.AddDays(-1).ToString("yyyyMMdd"));
             T_Kinmu? kinmu = _kintaiDbContext.t_kinmus
-                    .Where(a => a.KigyoCd.Equals(shain.KigyoCd) && a.ShainNo.Equals(shain.ShainNo) && a.KinmuFrDate != null && a.KinmuToDate == null && Convert.ToInt32(a.KinmuDt) <= kyo && kino <= Convert.ToInt32(a.KinmuDt))
+                    .Where(a => a.KigyoCd!.Equals(shain.KigyoCd) && a.ShainNo!.Equals(shain.ShainNo) && a.KinmuFrDate != null && a.KinmuToDate == null && Convert.ToInt32(a.KinmuDt) <= kyo && kino <= Convert.ToInt32(a.KinmuDt))
                     .OrderByDescending(e => e.KinmuDt)
                     .FirstOrDefault();
 
@@ -128,19 +128,20 @@ namespace UNN_Ki_001.Pages.Attendance
         private void Start(M_Shain shain)
         {
             T_Kinmu? kinmu = _kintaiDbContext.t_kinmus
-            .Where(e => e.KigyoCd.Equals(shain.KigyoCd) && e.KinmuDt.Equals(now.ToString("yyyyMMdd")) && e.ShainNo.Equals(shain.ShainNo) && e.KinmuFrDate == null)
+            .Where(e => e.KigyoCd!.Equals(shain.KigyoCd) && e.KinmuDt!.Equals(now.ToString("yyyyMMdd")) && e.ShainNo!.Equals(shain.ShainNo) && e.KinmuFrDate == null)
             .FirstOrDefault();
 
             // 該当レコードがなかったら新規作成
             if (kinmu == null)
             {
                 kinmu = new T_Kinmu(shain.KigyoCd, shain.ShainNo, now.ToString("yyyyMMdd"));
-                kinmu.SetKinmuCd("K001");
+                kinmu.SetKinmuCd("K001"); // TODO: テスト用コード
+                _kintaiDbContext.Add(kinmu);
             }
                 
 
             kinmu.DakokuFrDate = DateTime.Now;
-            _kintaiDbContext.Add(kinmu);
+            
         }
     }
 }
