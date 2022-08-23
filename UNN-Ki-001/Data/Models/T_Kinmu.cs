@@ -46,7 +46,7 @@ namespace UNN_Ki_001.Data.Models
             if (KinmuFrDate != null)
             {
                 var tgt = context.t_kinmus
-                    .Where(e => e.KigyoCd.Equals(KigyoCd) && e.ShainNo.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuFrDate < ((DateTime)KinmuFrDate).ToUniversalTime())
+                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuFrDate < ((DateTime)KinmuFrDate).ToUniversalTime())
                     .OrderByDescending(e => e.KinmuFrDate)
                     .FirstOrDefault();
                 if(tgt != null && tgt.KinmuToDate > KinmuFrDate)
@@ -58,7 +58,7 @@ namespace UNN_Ki_001.Data.Models
             if (KinmuToDate != null)
             {
                 var tgt = context.t_kinmus
-                    .Where(e => e.KigyoCd.Equals(KigyoCd) && e.ShainNo.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuToDate >((DateTime)KinmuToDate).ToUniversalTime())
+                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuToDate >((DateTime)KinmuToDate).ToUniversalTime())
                     .OrderBy(e => e.KinmuToDate)
                     .FirstOrDefault();
                 if (tgt != null && tgt.KinmuFrDate < KinmuToDate)
@@ -121,9 +121,9 @@ namespace UNN_Ki_001.Data.Models
             DateTime result = new DateControl(dakokuFrDate).MarumeProcess(master.KinmuFrMarumeTm, master.KinmuFrMarumeKbn).Origin;
 
             // 刻限の適用
-            if (master.KinmuFrTm != null && master.KinmuFrKbn != null && master.KinmuFrCtrlFlg != null)
+            if (master.KinmuFrTm != null && master.KinmuFrKbn != null && master.KinmuFrCtrlFlg != null && master.KinmuFrCtrlFlg.Equals("1"))
             {
-                DateTime ZissekiFrDate = new DateControl(KinmuDt, master.KinmuFrTm, master.KinmuFrKbn).Origin;
+                DateTime ZissekiFrDate = new DateControl(KinmuDt!, master.KinmuFrTm, master.KinmuFrKbn).Origin;
                 if (ZissekiFrDate > result)
                 {
                     result = ZissekiFrDate;
@@ -171,9 +171,9 @@ namespace UNN_Ki_001.Data.Models
             // 休憩１を生成・リストに追加
             if (master.Kyukei1FrKbn != null && master.Kyukei1FrTm != null && master.Kyukei1ToKbn != null && master.Kyukei1ToTm != null)
             {
-                DateControl frDc = new DateControl(KinmuDt, master.Kyukei1FrTm, master.Kyukei1FrKbn);
-                DateControl toDc = new DateControl(KinmuDt, master.Kyukei1ToTm, master.Kyukei1ToKbn);
-                T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count, tKinmu);
+                DateControl frDc = new DateControl(KinmuDt!, master.Kyukei1FrTm, master.Kyukei1FrKbn);
+                DateControl toDc = new DateControl(KinmuDt!, master.Kyukei1ToTm, master.Kyukei1ToKbn);
+                T_Kyukei kyukei = new T_Kyukei(KigyoCd!, ShainNo!, KinmuDt!, ++count, tKinmu);
                 kyukei.DakokuFrDate = frDc.Origin;
                 kyukei.DakokuToDate = toDc.Origin;
                 list.Add(kyukei);
@@ -182,9 +182,9 @@ namespace UNN_Ki_001.Data.Models
             // 休憩２を生成・リストに追加
             if (master.Kyukei2FrKbn != null && master.Kyukei2FrTm != null && master.Kyukei2ToKbn != null && master.Kyukei2ToTm != null)
             {
-                DateControl frDc = new DateControl(KinmuDt, master.Kyukei2FrTm, master.Kyukei2FrKbn);
-                DateControl toDc = new DateControl(KinmuDt, master.Kyukei2ToTm, master.Kyukei2ToKbn);
-                T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count, tKinmu);
+                DateControl frDc = new DateControl(KinmuDt!, master.Kyukei2FrTm, master.Kyukei2FrKbn);
+                DateControl toDc = new DateControl(KinmuDt!, master.Kyukei2ToTm, master.Kyukei2ToKbn);
+                T_Kyukei kyukei = new T_Kyukei(KigyoCd!, ShainNo!, KinmuDt!, ++count, tKinmu);
                 kyukei.DakokuFrDate = frDc.Origin;
                 kyukei.DakokuToDate = toDc.Origin;
                 list.Add(kyukei);
@@ -194,9 +194,9 @@ namespace UNN_Ki_001.Data.Models
             // 休憩３を生成・リストに追加
             if (master.Kyukei3FrKbn != null && master.Kyukei3FrTm != null && master.Kyukei3ToKbn != null && master.Kyukei3ToTm != null)
             {
-                DateControl frDc = new DateControl(KinmuDt, master.Kyukei3FrTm, master.Kyukei3FrKbn);
-                DateControl toDc = new DateControl(KinmuDt, master.Kyukei3ToTm, master.Kyukei3ToKbn);
-                T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count, tKinmu);
+                DateControl frDc = new DateControl(KinmuDt!, master.Kyukei3FrTm, master.Kyukei3FrKbn);
+                DateControl toDc = new DateControl(KinmuDt!, master.Kyukei3ToTm, master.Kyukei3ToKbn);
+                T_Kyukei kyukei = new T_Kyukei(KigyoCd!, ShainNo!, KinmuDt!, ++count, tKinmu);
                 kyukei.DakokuFrDate = frDc.Origin;
                 kyukei.DakokuToDate = toDc.Origin;
                 list.Add(kyukei);

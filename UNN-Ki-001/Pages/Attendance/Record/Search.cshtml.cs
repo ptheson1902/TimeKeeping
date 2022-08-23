@@ -41,8 +41,9 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         public IActionResult OnPost(string command, int index)
         {
             // 行選択時の処理
-            if (command != null && command.Equals("sub"))
+            if (command != null && command.Equals("sub") && index >= 0)
             {
+
                 // 一時データをセッションから取得
                 var getData = HttpContext.Session.GetObject<List<ShainSearchRecord>>(_TEMP_SEARCH_RESULT_LIST);
                 // 一時データをセッションから削除

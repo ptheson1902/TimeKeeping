@@ -9,32 +9,27 @@
         }
 
         public List<ShainSearchRecord> List { get; }
-        public int CurrentIndex { get; private set; }
+        public int CurrentIndex { get; set; }
 
-        public ShainSearchRecord Current
+        public ShainSearchRecord GetCurrent()
         {
-            get
-            {
-                return List[CurrentIndex];
-            }
+            return List[CurrentIndex];
         }
 
-        public ShainSearchRecord Next
+        public ShainSearchRecord GetNext()
         {
-            get
-            {
-                CurrentIndex++;
-                return Current;
-            }
+            CurrentIndex++;
+            if (CurrentIndex >= List.Count)
+                CurrentIndex = 0;
+            return GetCurrent();
         }
 
-        public ShainSearchRecord Prev
+        public ShainSearchRecord GetPrev()
         {
-            get
-            {
-                CurrentIndex--;
-                return Current;
-            }
+            CurrentIndex--;
+            if (CurrentIndex < 0)
+                CurrentIndex = List.Count - 1;
+            return GetCurrent();
         }
     }
 }
