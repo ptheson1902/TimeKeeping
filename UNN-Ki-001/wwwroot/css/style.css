@@ -133,43 +133,43 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
     border-radius: 50%;
-    border: 1px solid yellow;
+    border: 2px solid yellow;
 }
 
-    .taikin:hover {
-        background-color: yellow;
-    }
+.taikin:hover {
+    background-color: yellow;
+}
 
 .shukin {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
     border-radius: 50%;
-    border: 1px solid green;
+    border: 2px solid green;
 }
 
-    .shukin:hover {
-        background-color: green;
-    }
+.shukin:hover {
+    background-color: green;
+}
 
 .yasumi {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
     border-radius: 50%;
     border: 1px solid red;
 }
 
-    .yasumi:hover {
-        background-color: red;
-    }
+.yasumi:hover {
+    background-color: red;
+}
 
 @media (max-width: 991px) {
     .desktop, .phone, .footer {

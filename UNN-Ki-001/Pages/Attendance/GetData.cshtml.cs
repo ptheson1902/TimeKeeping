@@ -9,26 +9,34 @@ using System.Diagnostics;
 namespace UNN_Ki_001.Pages.Attendance
 {
     [Authorize(Policy = "Rookie")]
-    public class GetDataModel : PageModel
+    public class GetDataModel : BasePageModel
     {
-        public List<T_Kinmu?> ListKinmu { get; set; }
-        private readonly KintaiDbContext _kintaiDbContext;
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public GetDataModel(KintaiDbContext kintaiDbContext)
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public GetDataModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
-            _kintaiDbContext = kintaiDbContext;
         }
-        public JsonResult OnGet(DateTime? month)
+
+        public JsonResult? OnGet(DateTime? month)
         {
-            DateTime now = DateTime.Now;
+            var shain = GetCurrentUserShainAsync().Result;
+            if (shain == null)
+                return null;
             if (month != null)
             {
-                return new JsonResult(_kintaiDbContext.t_kinmus.Where(a => a.ShainNo!.Equals(User.Identity!.Name) && a.KinmuDt!.Substring(0, 6).Equals(((DateTime)month).ToString("yyyyMM"))).Select(a => new { a.KinmuDt, a.KinmuFrDate, a.KinmuToDate }).OrderBy(a => a.KinmuDt));
+                return new JsonResult(_kintaiDbContext.t_kinmus
+                    .Where(a => a.ShainNo!.Equals(shain!.ShainNo) 
+                    && a.KigyoCd!.Equals(shain!.KigyoCd) 
+                    && a.KinmuDt!.Substring(0, 6).Equals(((DateTime)month).ToString("yyyyMM")))
+                    .Select(a => new { a.KinmuDt, a.KinmuFrDate, a.KinmuToDate })
+                    .OrderBy(a => a.KinmuDt));
             }
             else
             {
-                return new JsonResult(_kintaiDbContext.t_kinmus.Where(a => a.ShainNo!.Equals(User.Identity!.Name) && a.KinmuDt!.Substring(0, 6).Equals(now.ToString("yyyyMM"))).Select(a => new { a.KinmuDt, a.KinmuFrDate, a.KinmuToDate }).OrderBy(a => a.KinmuDt));
+                return new JsonResult(_kintaiDbContext.t_kinmus
+                    .Where(a => a.ShainNo!.Equals(shain!.ShainNo) 
+                    && a.KigyoCd!.Equals(shain!.KigyoCd) 
+                    && a.KinmuDt!.Substring(0, 6).Equals(DateTime.Now.ToString("yyyyMM")))
+                    .Select(a => new { a.KinmuDt, a.KinmuFrDate, a.KinmuToDate })
+                    .OrderBy(a => a.KinmuDt));
             }
         }
     }
