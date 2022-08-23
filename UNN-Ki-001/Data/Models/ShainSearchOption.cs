@@ -1,22 +1,22 @@
 ﻿namespace UNN_Ki_001.Data.Models
 {
-    public class ShainSearchOption
+    public class ShainSearchRecordList
     {
-        public ShainSearchOption(List<M_Shain> resultList)
+        public ShainSearchRecordList(List<ShainSearchRecord> list, int index)
         {
-            if(resultList.Count == 0)
+            if(list.Count == 0)
             {
                 throw new Exception("RecordSearchOptionにサイズが０のリストが渡されました。");
             }
 
-            this.ResultList = resultList;
-            this.CurrentIndex = 0;
+            this.ResultList = list;
+            this.CurrentIndex = index;
         }
 
-        public List<M_Shain> ResultList { get; }
+        public List<ShainSearchRecord> ResultList { get; }
         public int CurrentIndex { get; private set; }
 
-        public M_Shain CurrentElem
+        public ShainSearchRecord CurrentElem
         {
             get
             {
@@ -24,7 +24,7 @@
             }
         }
 
-        public M_Shain NextElem
+        public ShainSearchRecord NextElem
         {
             get
             {
@@ -33,7 +33,7 @@
             }
         }
 
-        public M_Shain PrevElem
+        public ShainSearchRecord PrevElem
         {
             get
             {
