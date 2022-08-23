@@ -8,6 +8,11 @@ namespace UNN_Ki_001.Data.Models
     [Table("t_kinmu", Schema = "public")]
     public class T_Kinmu : Reloadable
     {
+        public T_Kinmu()
+        {
+
+        }
+
         public T_Kinmu(string kigyoCd, string shainNo, string kinmuDt)
         {
             // 必須項目を入力
@@ -83,7 +88,7 @@ namespace UNN_Ki_001.Data.Models
                 // 休憩時間の自動追加(総休憩時間がNULLの場合にのみ動作させます。)
                 if (Kyukei == null && master != null && master.KyukeiAutoFlg != null && master.KyukeiAutoFlg.Equals("1"))
                 {
-                    AddKyukeiFromMaster((M_Kinmu)master, context);
+                    AddKyukeiFromMaster((M_Kinmu)master, context, this);
                 }
 
                 // 休憩時間の計算
@@ -151,7 +156,7 @@ namespace UNN_Ki_001.Data.Models
             return (int)master.ShoteiTm;
         }
 
-        private void AddKyukeiFromMaster(M_Kinmu master, KintaiDbContext context)
+        private void AddKyukeiFromMaster(M_Kinmu master, KintaiDbContext context, T_Kinmu tKinmu)
         {
             // 既存の休憩をすべて削除
             // 手打ちで入力した休憩レコードと自動追加されたものの見分けが付かないため、問答無用で消去する仕様にした。
@@ -168,7 +173,7 @@ namespace UNN_Ki_001.Data.Models
             {
                 DateControl frDc = new DateControl(KinmuDt, master.Kyukei1FrTm, master.Kyukei1FrKbn);
                 DateControl toDc = new DateControl(KinmuDt, master.Kyukei1ToTm, master.Kyukei1ToKbn);
-                T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count);
+                T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count, tKinmu);
                 kyukei.DakokuFrDate = frDc.Origin;
                 kyukei.DakokuToDate = toDc.Origin;
                 list.Add(kyukei);
@@ -179,7 +184,7 @@ namespace UNN_Ki_001.Data.Models
             {
                 DateControl frDc = new DateControl(KinmuDt, master.Kyukei2FrTm, master.Kyukei2FrKbn);
                 DateControl toDc = new DateControl(KinmuDt, master.Kyukei2ToTm, master.Kyukei2ToKbn);
-                T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count);
+                T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count, tKinmu);
                 kyukei.DakokuFrDate = frDc.Origin;
                 kyukei.DakokuToDate = toDc.Origin;
                 list.Add(kyukei);
@@ -191,7 +196,7 @@ namespace UNN_Ki_001.Data.Models
             {
                 DateControl frDc = new DateControl(KinmuDt, master.Kyukei3FrTm, master.Kyukei3FrKbn);
                 DateControl toDc = new DateControl(KinmuDt, master.Kyukei3ToTm, master.Kyukei3ToKbn);
-                T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count);
+                T_Kyukei kyukei = new T_Kyukei(KigyoCd, ShainNo, KinmuDt, ++count, tKinmu);
                 kyukei.DakokuFrDate = frDc.Origin;
                 kyukei.DakokuToDate = toDc.Origin;
                 list.Add(kyukei);
@@ -265,15 +270,15 @@ namespace UNN_Ki_001.Data.Models
 
         [Key]
         [Column("kigyo_cd")]
-        public string KigyoCd { get; set; }
+        public string? KigyoCd { get; set; }
 
         [Key]
         [Column("shain_no")]
-        public string ShainNo { get; set; }
+        public string? ShainNo { get; set; }
 
         [Key]
         [Column("kinmu_dt")]
-        public string KinmuDt { get; set; }
+        public string? KinmuDt { get; set; }
 
         [Column("kinmu_cd")]
         public string? KinmuCd { get; private set; }
@@ -358,5 +363,9 @@ namespace UNN_Ki_001.Data.Models
 
         [Column("update_pgm")]
         public string? UpdatePgm { get; set; }
+
+        // ナビゲーションプロパティ
+        public M_Kinmu? MKinmu { get; set; }
+        public List<T_Kyukei> TKyukeis { get; set; } = new List<T_Kyukei>();
     }
 }

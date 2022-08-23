@@ -1,0 +1,71 @@
+﻿@page
+@model SearchEx
+@{
+    ViewData["Title"] = "社員検索";
+}
+<script src="~/js/Attendance.Record.Search.js"></script>
+<h1>@ViewData["Title"]</h1>
+<div class="container mt-5" style="max-width: 800px">
+    <form class="card mb-4" id="MainForm" method="Post">
+        <!-- 識別用 -->
+        <input type="hidden" name="command" value="main" />
+
+        <!-- 社員番号 -->
+        <label asp-for="Input.No" for="inputNo" ></label>
+        <input asp-for="Input.No" id="inputNo" />
+            
+        <!-- 氏名 -->
+        <label asp-for="Input.Name" for="inputName" ></label>
+        <input asp-for="Input.Name" id="inputName" />
+
+        <!-- 所属 -->
+        <label asp-for="Input.ShozokuName" for="inputShozokuName" ></label>
+        <input asp-for="Input.ShozokuName" id="inputShozokuName" />
+
+        <!-- 職種 -->
+        <label asp-for="Input.ShokushuName" for="inputShokushuName" ></label>
+        <input asp-for="Input.ShokushuName" id="inputShokushuName" />
+
+        <!-- 雇用形態 -->
+        <label asp-for="Input.KoyokeitaiName" for="inputKoyokeitaiName" ></label>
+        <input asp-for="Input.KoyokeitaiName" id="inputKoyokeitaiName" />
+        
+        <!-- クリアボタン -->  
+        <button type="button" class="btn btn-primary btn-lg"
+            style="padding-left: 2.5rem; padding-right: 2.5rem;">クリア</button>
+
+        <!-- 検索ボタン -->
+        <button type="submit" class="btn btn-primary btn-lg"
+            style="padding-left: 2.5rem; padding-right: 2.5rem;">検索</button>
+    </form>
+</div>
+<div class="container mt-5" style="max-width: 800px">
+        <!-- テーブルを作成 -->
+        <table>
+            <tr>
+                <th>
+                    社員番号
+                </th>
+            </tr>
+        @{
+            if(Model._targetList != null)
+            {
+                var list = Model._targetList;
+                for(int i = 0; i < list.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <a href="#" onclick="SendPost(@i);">
+                                @list[i].ShainNo
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+        </table>
+</div>
+<form id="SubForm" method="Post">
+    <input type="hidden" name="command" value="sub" />
+    <input type="hidden" name="target" value="" />
+</form>

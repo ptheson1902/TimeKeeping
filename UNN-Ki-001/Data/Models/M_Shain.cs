@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UNN_Ki_001.Data.Models
@@ -46,5 +47,10 @@ namespace UNN_Ki_001.Data.Models
 
         [Column("koyokeitai_cd")]
         public string? KoyokeitaiCd { get; set; }
+
+        // ナビゲーションプロパティ
+        public M_Shokushu? Shokushu { get; set; }
+        public M_Shozoku? Shozoku { get; set; }
+        public M_Koyokeitai? Koyokeitai { get; set; }
     }
 }

@@ -35,6 +35,7 @@ namespace UNN_Ki_001.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // 複合プライマリーキーの設定
             modelBuilder.Entity<M_Kinmu>()
                 .HasKey(c => new { c.KigyoCd, c.KinmuCd });
             modelBuilder.Entity<T_Kinmu>()
@@ -43,6 +44,34 @@ namespace UNN_Ki_001.Data
                 .HasKey(c => new { c.KigyoCd, c.ShainNo, c.KinmuDt, c.SeqNo });
             modelBuilder.Entity<M_Shain>()
                 .HasKey(c => new { c.KigyoCd, c.ShainNo });
+            modelBuilder.Entity<M_Shozoku>()
+                .HasKey(c => new { c.KigyoCd, c.ShozokuCd });
+            modelBuilder.Entity<M_Shokushu>()
+                .HasKey(c => new { c.KigyoCd, c.ShokushuCd });
+            modelBuilder.Entity<M_Koyokeitai>()
+                .HasKey(c => new { c.KigyoCd, c.KoyokeitaiCd });
+
+            // 複合外部キーの設定
+            modelBuilder.Entity<M_Shain>()
+                .HasOne(shain => shain.Koyokeitai)
+                .WithMany(koyokeitai => koyokeitai.Shains)
+                .HasForeignKey(shain => new { shain.KigyoCd, shain.KoyokeitaiCd });
+            modelBuilder.Entity<M_Shain>()
+                .HasOne(shain => shain.Shokushu)
+                .WithMany(shokushu => shokushu.Shains)
+                .HasForeignKey(shain => new { shain.KigyoCd, shain.ShokushuCd });
+            modelBuilder.Entity<M_Shain>()
+                .HasOne(shain => shain.Shozoku)
+                .WithMany(shozoku => shozoku.Shains)
+                .HasForeignKey(shain => new { shain.KigyoCd, shain.ShozokuCd });
+            modelBuilder.Entity<T_Kinmu>()
+                .HasOne(kinmu => kinmu.MKinmu)
+                .WithMany(mKinmu => mKinmu.TKinmus)
+                .HasForeignKey(kinmu => new { kinmu.KigyoCd, kinmu.KinmuCd });
+            modelBuilder.Entity<T_Kinmu>()
+                .HasMany(kinmu => kinmu.TKyukeis)
+                .WithOne(kyukei => kyukei.TKinmu)
+                .HasForeignKey(kinmu => new { kinmu.KigyoCd, kinmu.ShainNo, kinmu.KinmuDt });
         }
 
         public DbSet<T_Kyukei> t_Kyukeis => Set<T_Kyukei>();

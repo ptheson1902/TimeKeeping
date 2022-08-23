@@ -50,12 +50,18 @@ namespace UNN_Ki_001.Data.Models
             }
         }
 
-        public T_Kyukei(string kigyoCd, string shainNo, string kinmuDt, int seqNo)
+        public T_Kyukei()
+        {
+
+        }
+
+        public T_Kyukei(string kigyoCd, string shainNo, string kinmuDt, int seqNo, T_Kinmu kinmu)
         {
             KigyoCd = kigyoCd;
             ShainNo = shainNo;
             KinmuDt = kinmuDt;
             SeqNo = seqNo;
+            TKinmu = kinmu;
         }
 
         [Key]
@@ -101,5 +107,7 @@ namespace UNN_Ki_001.Data.Models
         [Column("update_pgm")]
         public string? UpdatePgm { get; set; }
 
+
+        public T_Kinmu TKinmu { get; set; }
     }
 }

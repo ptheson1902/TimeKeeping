@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Diagnostics;
 
 namespace UNN_Ki_001.Data.Models
 {
@@ -23,6 +24,11 @@ namespace UNN_Ki_001.Data.Models
             }
 
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            if (user == null)
+                return null;
+
+            
+            
             var shain = _kintaiDbContext.m_shains
                 .Where(e => e.KigyoCd != null && e.KigyoCd.Equals(user.Kigyo_cd) && e.ShainNo != null && e.ShainNo.Equals(user.Shain_no))
                 .FirstOrDefault();

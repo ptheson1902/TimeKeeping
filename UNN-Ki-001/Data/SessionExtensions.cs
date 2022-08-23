@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Linq.Expressions;
 
 namespace UNN_Ki_001.Data
 {
@@ -16,6 +17,18 @@ namespace UNN_Ki_001.Data
         {
             string? json = session.GetString(key);
             return string.IsNullOrEmpty(json) ? default :JsonConvert.DeserializeObject<TObject>(json);
+        }
+    }
+
+    public static class LinqExtensions
+    {
+        public static IQueryable<TSource> WhereIf<TSource>
+                (this IQueryable<TSource> Source, bool Condition, Expression<Func<TSource, bool>> Predicate)
+        {
+            if (Condition)
+                return Source.Where(Predicate);
+            else
+                return Source;
         }
     }
 }

@@ -141,5 +141,8 @@ namespace UNN_Ki_001.Data.Models
 
         [Column("update_pgm")]
         public string? UpdatePgm { get; set; }
+
+        // ナビゲーションプロパティ
+        public List<T_Kinmu> TKinmus { get; set; } = new List<T_Kinmu>();
     }
 }

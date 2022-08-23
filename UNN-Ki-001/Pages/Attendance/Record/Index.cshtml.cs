@@ -11,7 +11,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
     [Authorize(Policy = "Rookie")]
     public class IndexModel : BasePageModel
     {
-        public List<string> tgtList = new List<string>();
+        public List<M_Shain> tgtList = new List<M_Shain>();
 
         public IndexModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
@@ -23,26 +23,13 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             if (User.IsInRole("Admin"))
             {
                 // 検索対象が存在しなければNotFound
-                List<string>? sesList = HttpContext.Session.GetObject<List<string>>("target");
+                List<M_Shain>? sesList = HttpContext.Session.GetObject<List<M_Shain>>(Constants.RECORD_SEARCH_LIST);
                 if(sesList == null || sesList.Count == 0)
                 {
                     return NotFound();
                 }
 
                 tgtList.AddRange(sesList);
-            }
-            // 一般権限で有れば、自分自身をリストに追加
-            else
-            {
-                var me = GetCurrentUserShainAsync().Result;
-                
-                // 社員情報と紐づいてなければ、トップページへリダイレクト
-                if(me == null)
-                {
-                    return RedirectToPage("/");
-                }
-
-                tgtList.Add(me.ShainNo);
             }
 
 
@@ -53,5 +40,16 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         {
 
         }
+        /*
+        private DateTime GetShimeStartDate()
+        {
+
+        }
+
+        private DateTime GetShimeEndDate()
+        {
+
+        }
+        */
     }
 }
