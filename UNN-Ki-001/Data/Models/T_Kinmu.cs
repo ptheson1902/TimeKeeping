@@ -230,20 +230,22 @@ namespace UNN_Ki_001.Data.Models
             foreach (var item in list)
             {
                 // コンパイラにNULLじゃないことを保証します
-                if(item.DakokuToDate == null || item.DakokuFrDate == null)
+                if (item.DakokuToDate == null || item.DakokuFrDate == null)
                 {
                     continue;
                 }
 
                 // 休憩時間を勤務実績時間の枠に押し込める
-                if (item.DakokuFrDate < kinmuFrDate)
-                {
-                    item.DakokuFrDate = kinmuFrDate;
-                }
-                if (item.DakokuToDate > kinmuToDate)
+                if (item.DakokuToDate > kinmuToDate) // 休憩終わり時間
                 {
                     item.DakokuToDate = kinmuToDate;
                 }
+                if (item.DakokuFrDate < kinmuFrDate || item.DakokuFrDate > item.DakokuToDate) // 休憩開始時間
+                {
+                    item.DakokuFrDate = kinmuFrDate;
+                }
+
+
                 // 結果として意味を喪失していないレコードのみを選択して休憩時間を計算
                 if (item.DakokuFrDate < item.DakokuToDate)
                 {
