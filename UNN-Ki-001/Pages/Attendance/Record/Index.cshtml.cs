@@ -30,9 +30,9 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 }
 
                 tgtList.AddRange(sesList);
+
+
             }
-
-
 
 
             return Page();
