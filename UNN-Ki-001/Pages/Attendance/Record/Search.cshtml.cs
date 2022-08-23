@@ -10,9 +10,9 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 {
 
     [Authorize(Policy = "Rookie")]
-    public class SearchEx : BasePageModel
+    public class Search : BasePageModel
     {
-        public SearchEx(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
+        public Search(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
         }
 
@@ -20,7 +20,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         [BindProperty]
         public InputModel Input { get; set; } = new InputModel();
 
-        public List<M_Shain> _targetList;
+        public List<M_Shain> _targetList = new List<M_Shain>();
 
         public void OnGet()
         {
