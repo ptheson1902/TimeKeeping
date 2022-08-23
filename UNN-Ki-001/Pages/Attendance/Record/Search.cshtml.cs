@@ -40,9 +40,13 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         }
         public IActionResult OnPost(string command, int index)
         {
+
+            Console.WriteLine(index);
+            Console.WriteLine(command);
             // 行選択時の処理
             if (command != null && command.Equals("sub"))
             {
+
                 // 一時データをセッションから取得
                 var getData = HttpContext.Session.GetObject<List<ShainSearchRecord>>(_TEMP_SEARCH_RESULT_LIST);
                 // 一時データをセッションから削除
@@ -74,7 +78,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     && shain.Shokushu.ShokushuNm.Contains(Input.ShokushuName!))
                 .ToList();
 
-            // 検索結果をListにしてセッションに一時データとして格納
+            // 検索結果をシリアライズ可能なListにしてセッションに一時データとして格納
             var tempList = CreateRecordList(_targetList);
             HttpContext.Session.SetObj(_TEMP_SEARCH_RESULT_LIST, tempList);
 
@@ -116,8 +120,8 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             if(list != null)
             {
                 // 決定データをセッションに格納して勤務表ページへ飛ぶ
-                var resultList = new ShainSearchRecordList(list, index);
-                HttpContext.Session.SetObj(Constants.SEARCH_RECORD_LIST, list);
+                ShainSearchRecordList resultList = new ShainSearchRecordList(list, index);
+                HttpContext.Session.SetObj(Constants.SEARCH_RECORD_LIST, resultList);
             }
 
             return RedirectToPage("/Attendance/Record/Index");
