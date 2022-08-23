@@ -5,7 +5,7 @@
 }
 <script src="~/js/Attendance.Record.Search.js"></script>
 <h1>@ViewData["Title"]</h1>
-<div class="container mt-5" style="max-width: 800px">
+@*<div class="container mt-5" style="max-width: 800px">
     <form class="card mb-4" id="MainForm" method="Post">
         <!-- 識別用 -->
         <input type="hidden" name="command" value="main" />
@@ -64,6 +64,89 @@
             }
         }
         </table>
+</div>
+<form id="SubForm" method="Post">
+    <input type="hidden" name="command" value="sub" />
+    <input type="hidden" name="index" value="" />
+</form>*@
+
+
+
+
+    <div>
+   <div class="container mt-5" style="max-width: 800px">
+      <form class="card mb-4" method="Post" id="MainForm">
+         <div class="card-body">
+            <!-- 識別用 -->
+            <input type="hidden" name="command" value="main" />
+            <div class="row mb-3 align-items-center">
+               
+                <!-- 社員番号 -->
+                <label asp-for="Input.No" for="inputNo" ></label>
+                <input asp-for="Input.No" id="inputNo" />
+            </div>
+            <div class="row mb-3 align-items-center">
+                <!-- 氏名 -->
+                <label asp-for="Input.Name" for="inputName" ></label>
+                <input asp-for="Input.Name" id="inputName" />
+            </div>
+            <div class="row mb-3 align-items-center">
+                <!-- 所属 -->
+                <label asp-for="Input.ShozokuName" for="inputShozokuName" ></label>
+                <input asp-for="Input.ShozokuName" id="inputShozokuName" />
+            </div>
+            <div class="row mb-3 align-items-center">
+                 <!-- 職種 -->
+                <label asp-for="Input.ShokushuName" for="inputShokushuName" ></label>
+                <input asp-for="Input.ShokushuName" id="inputShokushuName" />
+             </div>
+            <div class="row mb-3 align-items-center">
+                <!-- 雇用形態 -->
+                <label asp-for="Input.KoyokeitaiName" for="inputKoyokeitaiName" ></label>
+                <input asp-for="Input.KoyokeitaiName" id="inputKoyokeitaiName" />
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+               <input type="hidden" value="search" name="action" />
+               <button type="submit" class="search btn btn-secondary mx-3">
+                  検索
+               </button>
+            </div>        
+         </div>
+      </form>
+
+      <div class="p-2">
+         <table class="table table-bordered" id="mytable">
+            <thead class="table-primary">
+               <tr class="text-center">
+                  <th class="col-2">社員番号</th>
+                  <th class="col-3">氏名</th>
+                  <th class="col-2">所属名</th>
+                  <th class="col-2">職種名</th>
+                  <th class="col-3">雇用形態名</th>
+               </tr>
+            </thead>
+            <tbody class="shokushuData ">
+                @{
+                    if(Model._targetList != null)
+                    {
+                        var list = Model._targetList;
+                        for(int i = 0; i < list.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="#" onclick="SendPost(@i);">
+                                        @list[i].ShainNo
+                                    </a>
+                                </td>
+                                
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+         </table>
+      </div>
+   </div>
 </div>
 <form id="SubForm" method="Post">
     <input type="hidden" name="command" value="sub" />

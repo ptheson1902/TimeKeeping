@@ -36,7 +36,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             ShainSearchRecordList targetList = temp;
 
             // カレントインデックスの情報を取り出し、ビューに渡します。
-            ShainSearchRecord target = targetList.Current;
+            ShainSearchRecord target = targetList.GetCurrent();
             ViewData["target"] = target;
 
             return Page();
