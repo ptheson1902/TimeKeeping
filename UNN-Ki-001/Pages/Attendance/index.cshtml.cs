@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Npgsql;
 using System.Data;
 using System.Diagnostics;
-using System.Linq;
 using UNN_Ki_001.Data;
 using UNN_Ki_001.Data.Models;
 
@@ -37,13 +32,13 @@ namespace UNN_Ki_001.Pages.Attendance
         private void DisabledButton(M_Shain shain)
         {
             var today = _kintaiDbContext.t_kinmus.
-                Where(a => a.KigyoCd!.Equals(shain.KigyoCd) && a.ShainNo!.Equals(shain.ShainNo) && a.KinmuDt!.Equals(now.ToString("yyyyMMdd")))
+                Where(e => e.KigyoCd!.Equals(shain.KigyoCd) && e.ShainNo!.Equals(shain.ShainNo) && e.KinmuDt!.Equals(now.ToString("yyyyMMdd")))
                 .FirstOrDefault();
             if (today == null || (today.KinmuFrDate == null && today.KinmuToDate == null))
             {
                 int d = int.Parse(now.ToString("yyyyMMdd"));
                 var old = _kintaiDbContext.t_kinmus
-                    .Where(a => a.KigyoCd!.Equals(shain.KigyoCd) && a.ShainNo!.Equals(shain.ShainNo) && Convert.ToInt32(a.KinmuDt) < d)
+                    .Where(e => e.KigyoCd!.Equals(shain.KigyoCd) && e.ShainNo!.Equals(shain.ShainNo) && Convert.ToInt32(e.KinmuDt) < d)
                     .OrderByDescending(e => e.KinmuDt)
                     .FirstOrDefault();
                 if ((old != null && ((old.KinmuFrDate != null && old.KinmuToDate != null) || (old.KinmuFrDate == null && old.KinmuToDate == null))) || old == null)
@@ -111,25 +106,40 @@ namespace UNN_Ki_001.Pages.Attendance
         {
             int kyo = int.Parse(now.ToString("yyyyMMdd"));
             int kino = int.Parse(now.AddDays(-1).ToString("yyyyMMdd"));
+            // Original
             T_Kinmu? kinmu = _kintaiDbContext.t_kinmus
-                    .Where(a => a.KigyoCd!.Equals(shain.KigyoCd) && a.ShainNo!.Equals(shain.ShainNo) && a.KinmuFrDate != null && a.KinmuToDate == null && Convert.ToInt32(a.KinmuDt) <= kyo && kino <= Convert.ToInt32(a.KinmuDt))
+                    .Where(e => e.KigyoCd!.Equals(shain.KigyoCd) && e.ShainNo!.Equals(shain.ShainNo) && e.KinmuFrDate != null && e.KinmuToDate == null && Convert.ToInt32(e.KinmuDt) <= kyo && kino <= Convert.ToInt32(e.KinmuDt))
                     .OrderByDescending(e => e.KinmuDt)
                     .FirstOrDefault();
+            // Test
+            /*T_Kinmu? kinmu = _kintaiDbContext.t_kinmus
+           .Where(e => e.KigyoCd!.Equals(shain.KigyoCd) && e.KinmuDt!.Equals("20220823") && e.ShainNo!.Equals(shain.ShainNo) && e.KinmuFrDate != null && e.KinmuToDate == null)
+           .FirstOrDefault();*/
 
             if (kinmu == null)
             {
                 Message = "退勤可能なレコードが存在しません。";
                 return;
             }
+            // Original
             kinmu.DakokuToDate = DateTime.Now;
+            
+            // Test
+            //kinmu.DakokuToDate = DateTime.ParseExact("20220824 18:15:00", "yyyyMMdd HH:mm:ss", null);
             _kintaiDbContext.Update(kinmu);
         }
 
         private void Start(M_Shain shain)
         {
+            // Original
             T_Kinmu? kinmu = _kintaiDbContext.t_kinmus
             .Where(e => e.KigyoCd!.Equals(shain.KigyoCd) && e.KinmuDt!.Equals(now.ToString("yyyyMMdd")) && e.ShainNo!.Equals(shain.ShainNo) && e.KinmuFrDate == null)
             .FirstOrDefault();
+
+            // Test
+            /*T_Kinmu? kinmu = _kintaiDbContext.t_kinmus
+           .Where(e => e.KigyoCd!.Equals(shain.KigyoCd) && e.KinmuDt!.Equals("20220824") && e.ShainNo!.Equals(shain.ShainNo) && e.KinmuFrDate == null)
+           .FirstOrDefault();*/
 
             // 該当レコードがなかったら新規作成
             if (kinmu == null)
@@ -138,10 +148,12 @@ namespace UNN_Ki_001.Pages.Attendance
                 kinmu.SetKinmuCd("K001"); // TODO: テスト用コード
                 _kintaiDbContext.Add(kinmu);
             }
-                
-
+            // Original
             kinmu.DakokuFrDate = DateTime.Now;
-            
+                
+            // Test
+            //kinmu.DakokuFrDate = DateTime.ParseExact("20220824 08:16:00", "yyyyMMdd HH:mm:ss", null);
+
         }
     }
 }
