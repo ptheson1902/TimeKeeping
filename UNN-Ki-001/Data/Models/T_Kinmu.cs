@@ -297,30 +297,6 @@ namespace UNN_Ki_001.Data.Models
         [Column("kinmu_to_date")]
         public DateTime? KinmuToDate { get; private set; }
 
-        [Column("dakoku_fr_dt")]
-        public string? DakokuFrDt { get; private set; }
-
-        [Column("dakoku_fr_tm")]
-        public string? DakokuFrTm { get; private set; }
-
-        [Column("dakoku_to_dt")]
-        public string? DakokuToDt { get; private set; }
-
-        [Column("dakoku_to_tm")]
-        public string? DakokuToTm { get; private set; }
-
-        [Column("kinmu_fr_dt")]
-        public string? KinmuFrDt { get; private set; }
-
-        [Column("kinmu_fr_tm")]
-        public string? KinmuFrTm { get; private set; }
-
-        [Column("kinmu_to_dt")]
-        public string? KinmuToDt { get; private set; }
-
-        [Column("kinmu_to_tm")]
-        public string? KinmuToTm { get; private set; }
-
         [Column("shotei")]
         public int? Shotei { get; set; }
 

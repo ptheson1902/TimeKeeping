@@ -1,22 +1,69 @@
 ﻿@page
 @model UNN_Ki_001.Pages.Attendance.Record.IndexModel
-@using Data.Models;
+@using UNN_Ki_001.Data.Models;
 @{
     ViewData["Title"] = "勤務表";
-    ShainSearchRecord target = (ShainSearchRecord)ViewData["target"]!; // ← NotNullable宣言しています。気を付けて
 }
  <h1>@ViewData["Title"]</h1>
 
-氏名=@target.ShainNm;
-企業コード=@target.KigyoCd;
-@target.KoyokeitaiNm;
+ <table>
+    <tr>
+        <th>日付</th>
+        <th>勤務予定</th>
+        <th>打刻開始</th>
+        <th>打刻終了</th>
+        <th>実績開始</th>
+        <th>実績終了</th>
+        <th>休憩</th>
+        <th>控除</th>
+        <th>総労働</th>
+        <th>備考</th>
+    </tr>
+    @{
+    foreach(var item in Model.DataList)
+    {
+        <tr>
+            <td>
+                @item.Day
+            </td>
+            <td>
+                @item.Yote
+            </td>
+            <td>
+                <input type="time" 
+                    value="@item.DakokuStart">
+            </td>
+            <td>
+                <input type="time" 
+                    value="@item.DakokuEnd">
+            </td>
+            <td>
+                <input type="time" 
+                    value="@item.KinmuStart">
+            </td>
+            <td>
+                <input type="time" 
+                    value="@item.KinmuEnd">
+            </td>
+            <td>
+                @item.Kyukei
+            </td>
+            <td>
+                @item.Kojo
+            </td>
+            <td>
+                @item.Sorodo
+            </td>
+            <td>
+                <input type="text"
+                    value="@item.Biko">
+            </td>
+        </tr>
+    }
+}
+ </table>
 
 
-
-
-
-
-      
    
 
 
