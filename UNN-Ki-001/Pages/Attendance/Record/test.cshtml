@@ -1,0 +1,214 @@
+﻿@page
+@model UNN_Ki_001.Pages.Attendance.Record.testModel
+
+@{
+    ViewData["Title"] = "test";
+}
+
+<h1>test</h1>
+
+<h4>M_Kinmu</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KigyoCd" class="control-label"></label>
+                <input asp-for="M_Kinmu.KigyoCd" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KigyoCd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KinmuCd" class="control-label"></label>
+                <input asp-for="M_Kinmu.KinmuCd" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KinmuCd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KinmuNm" class="control-label"></label>
+                <input asp-for="M_Kinmu.KinmuNm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KinmuNm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KinmuBunrui" class="control-label"></label>
+                <input asp-for="M_Kinmu.KinmuBunrui" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KinmuBunrui" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KinmuFrTm" class="control-label"></label>
+                <input asp-for="M_Kinmu.KinmuFrTm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KinmuFrTm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KinmuFrKbn" class="control-label"></label>
+                <input asp-for="M_Kinmu.KinmuFrKbn" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KinmuFrKbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KinmuToTm" class="control-label"></label>
+                <input asp-for="M_Kinmu.KinmuToTm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KinmuToTm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KinmuToKbn" class="control-label"></label>
+                <input asp-for="M_Kinmu.KinmuToKbn" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KinmuToKbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.Kyukei1FrTm" class="control-label"></label>
+                <input asp-for="M_Kinmu.Kyukei1FrTm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.Kyukei1FrTm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.Kyukei1FrKbn" class="control-label"></label>
+                <input asp-for="M_Kinmu.Kyukei1FrKbn" class="form-control" />
+                <span asp-validation-for="M_Kinmu.Kyukei1FrKbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.Kyukei1ToTm" class="control-label"></label>
+                <input asp-for="M_Kinmu.Kyukei1ToTm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.Kyukei1ToTm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.Kyukei1ToKbn" class="control-label"></label>
+                <input asp-for="M_Kinmu.Kyukei1ToKbn" class="form-control" />
+                <span asp-validation-for="M_Kinmu.Kyukei1ToKbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.Kyukei2FrTm" class="control-label"></label>
+                <input asp-for="M_Kinmu.Kyukei2FrTm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.Kyukei2FrTm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.Kyukei2FrKbn" class="control-label"></label>
+                <input asp-for="M_Kinmu.Kyukei2FrKbn" class="form-control" />
+                <span asp-validation-for="M_Kinmu.Kyukei2FrKbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.Kyukei2ToTm" class="control-label"></label>
+                <input asp-for="M_Kinmu.Kyukei2ToTm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.Kyukei2ToTm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.Kyukei2ToKbn" class="control-label"></label>
+                <input asp-for="M_Kinmu.Kyukei2ToKbn" class="form-control" />
+                <span asp-validation-for="M_Kinmu.Kyukei2ToKbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.Kyukei3FrTm" class="control-label"></label>
+                <input asp-for="M_Kinmu.Kyukei3FrTm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.Kyukei3FrTm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.Kyukei3FrKbn" class="control-label"></label>
+                <input asp-for="M_Kinmu.Kyukei3FrKbn" class="form-control" />
+                <span asp-validation-for="M_Kinmu.Kyukei3FrKbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.Kyukei3ToTm" class="control-label"></label>
+                <input asp-for="M_Kinmu.Kyukei3ToTm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.Kyukei3ToTm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.Kyukei3ToKbn" class="control-label"></label>
+                <input asp-for="M_Kinmu.Kyukei3ToKbn" class="form-control" />
+                <span asp-validation-for="M_Kinmu.Kyukei3ToKbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KyukeiAutoFlg" class="control-label"></label>
+                <input asp-for="M_Kinmu.KyukeiAutoFlg" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KyukeiAutoFlg" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.ShoteiTm" class="control-label"></label>
+                <input asp-for="M_Kinmu.ShoteiTm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.ShoteiTm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KinmuFrCtrlFlg" class="control-label"></label>
+                <input asp-for="M_Kinmu.KinmuFrCtrlFlg" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KinmuFrCtrlFlg" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KinmuFrMarumeTm" class="control-label"></label>
+                <input asp-for="M_Kinmu.KinmuFrMarumeTm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KinmuFrMarumeTm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KinmuFrMarumeKbn" class="control-label"></label>
+                <input asp-for="M_Kinmu.KinmuFrMarumeKbn" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KinmuFrMarumeKbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KinmuToMarumeTm" class="control-label"></label>
+                <input asp-for="M_Kinmu.KinmuToMarumeTm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KinmuToMarumeTm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KinmuToMarumeKbn" class="control-label"></label>
+                <input asp-for="M_Kinmu.KinmuToMarumeKbn" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KinmuToMarumeKbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KyukeiFrMarumeTm" class="control-label"></label>
+                <input asp-for="M_Kinmu.KyukeiFrMarumeTm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KyukeiFrMarumeTm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KyukeiFrMarumeKbn" class="control-label"></label>
+                <input asp-for="M_Kinmu.KyukeiFrMarumeKbn" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KyukeiFrMarumeKbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KyukeiToMarumeTm" class="control-label"></label>
+                <input asp-for="M_Kinmu.KyukeiToMarumeTm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KyukeiToMarumeTm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.KyukeiToMarumeKbn" class="control-label"></label>
+                <input asp-for="M_Kinmu.KyukeiToMarumeKbn" class="form-control" />
+                <span asp-validation-for="M_Kinmu.KyukeiToMarumeKbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.ValidFlg" class="control-label"></label>
+                <input asp-for="M_Kinmu.ValidFlg" class="form-control" />
+                <span asp-validation-for="M_Kinmu.ValidFlg" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.CreateUsr" class="control-label"></label>
+                <input asp-for="M_Kinmu.CreateUsr" class="form-control" />
+                <span asp-validation-for="M_Kinmu.CreateUsr" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.CreatePgm" class="control-label"></label>
+                <input asp-for="M_Kinmu.CreatePgm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.CreatePgm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.UpdateDt" class="control-label"></label>
+                <input asp-for="M_Kinmu.UpdateDt" class="form-control" />
+                <span asp-validation-for="M_Kinmu.UpdateDt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.UpdateUsr" class="control-label"></label>
+                <input asp-for="M_Kinmu.UpdateUsr" class="form-control" />
+                <span asp-validation-for="M_Kinmu.UpdateUsr" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="M_Kinmu.UpdatePgm" class="control-label"></label>
+                <input asp-for="M_Kinmu.UpdatePgm" class="form-control" />
+                <span asp-validation-for="M_Kinmu.UpdatePgm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

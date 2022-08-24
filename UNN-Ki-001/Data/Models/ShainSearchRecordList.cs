@@ -9,6 +9,7 @@
         }
 
         public List<ShainSearchRecord> List { get; }
+
         public int CurrentIndex { get; set; }
 
         public ShainSearchRecord GetCurrent()
