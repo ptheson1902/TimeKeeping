@@ -14,7 +14,14 @@
         public string? kinmu_cd { get; set; }
         public string ?kinmu_nm { get; set; }
         public string ?kinmu_bunrui {  get; set; }
+        public string? kinmu_fr_tm { get; set; }
+        public string? kinmu_to_tm { get; set; }
+        public string? kyuke1_fr_tm { get; set; }
+        public string? kyuke1_to_tm { get; set; }
+
         
-       
     }
+
+
+    
 }

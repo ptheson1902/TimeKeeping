@@ -5,8 +5,9 @@
     ViewData["Title"] = "勤務表";
     ShainSearchRecord target = (ShainSearchRecord)ViewData["target"]!; // ← NotNullable宣言しています。気を付けて
 }
- <h1>@ViewData["Title"]</h1>
+
       <div class="container mt-5" style="max-width: 800px">
+           <h3>@ViewData["Title"]</h3>
          <div class="card mb-4 " >
             <div class="card-body" >
                <h3>社員情報</h3>

@@ -33,7 +33,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
                     break;
                 default: break;
             }
-            /*var register_action = Request.Form["register_action"];
+            var register_action = Request.Form["register_action"];
             switch (register_action)
             {
                 case "register":
@@ -41,7 +41,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
                     break;
                 default: break;
             }
-            var update_action = Request.Form["update_action"];
+            /*var update_action = Request.Form["update_action"];
             switch (update_action)
             {
                 case "update":
@@ -96,9 +96,25 @@ namespace UNN_Ki_001.Pages.VariousMaster
                 d.kinmu_nm = item.KinmuNm;
                 d.kinmu_bunrui = item.KinmuBunrui;
                 d.valid_flg = item.ValidFlg;
+                d.kinmu_fr_tm = item.KinmuFrTm;
+                d.kinmu_to_tm = item.KinmuToTm;
+                d.kyuke1_fr_tm = item.Kyukei1FrTm;
+                d.kyuke1_to_tm = item.Kyukei1ToTm;
                 Data.Add(d);
             }
 
+        }
+        private void Register()
+        {
+            string kinmu_cd1 = Request.Form["kinmu_cd1"];
+            string kinmu_nm1 = Request.Form["kinmu_nm1"];
+            string kinmu_bunrui1 = Request.Form["kinmu_bunrui1"];
+            string kinmu_fr_tm1 = Request.Form["kinmu_fr_tm1"];
+            string kinmu_to_tm1 = Request.Form["kinmu_to_tm1"];
+            string kyuke1_fr_tm1 = Request.Form["kyuke1_fr_tm1"];
+            string kyuke1_to_tm1 = Request.Form["kyuke1_to_tm1"];
+            string kyukei_auto_flg1 = Request.Form["kyukei_auto_flg1"];
+            string kinmu_fr_ctrl_flg1 = Request.Form["kinmu_fr_ctrl_flg1"];
         }
     }
 }
