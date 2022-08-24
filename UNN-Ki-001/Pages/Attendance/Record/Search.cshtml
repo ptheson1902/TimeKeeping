@@ -132,14 +132,36 @@
                         var list = Model._targetList;
                         for(int i = 0; i < list.Count; i++)
                         {
-                            <tr>
-                                <td>
-                                    <a href="#" onclick="SendPost(@i);">
-                                        @list[i].ShainNo
-                                    </a>
-                                </td>
-                                
-                            </tr>
+                                <tr>
+                                    <td>
+                                        <a href="#" onclick="SendPost(@i);">
+                                            @list[i].ShainNo
+                                        </a>
+                                    </td>
+                                    <td>
+                                            @list[i].NameSei@list[i].NameMei
+                                    </td>
+                                    <td>
+                                        @if (list[i].Shozoku != null)
+                                        {
+                                            @list[i].Shozoku.ShozokuNm
+                                        }
+                                    </td>
+                                    <td>
+                                           @if (list[i].Shokushu != null)
+                                        {
+                                            @list[i].Shokushu.ShokushuNm
+                                        }
+                                    </td>
+                                    <td>
+                                            @if (list[i].Koyokeitai != null)
+                                        {
+                                            @list[i].Koyokeitai.KoyokeitaiNm
+                                        }
+                                    </td>
+
+                                    
+                                </tr>
                         }
                     }
                 }
