@@ -26,6 +26,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
         }
 
+        [ResponseCache(Duration = 30)]
         public IActionResult OnGet()
         {
             Init();
