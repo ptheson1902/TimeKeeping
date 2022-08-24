@@ -1,41 +1,105 @@
 ﻿@page
 @model UNN_Ki_001.Pages.Attendance.Record.IndexModel
-@using Data.Models;
+@using UNN_Ki_001.Data.Models;
+<script src="~/js/Attendance.Record.js"></script>
 @{
     ViewData["Title"] = "勤務表";
-    ShainSearchRecord target = (ShainSearchRecord)ViewData["target"]!; // ← NotNullable宣言しています。気を付けて
 }
+ <h1>@ViewData["Title"]</h1>
+ <input type="hidden" name="ShainNo" value="@Model.TargetShainNo" />
+ <input type="hidden" name="KigyoCd" value="@Model.TargetKigyoCd" />
+ <input type="button" value="登録実行テスト"/>
+ <form method="post">
+     <input type="hidden" value="nextMonth" name="command" />
+     <input type="submit" value="翌月" />
+ </form>
+  <form method="post">
+     <input type="hidden" value="prevMonth" name="command" />
+     <input type="submit" value="先月" />
+ </form>
+  <form method="post">
+     <input type="hidden" value="nextShain" name="command" />
+     <input type="submit" value="次の社員" />
+ </form>
+  <form method="post">
+     <input type="hidden" value="prevMonth" name="command" />
+     <input type="submit" value="前の社員" />
+ </form>
+ <table id="main-contents">
+    <tr>
+        <th>日付</th>
+        <th>勤務予定</th>
+        <th>打刻開始</th>
+        <th>打刻終了</th>
+        <th>実績開始</th>
+        <th>実績終了</th>
+        <th>休憩</th>
+        <th>控除</th>
+        <th>総労働</th>
+        <th>備考</th>
+    </tr>
+    @{
+    foreach(var item in Model.DataList)
+    {
+        <tr class="Record" id="@item.KinmuDt">
+            <!-- 勤務日 -->
+            <td>
+                @item.Day
+            </td>
+            <!-- 勤務内容 -->
+            <td>
+                <select>
+                    @foreach (var info in Model.MKinmuInfoList)
+                    {
+                        <option value="@info[0]" selected="@(item.KinmuCd.Equals(info[0]) ? true : false)">
+                                @info[1]
+                        </option>
+                    }
+                </select>
+            </td>
+            <!-- 打刻開始 -->
+            <td>
+                <input type="time" class="DakokuStart"
+                    value="@item.DakokuStart">
+            </td>
+            <!-- 打刻終了 -->
+            <td>
+                <input type="time" class="DakokuEnd"
+                    value="@item.DakokuEnd">
+            </td>
+            <!-- 勤務開始 -->
+            <td>
+                <input type="time" class="KinmuStart"
+                    value="@item.KinmuStart">
+            </td>
+            <!-- 勤務開始 -->
+            <td>
+                <input type="time" class="KinmuEnd"
+                    value="@item.KinmuEnd">
+            </td>
+            <!-- 休憩 -->
+            <td>
+                @item.Kyukei
+            </td>
+            <!-- 控除 -->
+            <td>
+                @item.Kojo
+            </td>
+            <!-- 総労働 -->
+            <td>
+                @item.Sorodo
+            </td>
+            <!-- 備考 -->
+            <td>
+                <input type="text"
+                    value="@item.Biko">
+            </td>
+        </tr>
+    }
+}
+ </table>
 
-      <div class="container mt-5" style="max-width: 800px">
-           <h3>@ViewData["Title"]</h3>
-         <div class="card mb-4 " >
-            <div class="card-body" >
-               <h3>社員情報</h3>
-               <div class="row mb-3 align-items-center">
-                  <label class="col-2" for="shain_no">社員番号:</label>
-                  <div class="col-2 row">@target.ShainNo</div>
-                  <label class="col-1" for="name_mei">氏名:</label>
-                  <div class="col-3 row">@target.ShainNm</div>
 
-               </div>
-               <div class="row mb-3 align-items-center">
-                  <label class="col-1" for="shozoku_nm">所属:</label>
-                  <div class="col-3 row">@target.ShozokuNm</div>
-                  <label class="col-1" for="shokushu_nm">職種:</label>
-                  <div class="col-3 row">@target.ShokushuNm</div>
-                  <label class="col-2" for="koyokeitai_nm">雇用形態:</label>
-                  <div class="col-3 row">@target.KoyokeitaiNm</div>
-               </div>
-            </div>
-         </div>
-      </div>
-
-
-
-
-
-
-      
    
 
 
