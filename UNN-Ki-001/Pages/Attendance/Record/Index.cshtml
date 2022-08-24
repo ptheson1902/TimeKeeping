@@ -1,11 +1,30 @@
 ﻿@page
 @model UNN_Ki_001.Pages.Attendance.Record.IndexModel
 @using UNN_Ki_001.Data.Models;
+<script src="~/js/Attendance.Record.js"></script>
 @{
     ViewData["Title"] = "勤務表";
 }
  <h1>@ViewData["Title"]</h1>
-
+ <input type="hidden" name="ShainNo" value="@Model.TargetShainNo" />
+ <input type="hidden" name="KigyoCd" value="@Model.TargetKigyoCd" />
+ <input type="button" value="登録実行テスト"/>
+ <form method="post">
+     <input type="hidden" value="nextMonth" name="command" />
+     <input type="submit" value="翌月" />
+ </form>
+  <form method="post">
+     <input type="hidden" value="prevMonth" name="command" />
+     <input type="submit" value="当月" />
+ </form>
+  <form method="post">
+     <input type="hidden" value="nextShain" name="command" />
+     <input type="submit" value="次の社員" />
+ </form>
+  <form method="post">
+     <input type="hidden" value="prevMonth" name="command" />
+     <input type="submit" value="前の社員" />
+ </form>
  <table>
     <tr>
         <th>日付</th>
@@ -22,38 +41,55 @@
     @{
     foreach(var item in Model.DataList)
     {
-        <tr>
+        <tr class="Record" id="@item.KinmuDt">
+            <!-- 勤務日 -->
             <td>
                 @item.Day
             </td>
+            <!-- 勤務内容 -->
             <td>
-                @item.Yote
+                <select>
+                    @foreach (var info in Model.MKinmuInfoList)
+                    {
+                        <option value="@info[0]" selected="@(item.KinmuCd.Equals(info[0]) ? true : false)">
+                                @info[1]
+                        </option>
+                    }
+                </select>
             </td>
+            <!-- 打刻開始 -->
             <td>
-                <input type="time" 
+                <input type="time" class="DakokuStart"
                     value="@item.DakokuStart">
             </td>
+            <!-- 打刻終了 -->
             <td>
-                <input type="time" 
+                <input type="time" class="DakokuEnd"
                     value="@item.DakokuEnd">
             </td>
+            <!-- 勤務開始 -->
             <td>
-                <input type="time" 
+                <input type="time" class="KinmuStart"
                     value="@item.KinmuStart">
             </td>
+            <!-- 勤務開始 -->
             <td>
-                <input type="time" 
+                <input type="time" class="KinmuEnd"
                     value="@item.KinmuEnd">
             </td>
+            <!-- 休憩 -->
             <td>
                 @item.Kyukei
             </td>
+            <!-- 控除 -->
             <td>
                 @item.Kojo
             </td>
+            <!-- 総労働 -->
             <td>
                 @item.Sorodo
             </td>
+            <!-- 備考 -->
             <td>
                 <input type="text"
                     value="@item.Biko">

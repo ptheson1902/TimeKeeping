@@ -13,43 +13,91 @@ namespace UNN_Ki_001.Pages.Attendance.Record
     [Authorize(Policy = "Rookie")]
     public class IndexModel : BasePageModel
     {
-        public List<Kinmuhyo> DataList = new List<Kinmuhyo>();
+        public List<Kinmuhyo> DataList = new();
+        public string TargetShainNo = "";
+        public string TargetKigyoCd = "";
+        public List<string[]> MKinmuInfoList = new();
+        public ShainSearchRecordList? ShainList;
+        public ShainSearchRecord? TargetShain;
+
 
         public IndexModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
+
         }
 
         public IActionResult OnGet()
         {
-            // 参照リストをセッションから読み込み
-            var temp = HttpContext.Session.GetObject<ShainSearchRecordList>(Constants.SEARCH_RECORD_LIST);
+            Init();
+            return Page();
+        }
 
-            // 参照対象が確認できなければNotFound
-            if(temp == null)
+        public IActionResult OnPost(string command = "")
+        {
+            Init();
+            // セッションに値が存在しない場合は社員検索へリダイレクトさせる
+            if (ShainList == null || TargetShain == null)
+                return RedirectToPage("/Attendance/Record/Search");
+
+            // 操作コマンドの処理
+            if(ShainList != null)
             {
-                // 整合性チェック
-                var length = temp.List.Count;
-                var index = temp.CurrentIndex;
-                if(length == 0 || index < 0 || index >= length)
+                switch (command)
                 {
-                    throw new Exception("検索対象の情報が破損しています。");
+                    case "nextMonth":
+                        TargetShain.GetNextMonth();
+                        break;
+                    case "prevMonth":
+                        TargetShain.GetPrevMonth();
+                        break;
+                    case "nextShain":
+                        ShainList.GetNext();
+                        break;
+                    case "prevShain":
+                        ShainList.GetPrev();
+                        break;
+                    default:
+                        break;
                 }
+
+                // 変更後のオブジェクトをセッションへ再配置
+                HttpContext.Session.SetObj(Constants.SEARCH_RECORD_LIST, ShainList);
             }
 
-            // 確認が済んだのでNULL非許容型へ再配置します
-            ShainSearchRecordList targetList = temp;
+            return RedirectToPage("/Attendance/Record/Index");
+        }
 
-            // カレントインデックスの情報を取り出し、ビューに渡します。
-            ShainSearchRecord target = targetList.GetCurrent();
+        private void Init()
+        {
+            // セッションから検索対象を取得
+            ShainList = HttpContext.Session.GetObject<ShainSearchRecordList>(Constants.SEARCH_RECORD_LIST);
+
+            // 参照対象が確認できなければここで終了
+            if (ShainList == null)
+                return;
+
+            // カレントインデックスの社員を取り出す
+            TargetShain = ShainList.GetCurrent();
+
+            // 勤務内容のリストを取得する
+            MKinmuInfoList.Add(new string[] { "", "" }); // ←社員検索にて企業コードのNotNullableが保証されている(シリアライズする際にコンストラクタの都合でNullableになっている)
+            var mKinmList = _kintaiDbContext.m_kinmus
+                .Where(e => e.KigyoCd!.Equals(TargetShain.KigyoCd) && e.ValidFlg != null && e.ValidFlg.Equals("1"))
+                .ToList();
+            foreach (var item in mKinmList)
+            {
+                MKinmuInfoList.Add(new string[] { item.KinmuCd, item.KinmuNm ?? "名称未設定" });
+            }
+
+
             // 閲覧月のデータを取得
-            DateTime currentMonth = target.GetCurrentDate();
+            DateTime currentMonth = TargetShain.GetCurrentDate();
             // 企業コードで設定をSELECT
             var setting = _kintaiDbContext.mSettings
-                .Where(e => e.KigyoCd.Equals(target.KigyoCd))
+                .Where(e => e.KigyoCd.Equals(TargetShain.KigyoCd))
                 .FirstOrDefault();
             // 設定から締め日を抽出（初期値: 99(末日))
-            int shimebi = (setting == null || setting.ShimeDt == null) 
-                ? 99 : (int)setting.ShimeDt;
+            int shimebi = (setting == null || setting.ShimeDt == null) ? 99 : (int)setting.ShimeDt;
 
             // 締め日翌日から締め日までのKinmuDt一覧を取得
             DayList calender = new DayList(currentMonth, shimebi);
@@ -58,8 +106,8 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             // 勤務データを取り込み
             var tempList = _kintaiDbContext.t_kinmus
                 .Include(e => e.MKinmu)
-                .Where(e => e.KigyoCd!.Equals(target.KigyoCd)
-                    && e.ShainNo!.Equals(target.ShainNo)
+                .Where(e => e.KigyoCd!.Equals(TargetShain.KigyoCd)
+                    && e.ShainNo!.Equals(TargetShain.ShainNo)
                     && kinmuDtList.Contains(e.KinmuDt!))
                 .OrderBy(e => e.KinmuDt)
                 .ToList();
@@ -68,7 +116,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             CultureInfo Japanese = new CultureInfo("ja-JP");
             foreach (var kinmuDt in kinmuDtList)
             {
-                var data = new Kinmuhyo();
+                var data = new Kinmuhyo(kinmuDt);
                 var day = DateTime.ParseExact(kinmuDt, "yyyyMMdd", null); // 変数kinmuDtがyyyyMMddのフォーマットであることはDayListクラスによって保証されている
                 data.Day = day.ToString("MM月dd日(ddd)", Japanese);
 
@@ -84,8 +132,12 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     continue;
                 }
 
-                    // 勤務予定
-                    if (kinmu.MKinmu != null && kinmu.MKinmu.KinmuNm != null)
+                // 勤務コード
+                if (kinmu.KinmuCd != null)
+                    data.KinmuCd = kinmu.KinmuCd;
+
+                // 勤務予定
+                if (kinmu.MKinmu != null && kinmu.MKinmu.KinmuNm != null)
                     data.Yote = kinmu.MKinmu.KinmuNm;
 
                 // 時刻フォーマットを宣言
@@ -94,7 +146,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 // 時刻
                 if (kinmu.DakokuFrDate != null)
                     data.DakokuStart = ((DateTime)kinmu.DakokuFrDate).ToString(timeFormat);
-                if(kinmu.DakokuToDate != null)
+                if (kinmu.DakokuToDate != null)
                     data.DakokuEnd = ((DateTime)kinmu.DakokuToDate).ToString(timeFormat);
                 if (kinmu.KinmuFrDate != null)
                     data.KinmuStart = ((DateTime)kinmu.KinmuFrDate).ToString(timeFormat);
@@ -120,25 +172,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 // 作成完了・リストに追加
                 DataList.Add(data);
             }
-
-            return Page();
         }
-
-        public void OnPost()
-        {
-
-        }
-        /*
-        private DateTime GetShimeStartDate()
-        {
-
-        }
-
-        private DateTime GetShimeEndDate()
-        {
-
-        }
-        */
 
         public string MinutesToString(int val)
         {
@@ -150,9 +184,10 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
     public class Kinmuhyo
     {
-        public Kinmuhyo()
+        public Kinmuhyo(string kinmuDt)
         {
-            Day = DakokuStart
+            Day = KinmuCd
+                = DakokuStart
                 = DakokuEnd
                 = KinmuStart
                 = KinmuEnd
@@ -162,9 +197,11 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 = Biko
                 = "";
             Yote = "未設定";
+            KinmuDt = kinmuDt;
         }
-
+        public string KinmuCd { get; set; }
         public string Day { get; set; }
+        public string KinmuDt;
         public string Yote { get; set; }
         public string DakokuStart { get; set; }
         public string DakokuEnd { get; set; }
