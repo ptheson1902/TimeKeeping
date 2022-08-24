@@ -61,7 +61,8 @@ namespace UNN_Ki_001.Data.Models
                     .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuToDate >((DateTime)KinmuToDate).ToUniversalTime())
                     .OrderBy(e => e.KinmuToDate)
                     .FirstOrDefault();
-                if (tgt != null && tgt.KinmuFrDate < KinmuToDate)
+                // TODO: 注意点
+                if (tgt != null && tgt.KinmuFrDate > KinmuToDate)
                 {
                     throw new Exception("直後の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。");
                 }
@@ -100,12 +101,21 @@ namespace UNN_Ki_001.Data.Models
             {
                 // 総労働時間の計算
                 Sorodo = (int)((DateTime)KinmuToDate - (DateTime)KinmuFrDate).TotalMinutes - Kyukei;
-
+/*                if(
+                    master != null 
+                    && master.KinmuFrTm != null 
+                    && master.KinmuToTm != null
+                    && int.Parse(master.KinmuFrTm))
+                )*/
                 // 控除時間の計算
                 Kojo = Shotei - Sorodo;
                 if(Kojo < 0)
                 {
                     Kojo = 0;
+                }
+                else
+                {
+                    Shotei = Sorodo;
                 }
             }
         }
@@ -236,11 +246,11 @@ namespace UNN_Ki_001.Data.Models
                 }
 
                 // 休憩時間を勤務実績時間の枠に押し込める
-                if (item.DakokuToDate > kinmuToDate || item.DakokuFrDate > item.DakokuToDate) // 休憩終わり時間
+                if (item.DakokuToDate > kinmuToDate) // 休憩終わり時間
                 {
                     item.DakokuToDate = kinmuToDate;
                 }
-                if (item.DakokuFrDate < kinmuFrDate || item.DakokuFrDate > item.DakokuToDate) // 休憩開始時間
+                if (item.DakokuFrDate < kinmuFrDate) // 休憩開始時間
                 {
                     item.DakokuFrDate = kinmuFrDate;
                 }
@@ -295,30 +305,6 @@ namespace UNN_Ki_001.Data.Models
 
         [Column("kinmu_to_date")]
         public DateTime? KinmuToDate { get; private set; }
-
-        [Column("dakoku_fr_dt")]
-        public string? DakokuFrDt { get; private set; }
-
-        [Column("dakoku_fr_tm")]
-        public string? DakokuFrTm { get; private set; }
-
-        [Column("dakoku_to_dt")]
-        public string? DakokuToDt { get; private set; }
-
-        [Column("dakoku_to_tm")]
-        public string? DakokuToTm { get; private set; }
-
-        [Column("kinmu_fr_dt")]
-        public string? KinmuFrDt { get; private set; }
-
-        [Column("kinmu_fr_tm")]
-        public string? KinmuFrTm { get; private set; }
-
-        [Column("kinmu_to_dt")]
-        public string? KinmuToDt { get; private set; }
-
-        [Column("kinmu_to_tm")]
-        public string? KinmuToTm { get; private set; }
 
         [Column("shotei")]
         public int? Shotei { get; set; }
