@@ -2,16 +2,17 @@
 @model UNN_Ki_001.Pages.VariousMaster.KinmuModel
 @{
 }
-<h1>勤務マスタメンテナンス</h1>
+
 <div>
-   <div class="container mt-5" style="max-width: 70%">
+   <div class="container mt-5" style="max-width: 50%">
+       <h3>勤務マスタメンテナンス</h3>
       <form class="card mb-4" method="Post">
          <div class="card-body">
             <div class="row mb-3 align-items-center">
-               <label class="col-5" for="shokushu_cd">勤務コード</label>
+               <label class="col-3" for="shokushu_cd">勤務コード</label>
                <input
                   type="text"
-                  class="form-control"
+                  class="col-3"
                   name="kinmu_cd"
                   size="30"
                   maxlength="10"
@@ -20,27 +21,27 @@
                 />
             </div>
             <div class="row mb-3 align-items-center">
-               <label class="col-5">勤務名</label>
+               <label class="col-3">勤務名</label>
                <input
                   type="text"
-                  class="form-control"
+                  class="col-3"
                   name="kinmu_nm"
                   id="kinmu_nm"
                   value = "@Model.Kinmu_nm"
                />
             </div>
              <div class="row mb-3 align-items-center">
-               <label class="col-5">勤務分類</label>
-               <input
-                  type="text"
-                  class="form-control"
-                  name="kinmu_bunrui"
-                  id="kinmu_bunrui"
-                  value = "@Model.Kinmu_bunrui"
-               />
+               <label class="col-3">勤務分類</label>
+               <select class="col-3" name="kinmu_bunrui">
+                    <option></option>
+                    @foreach (var item in @Model.Kinmu)
+                    {
+                        <option  value="@item.KinmuBunrui" >@item.KinmuBunrui</option>
+                    }
+                </select>
             </div>
             <div class="row mb-3 align-items-center">
-               <div class="col-10">
+               <div class="col-7">
                   有効/無効
                      <label for="valid_flg">有効</label>
                      <input
@@ -82,8 +83,8 @@
             </div>
          </div>
       </form>
-     @* <div class="text-black">@Model.Message</div>
-      <div class="text-danger">@Model.ErrorMessage</div>*@
+     <div class="text-black">@Model.Message</div>
+      @*<div class="text-danger">@Model.ErrorMessage</div>*@
       <div class="p-2">
          <table class="table table-bordered" id="mytable">
             <thead class="table-primary">
@@ -162,10 +163,10 @@
          <form class="card mb-4" method="Post">
             <div class="card-body">
                <div class=" mb-3 align-items-center">
-                  <label for="kinmu_cd1">勤務コード</label>
+                  <label for="kinmu_cd1" class="col-3">勤務コード</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class=" col-3"
                      name="kinmu_cd1"
                      size="30"
                      maxlength="10"
@@ -173,67 +174,88 @@
                   />
                </div>
                <div class=" mb-3 align-items-center">
-                  <label  for="kinmu_nm1">勤務名</label>
+                  <label  for="kinmu_nm1" class="col-3">勤務名</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class="col-3"
                      name="kinmu_nm1"
                      id="kinmu_nm1"
                   />
                </div>
                <div class=" mb-3 align-items-center">
-                  <label for="kinmu_bunrui1">勤務分類</label>
-                  <input
-                     type="text"
-                     class="form-control"
-                     name="kinmu_bunrui1"
-                     id="kinmu_bunrui1"
-                  />
+                  <label for="kinmu_bunrui" class="col-3">勤務分類</label>
+                  <select class="col-3" name="kinmu_bunrui">
+                    <option></option>
+                    @foreach (var item in @Model.Kinmu)
+                    {
+                        <option  value="@item.KinmuBunrui" >@item.KinmuBunrui</option>
+                    }
+                </select>
                </div>
                <div class=" mb-3 align-items-center">
-                 <label for="appt-time">勤務時間</label>
+                 <label for="appt-time" class="col-3">勤務時間</label>
                  <input id="appt-time" type="time" name="kinmu_fr_tm1" value="">
                  <input id="appt-time" type="time" name="kinmu_to_tm1" value="">
                </div>
                <div class=" mb-3 align-items-center">
-                 <label for="appt-time">休憩時間1</label>
+                 <label for="appt-time" class="col-3">休憩時間1</label>
                  <input id="appt-time" type="time" name="kyuke1_fr_tm1" value="">
                  <input id="appt-time" type="time" name="kyuke1_to_tm1" value="">
                </div>
                <div class=" mb-3 align-items-center">
-                 <label for="shotei_tm">所定時間</label>
+                 <label for="shotei_tm" class="col-3">所定時間</label>
                </div>
                <div class=" mb-3 align-items-center">
                  <label for="dakoku_settei">打刻設定</label>
                  　<input type="checkbox" name="kyukei_auto_flg1" value="0">
-                   <label>休憩打刻を退勤打刻時に自動追加する</label>
+                   <label class="">休憩打刻を退勤打刻時に自動追加する</label>
                    <input type="checkbox" name="kinmu_fr_ctrl_flg1" value="1">
-                   <label>始業前打刻を勤務開始時間にあわせる</label>
+                   <label class="">始業前打刻を勤務開始時間にあわせる</label>
                </div>
                <div class=" mb-3 align-items-center">
                  <label for="marume">打刻丸め設定</label>
                  <div>
-                     <label>始業</label>
-                     <input type="text" name="kinmu_fr_marume_kbn1" value="">
-                     <input type="text" name="kinmu_fr_marume_tm1" value="">
+                     <label class="col-3">始業</label>
+                     <select class="col-3" name="kinmu_fr_marume_kbn">
+                         <option></option>
+                         <option value="0">丸めなし</option>
+                         <option value="1">切り下げる</option>
+                         <option value="2">切り上げる</option>
+                     </select>
+                     <input type="text" name="kinmu_fr_marume_tm1" class="col-2">
                      <label>分単位</label>
                  </div>
                  <div>
-                     <label>始業</label>
-                     <input type="text" name="kinmu_to_marume_kbn1" value="">
-                     <input type="text" name="kinmu_to_marume_tm1" value="">
+                     <label class="col-3">終業</label>
+                     <select class="col-3" name="kinmu_to_marume_kbn">
+                         <option></option>
+                         <option value="0">丸めなし</option>
+                         <option value="1">切り下げる</option>
+                         <option value="2">切り上げる</option>
+                     </select>
+                     <input type="text" name="kinmu_to_marume_tm1" class="col-2">
                      <label>分単位</label>
                  </div>
                  <div>
-                     <label>休憩開始</label>
-                     <input type="text" name="kyukei_fr_marume_kbn1" value="">
-                     <input type="text" name="kinmu_fr_marume_tm1" value="">
+                     <label class="col-3">休憩開始</label>
+                     <select class="col-3" name="kinmu_fr_marume_kbn">
+                         <option></option>
+                         <option value="0">丸めなし</option>
+                         <option value="1">切り下げる</option>
+                         <option value="2">切り上げる</option>
+                     </select>
+                     <input type="text" name="kyukei_fr_marume_tm1" class="col-2">
                      <label>分単位</label>
                  </div>
                   <div>
-                     <label>休憩終了</label>
-                     <input type="text" name="kyukei_to_marume_kbn1" value="">
-                     <input type="text" name="kinmu_to_marume_tm1" value="">
+                     <label class="col-3">休憩終了</label>
+                    <select class="col-3" name="kinmu_to_marume_kbn">
+                         <option></option>
+                         <option value="0">丸めなし</option>
+                         <option value="1">切り下げる</option>
+                         <option value="2">切り上げる</option>
+                     </select>
+                     <input type="text" name="kyukei_to_marume_tm1" class="col-2">
                      <label>分単位</label>
                  </div>
                </div>
