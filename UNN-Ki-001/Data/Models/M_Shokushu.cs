@@ -8,7 +8,7 @@ namespace UNN_Ki_001.Data.Models
     public class M_Shokushu
     {
         
-        /*public M_Shokushu( string shokushu_cd,string shokushu_nm, string valid_flg , string kigyo_cd)
+       /* public M_Shokushu( string shokushu_cd,string shokushu_nm, string valid_flg , string kigyo_cd)
         {
             KigyoCd = kigyo_cd;
             ShokushuCd = shokushu_cd;

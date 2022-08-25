@@ -8,40 +8,30 @@ namespace UNN_Ki_001.Pages.VariousMaster
 {
     public class KinmuModel : BasePageModel
     {
-        private readonly KintaiDbContext _context;
-        private readonly ApplicationDbContext context1;
         public List<Display> Data = new List<Display>();
+
+        public List<M_Kinmu> _targetList = new();
 
         public KinmuModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
         }
 
         public List<M_Kinmu> Kinmu { get; set; }
-        public string? Kinmu_cd { get; set; }
-        public string? Kinmu_nm { get; set; }
-        public string? Valid_flg { get; set; }
-        public string? Kinmu_bunrui { get; set; }
+        [BindProperty]
+        public string? KinmuCd { get; set; }
+        [BindProperty]
+        public string? KinmuNm { get; set; }
+        [BindProperty]
+        public string? ValidFlg { get; set; }
+        [BindProperty]
+        public string? KinmuBunrui { get; set; }
         public string? Message { get; set; }
+        
         public void OnGet()
         {
-            var shain = GetCurrentUserShainAsync().Result;
-            Kinmu = (from e in _kintaiDbContext.m_kinmus
-                     where e.KigyoCd!.Equals(shain!.KigyoCd)
-                     orderby e.KinmuBunrui                   
-                     select e).ToList();
-            
-            
-
         }                                                     
         public void OnPost()
         {
-            var shain = GetCurrentUserShainAsync().Result;
-            Kinmu = 
-                (from e in _kintaiDbContext.m_kinmus
-                     where e.KigyoCd!.Equals(shain!.KigyoCd)
-                     orderby e.KinmuBunrui                   
-                     select e).ToList();
-
 
             var action = Request.Form["action"];
             switch (action)
@@ -79,65 +69,50 @@ namespace UNN_Ki_001.Pages.VariousMaster
         //@ŒŸõ
         private void Search()
         {
-            Kinmu_cd = Request.Form["kinmu_cd"];
-            Kinmu_nm = Request.Form["kinmu_nm"];
-            Kinmu_bunrui = Request.Form["kinmu_bunrui"];
-            Valid_flg = Request.Form["valid_flg"];
-            var no = from m_kinmu in _kintaiDbContext.m_kinmus
-                     orderby m_kinmu.KinmuCd
-                     select new { m_kinmu.KinmuCd, m_kinmu.KinmuNm, m_kinmu.ValidFlg , m_kinmu.KinmuBunrui ,m_kinmu.KinmuFrTm , m_kinmu.KinmuToTm , m_kinmu.Kyukei1FrTm , m_kinmu.Kyukei1ToTm};
-            // ðŒ‚É‚æ‚éŒŸõ‚·‚é‚±‚Æ(valuenull‚ÍŒŸõðŒ‚É‚È‚ç‚È‚¢‚±‚ÆB)
-            if (!string.IsNullOrEmpty(Kinmu_cd))
-            {
-                no = no.Where(e => e.KinmuCd.Equals(Kinmu_cd));
-            }
-
-            if (!string.IsNullOrEmpty(Kinmu_nm))
-            {
-                no = no.Where(e => e.KinmuNm.Equals(Kinmu_nm));
-            }
-            if (!string.IsNullOrEmpty(Kinmu_bunrui))
-            {
-                no = no.Where(e => e.KinmuBunrui.Equals(Kinmu_bunrui));
-            }
-
-            if (!string.IsNullOrEmpty(Valid_flg))
-            {
-                no = no.Where(e => e.ValidFlg.Equals(Valid_flg));
-            }
-
-            foreach (var item in no)
-            {
-
-                Display d = new Display();
-                d.kinmu_cd = item.KinmuCd;
-                d.kinmu_nm = item.KinmuNm;
-                d.kinmu_bunrui = item.KinmuBunrui;
-                d.valid_flg = item.ValidFlg;
-                d.kinmu_fr_tm = item.KinmuFrTm;
-                d.kinmu_to_tm = item.KinmuToTm;
-                d.kyuke1_fr_tm = item.Kyukei1FrTm;
-                d.kyuke1_to_tm = item.Kyukei1ToTm;
-                Data.Add(d);
-            }
-
+            _targetList = _kintaiDbContext.m_kinmus
+                .WhereIf(KinmuNm != null, e => e.KinmuNm!.Equals(KinmuNm!))
+                .WhereIf(KinmuCd != null, e => e.KinmuCd!.Equals(KinmuCd!))
+                .WhereIf(KinmuBunrui != null, e => e.KinmuBunrui!.Equals(KinmuBunrui!))
+                .WhereIf(ValidFlg != null, e => e.ValidFlg!.Equals(ValidFlg!))
+                .ToList();
         }
         private void Register()
         {
-            string kigyocd1 = "C001";
-            string kinmu_cd1 = Request.Form["kinmu_cd1"];
-            string kinmu_nm1 = Request.Form["kinmu_nm1"];
-            string kinmu_bunrui1 = Request.Form["kinmu_bunrui1"];
-            string kinmu_fr_tm1 = Request.Form["kinmu_fr_tm1"];
-            string kinmu_to_tm1 = Request.Form["kinmu_to_tm1"];
-            string kyuke1_fr_tm1 = Request.Form["kyuke1_fr_tm1"];
-            string kyuke1_to_tm1 = Request.Form["kyuke1_to_tm1"];
-            string kyukei_auto_flg1 = Request.Form["kyukei_auto_flg1"];
-            string kinmu_fr_ctrl_flg1 = Request.Form["kinmu_fr_ctrl_flg1"];
+            string kigyocd = "C001";
+            string kinmu_cd = Request.Form["kinmu_cd"];
+            string kinmu_nm = Request.Form["kinmu_nm"];
+            string kinmu_bunrui = Request.Form["kinmu_bunrui"];
+            string kinmu_fr_kbn = Request.Form["kinmu_fr_kbn"];
+            string kinmu_to_kbn = Request.Form["kinmu_to_kbn"];
+            string kinmu_fr_tm = Request.Form["kinmu_fr_tm"];
+            string kinmu_to_tm = Request.Form["kinmu_to_tm"];
+            string kyukei1_fr_kbn = Request.Form["kyukei1_fr_kbn"];
+            string kyukei1_to_kbn = Request.Form["kyukei1_to_kbn"];
+            string kyukei2_fr_kbn = Request.Form["kyukei2_fr_kbn"];
+            string kyukei2_to_kbn = Request.Form["kyukei2_to_kbn"];
+            string kyukei3_fr_kbn = Request.Form["kyukei3_fr_kbn"];
+            string kyukei3_to_kbn = Request.Form["kyukei3_to_kbn"];
+            string kyuke1_fr_tm = Request.Form["kyukei1_fr_tm"];
+            string kyuke1_to_tm = Request.Form["kyukei1_to_tm"];
+            string kyuke2_fr_tm = Request.Form["kyukei2_fr_tm"];
+            string kyuke2_to_tm = Request.Form["kyukei2_to_tm"];
+            string kyuke3_fr_tm = Request.Form["kyukei3_fr_tm"];
+            string kyuke3_to_tm = Request.Form["kyukei3_to_tm"];
+            string kyukei_auto_flg = Request.Form["kyukei_auto_flg1"];
+            string kinmu_fr_ctrl_flg = Request.Form["kinmu_fr_ctrl_flg1"];
+            string kinmu_fr_marume_kbn = Request.Form["kinmu_fr_marume_kbn"];
+            string kinmu_to_marume_kbn = Request.Form["kinmu_to_marume_kbn"];
+            string kinmu_fr_marume_tm = Request.Form["kinmu_fr_marume_tm"];
+            string kinmu_to_marume_tm = Request.Form["kinmu_to_marume_tm"];
+            string kyukei_fr_marume_kbn = Request.Form["kyukei_fr_marume_kbn"];
+            string kyukei_to_marume_kbn = Request.Form["kyukei_to_marume_kbn"];
+            string kyukei_fr_marume_tm = Request.Form["kyukei_fr_marume_tm"];
+            string kyukei_to_marume_tm = Request.Form["kyukei_to_marume_tm"];
+            string valid_flg = Request.Form["valid_flg1"];
 
-            M_Kinmu mk = new M_Kinmu( kigyocd1 , kinmu_cd1, kinmu_nm1 , kinmu_bunrui1);
-            _context.m_kinmus.Add(mk);
-            var a = _context.SaveChanges();
+            M_Kinmu mk = new M_Kinmu( kigyocd , kinmu_cd, kinmu_nm , kinmu_bunrui, kinmu_fr_tm.Replace(":",""),valid_flg);
+            _kintaiDbContext.m_kinmus.Add(mk);
+            var a = _kintaiDbContext.SaveChanges();
             if (a < 0)
             {
                 Message = "“o˜^‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";

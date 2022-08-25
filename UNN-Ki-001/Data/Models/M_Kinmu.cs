@@ -7,24 +7,51 @@ namespace UNN_Ki_001.Data.Models
     [Table("m_kinmu", Schema = "public")]
     public class M_Kinmu : Reloadable
     {
-        public M_Kinmu(string KigyoCd, string KinmuCd , string KinmuNm , string KinmuBunrui/* ,
-            string KinmuFrTm , string KinmuToTm , string Kyukei1FrTm , string Kyukei1ToTm ,
-            string KyukeiAutoFlg , string KinmuFrCtrlFlg , string KinmuFrMarumeKbn , string KinmuFrMarumeTm ,
-            string KinmuToMarumeKbn , string KinmuToMarumeTm , string KyukeiFrMarumeKbn ,
-            string KyukeiFrMarumeTm, string KyukeiToMarumeKbn , string KyukeiToMarumeTm*/)
+        public M_Kinmu(string KigyoCd, string KinmuCd , string KinmuNm , string KinmuBunrui/*, string KinmuFrKbn , string KinmuToKbn*/,
+            string KinmuFrTm/*, string KinmuToTm ,string Kyukei1FrKbn,string Kyukei1ToKbn, string Kyukei1FrTm , string Kyukei1ToTm ,
+            string Kyukei2FrKbn, string Kyukei2ToKbn, string Kyukei2FrTm, string Kyukei2ToTm,
+            string Kyukei3FrKbn, string Kyukei3ToKbn, string Kyukei3FrTm, string Kyukei3ToTm,
+            string KyukeiAutoFlg , string KinmuFrCtrlFlg , string KinmuFrMarumeKbn , int KinmuFrMarumeTm ,
+            string KinmuToMarumeKbn , int KinmuToMarumeTm , string KyukeiFrMarumeKbn ,
+            int KyukeiFrMarumeTm, string KyukeiToMarumeKbn , int KyukeiToMarumeTm*/, string ValidFlg)
         {
             this.KigyoCd = KigyoCd;
             this.KinmuCd = KinmuCd;
             this.KinmuNm = KinmuNm;
             this.KinmuBunrui = KinmuBunrui;
-           /* this.KinmuFrTm = KinmuFrTm;
+            this.KinmuFrTm = KinmuFrTm;
+            this.ValidFlg = ValidFlg;
+            this.KinmuFrTm = KinmuFrTm;
             this.KinmuToTm = KinmuToTm;
             this.Kyukei1FrTm = Kyukei1FrTm;
             this.Kyukei1ToTm = Kyukei1ToTm;
-            this.KyukeiAutoFlg = KyukeiAutoFlg;*/
-
+            this.KyukeiAutoFlg = KyukeiAutoFlg;
+            this.Kyukei1FrKbn = Kyukei1FrKbn;
+            this.Kyukei1ToKbn = Kyukei1ToKbn;
+            this.Kyukei1ToKbn = Kyukei1ToKbn;
+            this.KinmuFrKbn = KinmuFrKbn;
+            this.Kyukei1FrTm = Kyukei1FrTm;
+            this.KinmuToKbn = KinmuToKbn;
+            this.Kyukei2FrKbn = Kyukei2FrKbn;
+            this.Kyukei3FrKbn = Kyukei3FrKbn;
+            this.Kyukei3ToKbn = Kyukei3ToKbn;
+            this.Kyukei2ToKbn = Kyukei2ToKbn;
+            this.Kyukei2FrTm = Kyukei2FrTm;
+            this.Kyukei2FrTm = Kyukei2FrTm;
+            this.Kyukei2ToTm = Kyukei2ToTm;
+            this.Kyukei3FrTm = Kyukei3FrTm;
+            this.Kyukei3ToTm = Kyukei3ToTm;
+            this.KinmuToMarumeKbn = KinmuToMarumeKbn;
+            this.KinmuFrCtrlFlg = KinmuFrCtrlFlg;
+            this.KinmuFrMarumeKbn = KinmuFrMarumeKbn;          
+            this.KyukeiFrMarumeKbn = KyukeiFrMarumeKbn;
+            this.KinmuFrMarumeTm = KinmuFrMarumeTm;
+            this.KinmuToMarumeTm = KinmuToMarumeTm;
+            this.KyukeiFrMarumeTm = KyukeiFrMarumeTm;
+            this.KyukeiToMarumeKbn = KyukeiToMarumeKbn;
+            this.KyukeiToMarumeTm = KyukeiToMarumeTm;
         }
-       
+
 
 
         protected override void Reload(KintaiDbContext context)

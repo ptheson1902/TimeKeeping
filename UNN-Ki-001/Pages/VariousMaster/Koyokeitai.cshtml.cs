@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using UNN_Ki_001.Data;
@@ -5,12 +6,15 @@ using UNN_Ki_001.Data.Models;
 
 namespace UNN_Ki_001.Pages.VariousMaster
 {
-    public class KoyokeitaiModel : PageModel
+    public class KoyokeitaiModel : BasePageModel
     {
-        private readonly KintaiDbContext _context;
-        private readonly ApplicationDbContext context1;
         public List<Display> Data = new List<Display>();
         public Display? Data1;
+
+        public KoyokeitaiModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
+        {
+        }
+
         public string? Message { get; set; }
         public string? ErrorMessage { get; set; }
         public string? Koyokeitai_cd { get; set; }
@@ -18,24 +22,18 @@ namespace UNN_Ki_001.Pages.VariousMaster
         public string? Valid_flg { get; set; }
 
 
-        public KoyokeitaiModel(UNN_Ki_001.Data.KintaiDbContext context, ApplicationDbContext application)
-        {
-            _context = context;
-            context1 = application;
-        }
-
         public void OnGet()
         {
 
         }
         public void OnPost()
         {
-
+            var shain = GetCurrentUserShainAsync().Result;
             var action = Request.Form["action"];
             switch (action)
             {
                 case "search":
-                    Search();
+                    Search(shain);
                     break;
                 default: break;
             }
@@ -43,7 +41,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
             switch (register_action)
             {
                 case "register":
-                    Register();
+                    Register(shain);
                     break;
                 default: break;
             }
@@ -51,7 +49,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
             switch (update_action)
             {
                 case "update":
-                    Update();
+                    Update(shain);
                     break;
                 default: break;
             }
@@ -59,18 +57,19 @@ namespace UNN_Ki_001.Pages.VariousMaster
             switch (delete_action)
             {
                 case "delete":
-                    Delete();
+                    Delete(shain);
                     break;
                 default: break;
             }
         }
         //　検索
-        private void Search()
+        private void Search(M_Shain shain)
         {
             Koyokeitai_cd = Request.Form["koyokeitai_cd"];
             Koyokeitai_nm = Request.Form["koyokeitai_nm"];
             Valid_flg = Request.Form["valid_flg"];
-            var no = from m_koyokeitai in _context.m_koyokeitais
+            var no = from m_koyokeitai in _kintaiDbContext.m_koyokeitais
+                     where m_koyokeitai.KigyoCd.Equals(shain.KigyoCd)
                      orderby m_koyokeitai.KoyokeitaiCd
                      select new { m_koyokeitai.KoyokeitaiCd, m_koyokeitai.KoyokeitaiNm, m_koyokeitai.ValidFlg };
             // 条件による検索すること(value＝nullは検索条件にならないこと。)
@@ -101,7 +100,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
 
         }
         // 新規
-        private void Register()
+        private void Register(M_Shain shain)
         {
             string koyokeitai_cd1 = Request.Form["koyokeitai_cd1"];
             string koyokeitai_nm1 = Request.Form["koyokeitai_nm1"];
@@ -122,8 +121,8 @@ namespace UNN_Ki_001.Pages.VariousMaster
             if (valid_flg1 != null && koyokeitai_nm1 != "" && koyokeitai_cd1 != "")
             {
                 M_Koyokeitai kykt = new(koyokeitai_cd1, koyokeitai_nm1, valid_flg1, kigyo_cd1);
-                _context.m_koyokeitais.Add(kykt);
-                var a = _context.SaveChanges();
+                _kintaiDbContext.m_koyokeitais.Add(kykt);
+                var a = _kintaiDbContext.SaveChanges();
 
                 if (a < 0)
                 {
@@ -136,7 +135,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
             }
         }
         //　更新
-        private void Update()
+        private void Update(M_Shain shain)
         {
             string koyokeitai_cd2 = Request.Form["koyokeitai_cd2"];
             string koyokeitai_nm2 = Request.Form["koyokeitai_nm2"];
@@ -151,10 +150,10 @@ namespace UNN_Ki_001.Pages.VariousMaster
             }
             if (valid_flg2 != null && koyokeitai_nm2 != "")
             {
-                M_Koyokeitai kykt = _context.m_koyokeitais.Where(e => e.KoyokeitaiCd.Equals(koyokeitai_cd2)).FirstOrDefault();
+                M_Koyokeitai kykt = _kintaiDbContext.m_koyokeitais.Where(e => e.KoyokeitaiCd.Equals(koyokeitai_cd2)&& e.KigyoCd.Equals(shain.KigyoCd)).FirstOrDefault();
                 kykt.KoyokeitaiNm = koyokeitai_nm2;
-                _context.m_koyokeitais.Update(kykt);
-                var a = _context.SaveChanges();
+                _kintaiDbContext.m_koyokeitais.Update(kykt);
+                var a = _kintaiDbContext.SaveChanges();
                 if (a < 0)
                 {
                     Message = "更新できませんでした。";
@@ -167,7 +166,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
 
         }
         // 削除
-        private void Delete()
+        private void Delete(M_Shain shain)
         {
             string koyokeitai_cd2 = Request.Form["koyokeitai_cd2"];
             string koyokeitai_nm2 = Request.Form["koyokeitai_nm2"];
@@ -182,10 +181,10 @@ namespace UNN_Ki_001.Pages.VariousMaster
             }
             if (valid_flg2 != null && koyokeitai_nm2 != "")
             {
-                M_Koyokeitai kykt = _context.m_koyokeitais.Where(e => e.KoyokeitaiCd.Equals(koyokeitai_cd2)).FirstOrDefault();
+                M_Koyokeitai kykt = _kintaiDbContext.m_koyokeitais.Where(e => e.KoyokeitaiCd.Equals(koyokeitai_cd2) && e.KigyoCd.Equals(shain.KigyoCd)).FirstOrDefault();
                 kykt.KoyokeitaiNm = koyokeitai_nm2;
-                _context.m_koyokeitais.Remove(kykt);
-                var a = _context.SaveChanges();
+                _kintaiDbContext.m_koyokeitais.Remove(kykt);
+                var a = _kintaiDbContext.SaveChanges();
                 if (a < 0)
                 {
                     Message = "削除できませんでした。";

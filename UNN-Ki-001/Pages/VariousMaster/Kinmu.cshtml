@@ -17,7 +17,7 @@
                   size="30"
                   maxlength="10"
                   id="kinmu_cd"
-                  value = "@Model.Kinmu_cd"
+                  value = "@Model.KinmuCd"
                 />
             </div>
             <div class="row mb-3 align-items-center">
@@ -27,17 +27,21 @@
                   class="col-3"
                   name="kinmu_nm"
                   id="kinmu_nm"
-                  value = "@Model.Kinmu_nm"
+                  value = "@Model.KinmuNm"
                />
             </div>
              <div class="row mb-3 align-items-center">
                <label class="col-3">勤務分類</label>
-               <select class="col-3" name="kinmu_bunrui">
-                    <option></option>
-                    @foreach (var item in @Model.Kinmu)
-                    {
-                        <option  value="@item.KinmuBunrui" >@item.KinmuBunrui</option>
-                    }
+               <select class="col-3" name="kinmu_bunrui" id="kinmu_bunrui">
+                    
+                        <option  value="01" selected>通常勤務</option>
+                        <option  value="02" selected>所定休日</option>
+                        <option  value="03" selected>法定休日</option>
+                        <option  value="05" selected>振替休日</option>
+                        <option  value="06" selected>代休</option>
+                        <option  value="07" selected>有給休暇</option>
+                        <option  value="08" selected>午前半休</option>
+                        <option selected></option>
                 </select>
             </div>
             <div class="row mb-3 align-items-center">
@@ -49,7 +53,7 @@
                         name="valid_flg"
                         value="1"
                         id="valid_flg"
-                        @(Model.Valid_flg =="1" ? "checked" : "")
+                        @(Model.ValidFlg =="1" ? "checked" : "")
                      />
                      <label for="valid_flg">無効</label>
                      <input
@@ -57,7 +61,7 @@
                         name="valid_flg"
                         value="0"
                         id="valid_flg"
-                        @(Model.Valid_flg =="0" ? "checked" : "")
+                        @(Model.ValidFlg =="0" ? "checked" : "")
                      />
                </div>
             </div>
@@ -98,46 +102,46 @@
                </tr>
             </thead>
             <tbody class="shokushuData ">
-                @if (Model.Data != null) { 
-                    @foreach (var kinmu in Model.Data) {
+                @if (@Model._targetList!= null) { 
+                    @foreach (var kinmu in Model._targetList) {
                         <tr>
                             <td  data-bs-toggle="modal" data-bs-target="#updateModal">
-                                <div class="shokushu_cd text-decoration-underline text-primary">@kinmu.kinmu_cd</div>
+                                <div class="shokushu_cd text-decoration-underline text-primary">@kinmu.KinmuCd</div>
                             </td>
-                            <td>@kinmu.kinmu_nm</td>
-                            @if(@kinmu.kinmu_bunrui == "01")
+                            <td>@kinmu.KinmuNm</td>
+                            @if(@kinmu.KinmuBunrui == "01")
                                 {
                                     <td>通常勤務</td>
                                 }
-                                else if(@kinmu.kinmu_bunrui == "02")
+                                else if(@kinmu.KinmuBunrui == "02")
                                 {
                                     <td>所定休日</td>
                                 }
-                                else if(@kinmu.kinmu_bunrui == "03")
+                                else if(@kinmu.KinmuBunrui == "03")
                                 {
                                     <td>法定休日</td>
                                 }
                                 
-                                else if(@kinmu.kinmu_bunrui == "05")
+                                else if(@kinmu.KinmuBunrui == "05")
                                 {
                                     <td>振替休日</td>
                                 }
-                                else if(@kinmu.kinmu_bunrui == "06")
+                                else if(@kinmu.KinmuBunrui == "06")
                                 {
                                     <td>代休</td>
                                 }
-                                else if(@kinmu.kinmu_bunrui == "07")
+                                else if(@kinmu.KinmuBunrui == "07")
                                 {
                                     <td>A有給休暇</td>
                                 }
-                                else if(@kinmu.kinmu_bunrui == "08")
+                                else if(@kinmu.KinmuBunrui == "08")
                                 {
                                     <td>午前半休</td>
                                 }
-                                <td> @kinmu.kinmu_fr_tm-@kinmu.kinmu_to_tm</td>
-                                <td> @kinmu.kyuke1_fr_tm-@kinmu.kyuke1_to_tm</td>
+                                <td> @kinmu.KinmuFrTm-@kinmu.KinmuToTm</td>
+                                <td> @kinmu.Kyukei1FrTm-@kinmu.Kyukei1ToTm</td>
                             <td>
-                                <input type="checkbox" value="@kinmu.valid_flg" @(kinmu.valid_flg == "0" ? "" : "checked") disabled />
+                                <input type="checkbox" value="@kinmu.ValidFlg" @(kinmu.ValidFlg == "0" ? "" : "checked") disabled />
                             </td>
                         </tr>
                     }
@@ -184,23 +188,88 @@
                </div>
                <div class=" mb-3 align-items-center">
                   <label for="kinmu_bunrui" class="col-3">勤務分類</label>
-                  <select class="col-3" name="kinmu_bunrui">
-                    <option></option>
-                    @foreach (var item in @Model.Kinmu)
-                    {
-                        <option  value="@item.KinmuBunrui" >@item.KinmuBunrui</option>
-                    }
+                  <select class="col-3" name="kinmu_bunrui1">
+                        <option></option>
+                        <option  value="01" selected>通常勤務</option>
+                        <option  value="02" selected>所定休日</option>
+                        <option  value="03" selected>法定休日</option>
+                        <option  value="05" selected>振替休日</option>
+                        <option  value="06" selected>代休</option>
+                        <option  value="07" selected>有給休暇</option>
+                        <option  value="08" selected>午前半休</option>
                 </select>
                </div>
                <div class=" mb-3 align-items-center">
                  <label for="appt-time" class="col-3">勤務時間</label>
+                 <select class="col-2" name="kinmu_fr_kbn">
+                     <option></option>
+                     <option value="0">当日</option>
+                     <option value="1">前日</option>
+                     <option value="2">翌日</option>
+                 </select>
                  <input id="appt-time" type="time" name="kinmu_fr_tm1" value="">
+                 -
+                 <select class="col-2" name="kinmu_to_kbn">
+                     <option></option>
+                     <option value="0">当日</option>
+                     <option value="1">前日</option>
+                     <option value="2">翌日</option>
+                  </select>
                  <input id="appt-time" type="time" name="kinmu_to_tm1" value="">
                </div>
                <div class=" mb-3 align-items-center">
                  <label for="appt-time" class="col-3">休憩時間1</label>
-                 <input id="appt-time" type="time" name="kyuke1_fr_tm1" value="">
-                 <input id="appt-time" type="time" name="kyuke1_to_tm1" value="">
+                  <select class="col-2" name="kyukei1_fr_kbn">
+                     <option></option>
+                     <option value="0">当日</option>
+                     <option value="1">前日</option>
+                     <option value="2">翌日</option>
+                 </select>
+                 <input id="appt-time" type="time" name="kyukei1_fr_tm1" value="">
+                 -
+                  <select class="col-2" name="kyukei1_to_kbn">
+                     <option></option>
+                     <option value="0">当日</option>
+                     <option value="1">前日</option>
+                     <option value="2">翌日</option>
+                 </select>
+                 <input id="appt-time" type="time" name="kyukei2_to_tm1" value="">
+               </div>
+                <div class=" mb-3 align-items-center">
+                 <label for="appt-time" class="col-3">休憩時間2</label>
+                  <select class="col-2" name="kyukei2_fr_kbn">
+                     <option></option>
+                     <option value="0">当日</option>
+                     <option value="1">前日</option>
+                     <option value="2">翌日</option>
+                 </select>
+                 <input id="appt-time" type="time" name="kyukei2_fr_tm1" value="">
+                 -
+                  <select class="col-2" name="kyukei2_to_kbn">
+                     <option></option>
+                     <option value="0">当日</option>
+                     <option value="1">前日</option>
+                     <option value="2">翌日</option>
+                 </select>
+                 <input id="appt-time" type="time" name="kyukei2_to_tm1" value="">
+               </div>
+                <div class=" mb-3 align-items-center">
+                 <label for="appt-time" class="col-3">休憩時間3</label>
+                  <select class="col-2" name="kyukei3_fr_kbn">
+                     <option></option>
+                     <option value="0">当日</option>
+                     <option value="1">前日</option>
+                     <option value="2">翌日</option>
+                 </select>
+                 <input id="appt-time" type="time" name="kyukei3_fr_tm1" value="">
+                 -
+                  <select class="col-2" name="kyukei3_to_kbn">
+                     <option></option>
+                     <option value="0">当日</option>
+                     <option value="1">前日</option>
+                     <option value="2">翌日</option>
+                 </select>
+                 <input id="appt-time" type="time" name="kyukei3_to_tm1" value="">
                </div>
                <div class=" mb-3 align-items-center">
                  <label for="shotei_tm" class="col-3">所定時間</label>
@@ -259,6 +328,27 @@
                      <label>分単位</label>
                  </div>
                </div>
+                <div class="row mb-3 align-items-center">
+               <div class="col-7">
+                  有効/無効
+                     <label for="valid_flg">有効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg1"
+                        value="1"
+                        id="valid_flg"
+                        @(Model.ValidFlg =="1" ? "checked" : "")
+                     />
+                     <label for="valid_flg">無効</label>
+                     <input
+                        type="radio"
+                        name="valid_flg1"
+                        value="0"
+                        id="valid_flg"
+                        @(Model.ValidFlg =="0" ? "checked" : "")
+                     />
+               </div>
+            </div>
              
 
                <div class="d-flex justify-content-end mt-2">
