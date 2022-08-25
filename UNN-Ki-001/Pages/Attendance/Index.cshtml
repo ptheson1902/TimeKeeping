@@ -1,9 +1,10 @@
 ﻿@page
 @model Attendance.IndexModel
+
 @{
     ViewData["Title"] = "打刻登録";
 
-    var Date = DateTime.Now.ToString("yyyy年MM月dd日(dddd)");
+    var Date = DateTime.Now.AddDays(-1).ToString("yyyy年MM月dd日(dddd)");
 }
 <div class="main d-flex justify-content-center align-items-center">
     <div

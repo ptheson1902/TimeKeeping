@@ -12,8 +12,15 @@ namespace UNN_Ki_001.Pages.Attendance.Record
     [Authorize(Policy = "Rookie")]
     public class Search : BasePageModel
     {
+        public string? Test { get; set; }
+        public string? Test1 { get; set; }
+        public string? Test2 { get; set; }
+        public List<M_Shozoku> Shozoku { get; set; }
+        public List<M_Shokushu> Shokushu { get; set; }
+        public List<M_Koyokeitai> Koyokeitai { get; set; }
         public Search(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
+            
         }
 
 
@@ -27,13 +34,12 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         public IActionResult OnGet()
         {
 
+            // 現在の社員を取得
+            var me = GetCurrentUserShainAsync().Result;
 
             // 一般権限の場合、自身のみを追加して勤務表へ
             if (!User.IsInRole("Admin"))
             {
-                // 現在の社員を取得
-                var me = GetCurrentUserShainAsync().Result;
-
                 if(me == null)
                 {
                     // 何の権限も持たない場合はIndexページへ
@@ -46,10 +52,38 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 // セッションに格納して勤務表ページへ飛ぶ
                 return SendToKinmuhyo(tempList, 0);
             }
+
+            GetData(me);
+
             return Page();
+        }
+
+        public void GetData(M_Shain? shain)
+        {
+            if(shain != null)
+            {
+                Shozoku = (from e in _kintaiDbContext.m_shozokus
+                           where e.KigyoCd!.Equals(shain!.KigyoCd)
+                           select e).ToList();
+
+                Shokushu = (from e in _kintaiDbContext.m_shokushus
+                            where e.KigyoCd.Equals(shain!.KigyoCd)
+                            select e).ToList();
+
+                Koyokeitai = (from e in _kintaiDbContext.m_koyokeitais
+                              where e.KigyoCd!.Equals(shain!.KigyoCd)
+                              select e).ToList();
+            }
+            else
+            {
+                return;
+            }
         }
         public IActionResult OnPost(string command, int index)
         {
+            // 現在の社員を取得
+            var me = GetCurrentUserShainAsync().Result;
+            GetData(me);
             // 行選択時の処理
             if (command != null && command.Equals("sub") && index >= 0)
             {
@@ -63,26 +97,31 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             }
 
             // 以下検索ボタン押下時の処理
+
+            // 入力の空白文字を削除
+            Input.ReplaceAll(" ", "");
+            Input.ReplaceAll("　", "");
+            Test = Input.ShozokuCd;
+            Test1 = Input.ShokushuCd;
+            Test2 = Input.KoyokeitaiCd;
+            
             // 社員とその関連データを一括Select
             _targetList = _kintaiDbContext.m_shains
                 .Include(shain => shain.Shokushu)
                 .Include(shain => shain.Shozoku)
                 .Include(shain => shain.Koyokeitai)
-                .WhereIf(Input.No != null, shain => shain.ShainNo.Contains(Input.No!))
-                .WhereIf(Input.Name != null, shain => (shain.NameSei + shain.NameMei).Contains(Input.Name!))
+                .WhereIf(Input.No != null, shain => shain.ShainNo.Equals(Input.No!))
+                .WhereIf(Input.Name != null, shain => (shain.NameSei + shain.NameMei).Equals(Input.Name!))
                 .WhereIf(Input.KigyoCd != null, shain => shain.KigyoCd.Contains(Input.KigyoCd!))
-                .WhereIf(Input.KoyokeitaiName != null, shain =>     // 雇用形態
+                .WhereIf(Input.KoyokeitaiCd != null, shain =>     // 雇用形態
                     shain.Koyokeitai != null
-                    && shain.Koyokeitai.KoyokeitaiNm != null
-                    && shain.Koyokeitai.KoyokeitaiNm.Contains(Input.KoyokeitaiName!))
-                .WhereIf(Input.ShozokuName != null, shain =>        // 所属
+                    && shain.Koyokeitai.KoyokeitaiCd.Equals(Input.KoyokeitaiCd!))
+                .WhereIf(Input.ShozokuCd != null, shain =>        // 所属
                     shain.Shozoku != null
-                    && shain.Shozoku.ShozokuNm != null
-                    && shain.Shozoku.ShozokuNm.Contains(Input.ShozokuName!))
-                .WhereIf(Input.ShokushuName != null, shain =>       // 職種
+                    && shain.Shozoku.ShozokuCd!.Equals(Input.ShozokuCd!))
+                .WhereIf(Input.ShokushuCd != null, shain =>       // 職種
                     shain.Shokushu != null
-                    && shain.Shokushu.ShokushuNm != null
-                    && shain.Shokushu.ShokushuNm.Contains(Input.ShokushuName!))
+                    && shain.Shokushu.ShokushuCd.Equals(Input.ShokushuCd!))
                 .OrderBy(shain => shain.ShainNo)
                 .ToList();
 
@@ -134,8 +173,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
             return RedirectToPage("/Attendance/Record/Index");
         }
-
-
+        
         public class InputModel
         {
             [Display(Name = "企業コード")]
@@ -144,12 +182,29 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             public string? No { get; set; }
             [Display(Name = "氏名")]
             public string? Name { get; set; }
+
             [Display(Name = "所属")]
-            public string? ShozokuName { get; set; }
+            public string? ShozokuCd { get; set; }
             [Display(Name = "職種")]
-            public string? ShokushuName { get; set; }
+            public string? ShokushuCd { get; set; }
             [Display(Name = "雇用形態")]
-            public string? KoyokeitaiName { get; set; }
+            public string? KoyokeitaiCd { get; set; }
+
+            public void ReplaceAll(string tgt, string val)
+            {
+                if(KigyoCd != null)
+                    KigyoCd = KigyoCd.Replace(tgt, val);
+                if (No != null)
+                    No = No.Replace(tgt, val);
+                if (Name != null)
+                    Name = Name.Replace(tgt, val);
+                if (ShozokuCd != null)
+                    ShozokuCd = ShozokuCd.Replace(tgt, val);
+                if (KoyokeitaiCd != null)
+                    KoyokeitaiCd = KoyokeitaiCd.Replace(tgt, val);
+                if (ShokushuCd != null)
+                    ShokushuCd = ShokushuCd.Replace(tgt, val);
+            }
         }
         
     }

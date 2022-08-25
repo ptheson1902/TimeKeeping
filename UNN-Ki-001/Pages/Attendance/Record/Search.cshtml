@@ -4,7 +4,7 @@
     ViewData["Title"] = "社員検索";
 }
 <script src="~/js/Attendance.Record.Search.js"></script>
-<h1>@ViewData["Title"]</h1>
+
 @*<div class="container mt-5" style="max-width: 800px">
     <form class="card mb-4" id="MainForm" method="Post">
         <!-- 識別用 -->
@@ -72,9 +72,11 @@
 
 
 
-
-    <div>
+   
+   <div>
+       
    <div class="container mt-5" style="max-width: 800px">
+       <h3 class="align-items-center">@ViewData["Title"]</h3>
       <form class="card mb-4" method="Post" id="MainForm">
          <div class="card-body">
             <!-- 識別用 -->
@@ -82,28 +84,46 @@
             <div class="row mb-3 align-items-center">
                
                 <!-- 社員番号 -->
-                <label asp-for="Input.No" for="inputNo" ></label>
-                <input asp-for="Input.No" id="inputNo" />
+                <label asp-for="Input.No" for="inputNo" class="col-3"></label>
+                <input asp-for="Input.No" id="inputNo" class="col-3" />
             </div>
             <div class="row mb-3 align-items-center">
                 <!-- 氏名 -->
-                <label asp-for="Input.Name" for="inputName" ></label>
-                <input asp-for="Input.Name" id="inputName" />
+                <label asp-for="Input.Name" for="inputName" class="col-3"></label>
+                <input asp-for="Input.Name" id="inputName"class="col-3" />
             </div>
             <div class="row mb-3 align-items-center">
                 <!-- 所属 -->
-                <label asp-for="Input.ShozokuName" for="inputShozokuName" ></label>
-                <input asp-for="Input.ShozokuName" id="inputShozokuName" />
+                <label asp-for="Input.ShozokuCd" for="inputShozokuName" class="col-3" ></label>
+                <select name="Input.ShozokuCd" class="col-3">
+                    <option></option>
+                    @foreach (var item in @Model.Shozoku)
+                    {
+                        <option value="@item.ShozokuCd" selected="@(Model.Test!=null && Model.Test!.Equals(item.ShozokuCd)  ? true : false)">@item.ShozokuNm</option>
+                    }
+                </select>
             </div>
             <div class="row mb-3 align-items-center">
                  <!-- 職種 -->
-                <label asp-for="Input.ShokushuName" for="inputShokushuName" ></label>
-                <input asp-for="Input.ShokushuName" id="inputShokushuName" />
+                <label asp-for="Input.ShokushuCd" for="inputShokushuName" class="col-3"></label>
+                <select name="Input.ShokushuCd" class="col-3">
+                    <option></option>
+                    @foreach (var item in @Model.Shokushu)
+                    {
+                        <option value="@item.ShokushuCd" selected="@(Model.Test1!=null && Model.Test1!.Equals(item.ShokushuCd)  ? true : false)">@item.ShokushuNm</option>
+                    }
+                </select>
              </div>
             <div class="row mb-3 align-items-center">
                 <!-- 雇用形態 -->
-                <label asp-for="Input.KoyokeitaiName" for="inputKoyokeitaiName" ></label>
-                <input asp-for="Input.KoyokeitaiName" id="inputKoyokeitaiName" />
+                <label asp-for="Input.KoyokeitaiCd" for="inputKoyokeitaiName" class="col-3" ></label>
+                 <select name="Input.KoyokeitaiCd" class="col-3">
+                    <option></option>
+                    @foreach (var item in @Model.Koyokeitai)
+                    {
+                        <option value="@item.KoyokeitaiCd" selected="@(Model.Test2!=null && Model.Test2!.Equals(item.KoyokeitaiCd)  ? true : false)">@item.KoyokeitaiNm</option>
+                    }
+                </select>
             </div>
             <div class="d-flex justify-content-end mt-2">
                <input type="hidden" value="search" name="action" />
@@ -113,7 +133,6 @@
             </div>        
          </div>
       </form>
-
       <div class="p-2">
          <table class="table table-bordered" id="mytable">
             <thead class="table-primary">
@@ -126,47 +145,50 @@
                </tr>
             </thead>
             <tbody class="shokushuData ">
-                @{
-                    if(Model._targetList != null)
+                @if (Model._targetList != null)
+                {
+                    var list = Model._targetList;
+                    for (int i = 0; i < list.Count; i++)
                     {
-                        var list = Model._targetList;
-                        for(int i = 0; i < list.Count; i++)
-                        {
-                                <tr>
-                                    <td>
-                                        <a href="#" onclick="SendPost(@i);">
-                                            @list[i].ShainNo
-                                        </a>
-                                    </td>
-                                    <td>
-                                            @list[i].NameSei@list[i].NameMei
-                                    </td>
-                                    <td>
-                                        @if (list[i].Shozoku != null)
-                                        {
-                                            @list[i].Shozoku.ShozokuNm
-                                        }
-                                    </td>
-                                    <td>
-                                           @if (list[i].Shokushu != null)
-                                        {
-                                            @list[i].Shokushu.ShokushuNm
-                                        }
-                                    </td>
-                                    <td>
-                                            @if (list[i].Koyokeitai != null)
-                                        {
-                                            @list[i].Koyokeitai.KoyokeitaiNm
-                                        }
-                                    </td>
+                        <tr>
+                            <td>
+                                <a href="#" onclick="SendPost(@i);">
+                                    @list[i].ShainNo
+                                </a>
+                            </td>
+                            <td>
+                                @list[i].NameSei @list[i].NameMei
+                            </td>
+                            <td>
+                                @if (list[i].Shozoku != null)
+                                {
+                                    @list[i].Shozoku.ShozokuNm
+                                }
+                            </td>
+                            <td>
+                                @if (list[i].Shokushu != null)
+                                {
+                                    @list[i].Shokushu.ShokushuNm
+                                }
+                            </td>
+                            <td>
+                                @if (list[i].Koyokeitai != null)
+                                {
+                                    @list[i].Koyokeitai.KoyokeitaiNm
+                                }
+                            </td>
 
-                                    
-                                </tr>
-                        }
+
+                        </tr>
+
                     }
                 }
             </tbody>
          </table>
+         @if(Model._targetList == null)
+            {
+                <div>結果がありません。</div>
+            }
       </div>
    </div>
 </div>
