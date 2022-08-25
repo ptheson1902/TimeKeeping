@@ -151,6 +151,7 @@ $(".next-month").click(function () {
 
 function GetData(year, month) {
     $.ajax({
+        cache: false,
         url: "/Attendance/GetData/" + year + "-" + month,
         method: "get",
         Cache: "false",

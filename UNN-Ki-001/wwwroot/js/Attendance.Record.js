@@ -4,7 +4,10 @@ function attach(kinmuDt) {
     Console.log("勤務レコード" + kinmuDt + "の変更を検知しました。");
 }
 
-$("form").submit(function () {
-    $(this).children()[0].value = "test"
-    //alert($(this).children()[0].value)
+$(window).on('load', function () {
+
+    // ページ内の全てのフォームにTargetListのデータを紐づける処理
+    $("form").submit(function () {
+        $(this).append($("#targetListJson"));
+    })
 })
