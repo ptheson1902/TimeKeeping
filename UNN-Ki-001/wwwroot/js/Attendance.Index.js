@@ -1,4 +1,4 @@
-﻿function getdate() {
+﻿function Timer() {
     var today = new Date();
     var h = today.getHours();
     var m = today.getMinutes();
@@ -12,7 +12,7 @@
     $(".main .left .time").text(h + " : " + m);
     setTimeout(function () { getdate() }, 1);
 }
-getdate()
+Timer()
 // Calendar
 function day(i) {
     var str = "";
@@ -120,9 +120,9 @@ function Calendar(year, month, e) {
                     count = 2
                 }
             }
-            if(count == 1)
+            if (count == 1)
                 it.children().addClass("taikin");
-            if(count == 2)
+            if (count == 2)
                 it.children().addClass("shukin");
             if (count == 0 && it.data("date") != "" && new Date(new Date().getTime() - 86400000) > strToDate(it.data("date").toString()))
                 it.children().addClass("yasumi");

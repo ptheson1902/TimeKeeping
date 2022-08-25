@@ -16,7 +16,6 @@ namespace UNN_Ki_001.Pages.Attendance
         public string? Message { get; set; }
         private M_Shain? shain;
         private DateTime now = DateTime.Now;
-
         public IndexModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
         }
@@ -54,7 +53,7 @@ namespace UNN_Ki_001.Pages.Attendance
                     Shukin = "disabled";
                     Taikin = null;
                 }
-                else if ( today.KinmuFrDate != null && today.KinmuToDate != null)
+                else if (today.KinmuFrDate != null && today.KinmuToDate != null)
                 {
                     Shukin = "disabled";
                     Taikin = "disabled";
@@ -75,6 +74,57 @@ namespace UNN_Ki_001.Pages.Attendance
                 Message = "ユーザーに社員が登録されていません。";
                 return;
             }
+            // パターン1のテストデーター
+            //DateTime dkf = DateTime.ParseExact("20220801 09:00:00", "yyyyMMdd HH:mm:ss", null);
+            //DateTime dkt = DateTime.ParseExact("20220801 23:00:00", "yyyyMMdd HH:mm:ss", null);
+
+            // パターン2のテストデーター
+            //DateTime dkf = DateTime.ParseExact("20220802 09:00:00", "yyyyMMdd HH:mm:ss", null);
+            //DateTime dkt = DateTime.ParseExact("20220802 18:00:00", "yyyyMMdd HH:mm:ss", null);
+
+            // パターン3のテストデーター
+            //DateTime dkf = DateTime.ParseExact("20220803 09:15:00", "yyyyMMdd HH:mm:ss", null);
+            //DateTime dkt = DateTime.ParseExact("20220803 18:00:00", "yyyyMMdd HH:mm:ss", null);
+
+            // パターン4のテストデーター
+            //DateTime dkf = DateTime.ParseExact("20220804 09:00:00", "yyyyMMdd HH:mm:ss", null);
+            //DateTime dkt = DateTime.ParseExact("20220804 15:00:00", "yyyyMMdd HH:mm:ss", null);
+
+            // パターン5のテストデーター
+            //DateTime dkf = DateTime.ParseExact("20220805 09:00:00", "yyyyMMdd HH:mm:ss", null);
+            //DateTime dkt = DateTime.ParseExact("20220805 15:00:00", "yyyyMMdd HH:mm:ss", null);
+
+            // パターン6のテストデーター
+            //DateTime dkf = DateTime.ParseExact("20220806 09:00:00", "yyyyMMdd HH:mm:ss", null);
+            //DateTime dkt = DateTime.ParseExact("20220806 15:00:00", "yyyyMMdd HH:mm:ss", null);
+
+            // パターン7のテストデーター
+            //DateTime dkf = DateTime.ParseExact("20220807 09:00:00", "yyyyMMdd HH:mm:ss", null);
+            //DateTime dkt = DateTime.ParseExact("20220807 18:00:00", "yyyyMMdd HH:mm:ss", null);
+
+            // パターン8のテストデーター
+            //DateTime dkf = DateTime.ParseExact("20220808 13:00:00", "yyyyMMdd HH:mm:ss", null);
+            //DateTime dkt = DateTime.ParseExact("20220808 18:00:00", "yyyyMMdd HH:mm:ss", null);
+
+            // パターン9のテストデーター
+            //DateTime dkf = DateTime.ParseExact("20220809 13:30:00", "yyyyMMdd HH:mm:ss", null);
+            //DateTime dkt = DateTime.ParseExact("20220809 18:00:00", "yyyyMMdd HH:mm:ss", null);
+
+            // パターン10のテストデーター
+            //DateTime dkf = DateTime.ParseExact("20220810 13:00:00", "yyyyMMdd HH:mm:ss", null);
+            //DateTime dkt = DateTime.ParseExact("20220810 17:00:00", "yyyyMMdd HH:mm:ss", null);
+
+            // パターン11のテストデーター
+            //DateTime dkf = DateTime.ParseExact("20220811 09:00:00", "yyyyMMdd HH:mm:ss", null);
+            //DateTime dkt = DateTime.ParseExact("20220811 12:00:00", "yyyyMMdd HH:mm:ss", null);
+
+            // パターン12のテストデーター
+            //DateTime dkf = DateTime.ParseExact("20220812 09:30:00", "yyyyMMdd HH:mm:ss", null);
+            //DateTime dkt = DateTime.ParseExact("20220812 12:00:00", "yyyyMMdd HH:mm:ss", null);
+
+            // パターン13のテストデーター
+            //DateTime dkf = DateTime.ParseExact("20220813 09:00:00", "yyyyMMdd HH:mm:ss", null);
+            //DateTime dkt = DateTime.ParseExact("20220813 11:00:00", "yyyyMMdd HH:mm:ss", null);
 
             var action = Request.Form["action"];
             switch (action)
@@ -91,7 +141,8 @@ namespace UNN_Ki_001.Pages.Attendance
             try
             {
                 _kintaiDbContext.SaveChanges();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
                 Message = "打刻に失敗しました。";
@@ -104,28 +155,20 @@ namespace UNN_Ki_001.Pages.Attendance
 
         private void End(M_Shain shain)
         {
+            // Original
             int kyo = int.Parse(now.ToString("yyyyMMdd"));
             int kino = int.Parse(now.AddDays(-1).ToString("yyyyMMdd"));
-            // Original
             T_Kinmu? kinmu = _kintaiDbContext.t_kinmus
                     .Where(e => e.KigyoCd!.Equals(shain.KigyoCd) && e.ShainNo!.Equals(shain.ShainNo) && e.KinmuFrDate != null && e.KinmuToDate == null && Convert.ToInt32(e.KinmuDt) <= kyo && kino <= Convert.ToInt32(e.KinmuDt))
                     .OrderByDescending(e => e.KinmuDt)
                     .FirstOrDefault();
-            // Test
-            /*T_Kinmu? kinmu = _kintaiDbContext.t_kinmus
-           .Where(e => e.KigyoCd!.Equals(shain.KigyoCd) && e.KinmuDt!.Equals("20220823") && e.ShainNo!.Equals(shain.ShainNo) && e.KinmuFrDate != null && e.KinmuToDate == null)
-           .FirstOrDefault();*/
 
             if (kinmu == null)
             {
                 Message = "退勤可能なレコードが存在しません。";
                 return;
             }
-            // Original
             kinmu.DakokuToDate = DateTime.Now;
-            
-            // Test
-            //kinmu.DakokuToDate = DateTime.ParseExact("20220824 18:15:00", "yyyyMMdd HH:mm:ss", null);
             _kintaiDbContext.Update(kinmu);
         }
 
@@ -136,10 +179,6 @@ namespace UNN_Ki_001.Pages.Attendance
             .Where(e => e.KigyoCd!.Equals(shain.KigyoCd) && e.KinmuDt!.Equals(now.ToString("yyyyMMdd")) && e.ShainNo!.Equals(shain.ShainNo) && e.KinmuFrDate == null)
             .FirstOrDefault();
 
-            // Test
-            /*T_Kinmu? kinmu = _kintaiDbContext.t_kinmus
-           .Where(e => e.KigyoCd!.Equals(shain.KigyoCd) && e.KinmuDt!.Equals("20220824") && e.ShainNo!.Equals(shain.ShainNo) && e.KinmuFrDate == null)
-           .FirstOrDefault();*/
 
             // 該当レコードがなかったら新規作成
             if (kinmu == null)
@@ -148,12 +187,7 @@ namespace UNN_Ki_001.Pages.Attendance
                 kinmu.SetKinmuCd("K001"); // TODO: テスト用コード
                 _kintaiDbContext.Add(kinmu);
             }
-            // Original
             kinmu.DakokuFrDate = DateTime.Now;
-                
-            // Test
-            //kinmu.DakokuFrDate = DateTime.ParseExact("20220824 08:16:00", "yyyyMMdd HH:mm:ss", null);
-
         }
     }
 }

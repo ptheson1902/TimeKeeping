@@ -42,7 +42,7 @@ namespace UNN_Ki_001.Data.Models
                 KinmuToDate = CalcKinmuTo(master, (DateTime)DakokuToDate);
             }
 
-            // 直前の勤務レコードと重複していないかどうかの確認
+            /*// 直前の勤務レコードと重複していないかどうかの確認
             if (KinmuFrDate != null)
             {
                 var tgt = context.t_kinmus
@@ -66,7 +66,7 @@ namespace UNN_Ki_001.Data.Models
                 {
                     throw new Exception("直後の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。");
                 }
-            }
+            }*/
             // 実績時間の整合性を確認・修正
             if (KinmuFrDate != null && KinmuToDate != null)
             {
@@ -101,20 +101,15 @@ namespace UNN_Ki_001.Data.Models
             {
                 // 総労働時間の計算
                 Sorodo = (int)((DateTime)KinmuToDate - (DateTime)KinmuFrDate).TotalMinutes - Kyukei;
-/*                if(
-                    master != null 
-                    && master.KinmuFrTm != null 
-                    && master.KinmuToTm != null
-                    && int.Parse(master.KinmuFrTm))
-                )*/
+
                 // 控除時間の計算
-                Kojo = Shotei - Sorodo;
-                if(Kojo < 0)
+                if(Shotei <= Sorodo)
                 {
                     Kojo = 0;
                 }
                 else
                 {
+                    Kojo = Shotei - Sorodo;
                     Shotei = Sorodo;
                 }
             }

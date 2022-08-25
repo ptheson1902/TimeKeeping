@@ -1,7 +1,7 @@
 ﻿@page
 @model UNN_Ki_001.Pages.Attendance.Record.IndexModel
 @using UNN_Ki_001.Data.Models;
-<script src="~/js/Attendance.Record.js"></script>
+
 @{
     ViewData["Title"] = "勤務表";
 }
@@ -10,18 +10,22 @@
  <input type="hidden" name="KigyoCd" value="@Model.TargetKigyoCd" />
  <input type="button" value="登録実行テスト"/>
  <form method="post">
+     <input type='hidden' name='TargetList' />
      <input type="hidden" value="nextMonth" name="command" />
      <input type="submit" value="翌月" />
  </form>
   <form method="post">
+     <input type='hidden' name='TargetList' />
      <input type="hidden" value="prevMonth" name="command" />
      <input type="submit" value="先月" />
  </form>
   <form method="post">
+    <input type='hidden' name='TargetList' />
      <input type="hidden" value="nextShain" name="command" />
      <input type="submit" value="次の社員" />
  </form>
   <form method="post">
+     <input type='hidden' name='TargetList' />
      <input type="hidden" value="prevMonth" name="command" />
      <input type="submit" value="前の社員" />
  </form>
@@ -98,7 +102,7 @@
     }
 }
  </table>
-
+<script src="~/js/Attendance.Record.js"></script>
 
    
 
