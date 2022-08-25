@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Globalization;
 using UNN_Ki_001.Data;
@@ -14,101 +15,119 @@ namespace UNN_Ki_001.Pages.Attendance.Record
     public class IndexModel : BasePageModel
     {
         public List<Kinmuhyo> DataList = new();
-        public string TargetShainNo = "";
-        public string TargetKigyoCd = "";
         public List<string[]> MKinmuInfoList = new();
-        public ShainSearchRecordList? ShainList;
-        public ShainSearchRecord? TargetShain;
-
+        public ShainSearchRecord Target = new();
+        public ShainSearchRecordList? TargetList = null;
+        public string TargetListJson = "";
 
         public IndexModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
 
         }
 
-        [ResponseCache(Duration = 30)]
+        /// <summary>
+        /// セッションからターゲットを選出して勤務表を表示します。
+        /// </summary>
+        /// <returns></returns>
         public IActionResult OnGet()
         {
-            Init();
+            // 表示対象をセッションから確定します。
+            TargetListJson = HttpContext.Session.GetString(Constants.SEARCH_RECORD_LIST) ?? "";
+            TargetList = JsonConvert.DeserializeObject<ShainSearchRecordList>(TargetListJson);
+            // もし存在しなければ社員検索へ飛ばして作成してもらいます。
+            if(TargetList == null)
+                return RedirectToPage("/Attendance/Record/Search");
+
+            // 表示内容を生成します。
+            Target = TargetList.Get();
+            var mKinmuList = _kintaiDbContext.m_kinmus
+                .Where(e => e.KigyoCd == Target.KigyoCd)
+                .ToList();
+            foreach(var item in mKinmuList)
+            {
+                MKinmuInfoList.Add(new string[] { item.KigyoCd, item.KinmuCd, item.KinmuNm ?? "名称未設定" });
+            }
+            DataList = CreateData(Target, TargetList.CurrentDate);
+
             return Page();
         }
 
-        public IActionResult OnPost(string command = "")
+        /// <summary>
+        /// パラメーターを受け取って画面遷移します。
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public IActionResult OnPost(string targetListJson, string command = "")
         {
-            Init();
-            // セッションに値が存在しない場合は社員検索へリダイレクトさせる
-            if (ShainList == null || TargetShain == null)
+            // パラメーターを受け取ります。
+            TargetListJson = targetListJson;
+
+            // ターゲットリストをデシリアライズします。
+            // TODO: デシリアライズ失敗時のテストをしてください。
+            TargetList = JsonConvert.DeserializeObject<ShainSearchRecordList>(TargetListJson);
+            // もし存在しなければ社員検索へ飛ばします。
+            if (TargetList == null)
                 return RedirectToPage("/Attendance/Record/Search");
 
-            // 操作コマンドの処理
-            if(ShainList != null)
+            // コマンドを適用して表示を変更します
+            switch (command)
             {
-                switch (command)
-                {
-                    case "nextMonth":
-                        TargetShain.GetNextMonth();
-                        break;
-                    case "prevMonth":
-                        TargetShain.GetPrevMonth();
-                        break;
-                    case "nextShain":
-                        ShainList.GetNext();
-                        break;
-                    case "prevShain":
-                        ShainList.GetPrev();
-                        break;
-                    default:
-                        break;
-                }
-
-                // 変更後のオブジェクトをセッションへ再配置
-                HttpContext.Session.SetObj(Constants.SEARCH_RECORD_LIST, ShainList);
+                case "NextMonth":
+                    TargetList.NextMonth();
+                    break;
+                case "PrevMonth":
+                    TargetList.PrevMonth();
+                    break;
+                case "NextShain":
+                    Target = TargetList.Next().Get();
+                    break;
+                case "PrevShain":
+                    Target = TargetList.Prev().Get();
+                    break;
+                default:
+                    Target = TargetList.Get();
+                    break;
             }
 
-            return RedirectToPage("/Attendance/Record/Index");
+            // 表示内容を生成します。
+            DataList = CreateData(Target, TargetList.CurrentDate);
+            var mKinmuList = _kintaiDbContext.m_kinmus
+            .Where(e => e.KigyoCd == Target.KigyoCd)
+            .ToList();
+            foreach (var item in mKinmuList)
+            {
+                MKinmuInfoList.Add(new string[] { item.KigyoCd, item.KinmuCd, item.KinmuNm ?? "名称未設定" });
+            }
+            Target = TargetList.Get();
+
+            // 再びシリアライズしてビューに渡します
+            // TODO: シリアライズ失敗時のテストをしてください。
+            TargetListJson = JsonConvert.SerializeObject(TargetList);
+
+            return Page();
         }
 
-        private void Init()
+        private List<Kinmuhyo> CreateData(ShainSearchRecord target, DateTime month)
         {
-            // セッションから検索対象を取得
-            ShainList = HttpContext.Session.GetObject<ShainSearchRecordList>(Constants.SEARCH_RECORD_LIST);
+            // 結果格納用の変数
+            List<Kinmuhyo> result = new();
 
-            // 参照対象が確認できなければここで終了
-            if (ShainList == null)
-                return;
-
-            // カレントインデックスの社員を取り出す
-            TargetShain = ShainList.GetCurrent();
-
-            // 勤務内容のリストを取得する
-            MKinmuInfoList.Add(new string[] { "", "" }); // ←社員検索にて企業コードのNotNullableが保証されている(シリアライズする際にコンストラクタの都合でNullableになっている)
-            var mKinmList = _kintaiDbContext.m_kinmus
-                .Where(e => e.KigyoCd!.Equals(TargetShain.KigyoCd) && e.ValidFlg != null && e.ValidFlg.Equals("1"))
-                .ToList();
-            foreach (var item in mKinmList)
-            {
-                MKinmuInfoList.Add(new string[] { item.KinmuCd, item.KinmuNm ?? "名称未設定" });
-            }
-
-
-            // 閲覧月のデータを取得
-            DateTime currentMonth = TargetShain.GetCurrentDate();
             // 企業コードで設定をSELECT
             var setting = _kintaiDbContext.mSettings
-                .Where(e => e.KigyoCd.Equals(TargetShain.KigyoCd))
+                .Where(e => e.KigyoCd.Equals(target.KigyoCd))
                 .FirstOrDefault();
             // 設定から締め日を抽出（初期値: 99(末日))
             int shimebi = (setting == null || setting.ShimeDt == null) ? 99 : (int)setting.ShimeDt;
 
             // 締め日翌日から締め日までのKinmuDt一覧を取得
-            DayList calender = new DayList(currentMonth, shimebi);
+            DayList calender = new(month, shimebi);
             var kinmuDtList = calender.KinmuDtList;
 
             // 勤務データを取り込み
             var tempList = _kintaiDbContext.t_kinmus
                 .Include(e => e.MKinmu)
-                .Where(e => e.KigyoCd!.Equals(TargetShain.KigyoCd)
-                    && e.ShainNo!.Equals(TargetShain.ShainNo)
+                .Where(e => e.KigyoCd!.Equals(target.KigyoCd)
+                    && e.ShainNo!.Equals(target.ShainNo)
                     && kinmuDtList.Contains(e.KinmuDt!))
                 .OrderBy(e => e.KinmuDt)
                 .ToList();
@@ -129,7 +148,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 // nullならcontinue(初期値はコンストラクタで挿入済み）
                 if (kinmu == null)
                 {
-                    DataList.Add(data);
+                    result.Add(data);
                     continue;
                 }
 
@@ -171,8 +190,10 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     data.Biko = kinmu.Biko;
 
                 // 作成完了・リストに追加
-                DataList.Add(data);
+                result.Add(data);
             }
+
+            return result;
         }
 
         public string MinutesToString(int val)

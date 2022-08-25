@@ -6,98 +6,142 @@
     ViewData["Title"] = "勤務表";
 }
  <h1>@ViewData["Title"]</h1>
- <input type="hidden" name="ShainNo" value="@Model.TargetShainNo" />
- <input type="hidden" name="KigyoCd" value="@Model.TargetKigyoCd" />
- <input type="button" value="登録実行テスト"/>
- <form method="post">
-     <input type="hidden" value="nextMonth" name="command" />
-     <input type="submit" value="翌月" />
- </form>
-  <form method="post">
-     <input type="hidden" value="prevMonth" name="command" />
-     <input type="submit" value="先月" />
- </form>
-  <form method="post">
-     <input type="hidden" value="nextShain" name="command" />
-     <input type="submit" value="次の社員" />
- </form>
-  <form method="post">
-     <input type="hidden" value="prevMonth" name="command" />
-     <input type="submit" value="前の社員" />
- </form>
- <table id="main-contents">
-    <tr>
-        <th>日付</th>
-        <th>勤務予定</th>
-        <th>打刻開始</th>
-        <th>打刻終了</th>
-        <th>実績開始</th>
-        <th>実績終了</th>
-        <th>休憩</th>
-        <th>控除</th>
-        <th>総労働</th>
-        <th>備考</th>
-    </tr>
-    @{
-    foreach(var item in Model.DataList)
-    {
-        <tr class="Record" id="@item.KinmuDt">
-            <!-- 勤務日 -->
-            <td>
-                @item.Day
-            </td>
-            <!-- 勤務内容 -->
-            <td>
-                <select>
-                    @foreach (var info in Model.MKinmuInfoList)
-                    {
-                        <option value="@info[0]" selected="@(item.KinmuCd.Equals(info[0]) ? true : false)">
-                                @info[1]
-                        </option>
-                    }
-                </select>
-            </td>
-            <!-- 打刻開始 -->
-            <td>
-                <input type="time" class="DakokuStart"
-                    value="@item.DakokuStart">
-            </td>
-            <!-- 打刻終了 -->
-            <td>
-                <input type="time" class="DakokuEnd"
-                    value="@item.DakokuEnd">
-            </td>
-            <!-- 勤務開始 -->
-            <td>
-                <input type="time" class="KinmuStart"
-                    value="@item.KinmuStart">
-            </td>
-            <!-- 勤務開始 -->
-            <td>
-                <input type="time" class="KinmuEnd"
-                    value="@item.KinmuEnd">
-            </td>
-            <!-- 休憩 -->
-            <td>
-                @item.Kyukei
-            </td>
-            <!-- 控除 -->
-            <td>
-                @item.Kojo
-            </td>
+
+ <!-- 全てのフォームにonLoadで追加するデータ -->
+<input type="hidden" id="targetListJson" name="targetListJson" value='@Model.TargetListJson' />
+ 
+ <!-- メインコンテナ -->
+ <div class="container-fluid">
+
+
+     <!-- 社員情報 -->
+    <div class="row border mb-5 align-items-center">
+        <div class="row">
+            <h4 class="col-md-2">社員情報</h4>
+            <form method="post" action="" class="col-md-2 w-auto">
+                <input type="hidden" value="PrevShain" name="command" />
+                <input type="submit" class="test" value="前の社員" />
+            </form>
+            <form method="post" action="" class="col-md-2 w-auto">
+                <input type="hidden" value="NextShain" name="command" />
+                <input type="submit" class="test" value="次の社員" />
+            </form>
+        </div>
+
+        <div class="row">
+            <p class="col-md-2">社員番号: @Model.Target.ShainNo</p>
+            <p class="col-md-10">氏名: @Model.Target.ShainNm</p>
+        </div>
+        <div class="row">
+            <p class="col-md-2">所属: @Model.Target.ShozokuNm</p>
+            <p class="col-md-2">職種: @Model.Target.ShokushuNm</p>
+            <p class="col-md-8">雇用形態: @Model.Target.KoyokeitaiNm</p>
+        </div>
+    </div>
+
+    <!-- データテーブル -->
+    <div class="row mb-3 align-items-center">
+        <div class="row">
+            <h4 class="col-md-2">勤怠情報</h4>
+            <form method="post" action="" class="col-md-5 w-auto">
+                <input type="hidden" value="PrevMonth" name="command" />
+                <input type="submit" class="test" value="先月" />
+            </form>
+            <form method="post" action="" class="col-md-5 w-auto">
+                <input type="hidden" value="NextMonth" name="command" />
+                <input type="submit" class="test" value="翌月" />
+            </form>
+        </div>
+        <div class="row">
+            <h4 class="col-md-10">@((Model.TargetList == null) ? "日時エラー" : Model.TargetList.CurrentDate.ToString("yyyy年MM月"))</h4>
+            <!-- 所定労働時間 -->
             <!-- 総労働 -->
-            <td>
-                @item.Sorodo
-            </td>
-            <!-- 備考 -->
-            <td>
-                <input type="text"
-                    value="@item.Biko">
-            </td>
-        </tr>
-    }
-}
- </table>
+            <!-- 所定日数 -->
+            <!-- 休日 -->
+            <!-- 有給 -->
+            <form method="post" action="" class="col-md-2 align-content-end">
+                <input type="hidden" value="SaveChange" name="command" />
+                <input type="submit" class="test" value="登録" />
+            </form>
+        </div>
+    </div>
+
+     <div class="row mb-3 align-items-center">
+            <table id="main-contents" class="Nesting table table-striped">
+            <tr class="table-dark">
+                <th>日付</th>
+                <th>勤務予定</th>
+                <th>打刻開始</th>
+                <th>打刻終了</th>
+                <th>実績開始</th>
+                <th>実績終了</th>
+                <th>休憩</th>
+                <th>控除</th>
+                <th>総労働</th>
+                <th>備考</th>
+            </tr>
+            @foreach(var item in Model.DataList) {
+                <tr class="Record" id="@item.KinmuDt">
+                    <!-- 勤務日 -->
+                    <td>
+                        @item.Day
+                    </td>
+                    <!-- 勤務内容 -->
+                    <td>
+                        <select>                            
+                            <option></option>
+                            @foreach (var info in Model.MKinmuInfoList)
+                            {
+                                <option value="@info[1]" selected="@(item.KinmuCd.Equals(info[1]) && Model.Target.KigyoCd == info[0] ? true : false)">
+                                        @info[2]
+                                </option>
+                            }
+                        </select>
+                    </td>
+                    <!-- 打刻開始 -->
+                    <td>
+                        <input type="time" class="DakokuStart"
+                            value="@item.DakokuStart">
+                    </td>
+                    <!-- 打刻終了 -->
+                    <td>
+                        <input type="time" class="DakokuEnd"
+                            value="@item.DakokuEnd">
+                    </td>
+                    <!-- 勤務開始 -->
+                    <td>
+                        <input type="time" class="KinmuStart"
+                            value="@item.KinmuStart">
+                    </td>
+                    <!-- 勤務開始 -->
+                    <td>
+                        <input type="time" class="KinmuEnd"
+                            value="@item.KinmuEnd">
+                    </td>
+                    <!-- 休憩 -->
+                    <td>
+                        @item.Kyukei
+                    </td>
+                    <!-- 控除 -->
+                    <td>
+                        @item.Kojo
+                    </td>
+                    <!-- 総労働 -->
+                    <td>
+                        @item.Sorodo
+                    </td>
+                    <!-- 備考 -->
+                    <td>
+                        <textarea value="@item.Biko" class="w-100"rows="1"></textarea>
+                    </td>
+                </tr>
+            }
+         </table>
+     </div>
+
+
+ </div>
+
 
 
    
