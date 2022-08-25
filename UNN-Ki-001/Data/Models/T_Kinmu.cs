@@ -49,7 +49,7 @@ namespace UNN_Ki_001.Data.Models
                     .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuFrDate < ((DateTime)KinmuFrDate).ToUniversalTime())
                     .OrderByDescending(e => e.KinmuFrDate)
                     .FirstOrDefault();
-                if(tgt != null && tgt.KinmuToDate > KinmuFrDate)
+                if (tgt != null && tgt.KinmuToDate > KinmuFrDate)
                 {
                     throw new Exception("直前の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。");
                 }
@@ -58,7 +58,7 @@ namespace UNN_Ki_001.Data.Models
             if (KinmuToDate != null)
             {
                 var tgt = context.t_kinmus
-                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuToDate >((DateTime)KinmuToDate).ToUniversalTime())
+                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuToDate > ((DateTime)KinmuToDate).ToUniversalTime())
                     .OrderBy(e => e.KinmuToDate)
                     .FirstOrDefault();
                 // TODO: 注意点
@@ -101,20 +101,15 @@ namespace UNN_Ki_001.Data.Models
             {
                 // 総労働時間の計算
                 Sorodo = (int)((DateTime)KinmuToDate - (DateTime)KinmuFrDate).TotalMinutes - Kyukei;
-/*                if(
-                    master != null 
-                    && master.KinmuFrTm != null 
-                    && master.KinmuToTm != null
-                    && int.Parse(master.KinmuFrTm))
-                )*/
+
                 // 控除時間の計算
-                Kojo = Shotei - Sorodo;
-                if(Kojo < 0)
+                if(Shotei <= Sorodo)
                 {
                     Kojo = 0;
                 }
                 else
                 {
+                    Kojo = Shotei - Sorodo;
                     Shotei = Sorodo;
                 }
             }
