@@ -301,6 +301,7 @@ namespace UNN_Ki_001.Data.Models
         [Column("kinmu_to_date")]
         public DateTime? KinmuToDate { get; private set; }
 
+
         [Column("shotei")]
         public int? Shotei { get; set; }
 

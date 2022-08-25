@@ -18,7 +18,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
         public string? Valid_flg { get; set; }
 
 
-        public ShokushuModel(UNN_Ki_001.Data.KintaiDbContext context, ApplicationDbContext application)
+        public ShokushuModel(UNN_Ki_001.Data.KintaiDbContext context, ApplicationDbContext application )
         {
             _context = context;
             context1 = application;
