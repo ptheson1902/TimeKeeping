@@ -2,16 +2,17 @@
 @model UNN_Ki_001.Pages.VariousMaster.ShozokuModel 
 @{
 }
-<h1>所属マスタメンテナンス</h1>
+
 <div>
    <div class="container mt-5" style="max-width: 500px">
+       <h3>所属マスタメンテナンス</h3>
       <form class="card mb-4" method="Post">
          <div class="card-body">
             <div class="row mb-3 align-items-center">
-               <label class="col-5" for="shozoku_cd">所属コード</label>
+               <label class="col-4" for="shozoku_cd">所属コード</label>
                <input
                   type="text"
-                  class="form-control"
+                  class="col-4"
                   name="shozoku_cd"
                   size="30"
                   maxlength="10"
@@ -20,10 +21,10 @@
                />
             </div>
             <div class="row mb-3 align-items-center">
-               <label class="col-5">所属名</label>
+               <label class="col-4">所属名</label>
                <input
                   type="text"
-                  class="form-control"
+                  class="col-4"
                   name="shozoku_nm"
                   id="shozoku_nm"
                   value = "@Model.Shozoku_nm"
@@ -119,10 +120,10 @@
          <form class="card mb-4" method="Post">
             <div class="card-body">
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="shozoku_cd1">所属コード</label>
+                  <label class="col-4" for="shozoku_cd1">所属コード</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class="col-4"
                      name="shozoku_cd1"
                      size="30"
                      maxlength="10"
@@ -130,10 +131,10 @@
                   />
                </div>
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="shozoku_nm1">所属名</label>
+                  <label class="col-4" for="shozoku_nm1">所属名</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class="col-4"
                      name="shozoku_nm1"
                      id="shozoku_nm1"
                   />
@@ -196,10 +197,10 @@
          <form class="card mb-4" method="Post">
             <div class="card-body">
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="shozoku_cd2">所属コード</label>
+                  <label class="col-4" for="shozoku_cd2">所属コード</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class="col-4"
                      name="shozoku_cd2"
                      size="30"
                      maxlength="10"
@@ -208,10 +209,10 @@
                   />
                </div>
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="shozoku_nm2">所属名</label>
+                  <label class="col-4" for="shozoku_nm2">所属名</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class="col-4"
                      name="shozoku_nm2"
                      id="shozoku_nm2"
                   />
@@ -266,3 +267,25 @@
       </div>
    </div>
 </div>
+<script>
+// 所属コードをクリックする時、修正・削除のポップアップが表示
+$(".shozoku_cd").click(function () {
+    $("#updateModal input[name='shozoku_cd2']").val($(this).text())
+    $("#updateModal input[name='shozoku_nm2']").val($(this).parent().next().text())
+    $("#updateModal input[name='valid_flg2']").attr("checked", false);
+    $("#updateModal input[name='valid_flg2'][value='" + $(this).parent().next().next().children().val() + "']").attr("checked", true)
+})
+//  所属メンテナンスの複写機能(Copy)
+$(".shozokuData tr").click(function () {
+
+    $(".shozokuData tr").removeClass("selected bg-light")
+    $(this).addClass("selected bg-light");
+    $(".szcopy").click(function () {
+        $(".tsuika").click();
+        $("#tsuikaModal input[name='shozoku_cd1']").val($(".shozokuData tr.selected").children().children().text())
+        $("#tsuikaModal input[name='shozoku_nm1']").val($(".shozokuData tr.selected").children()[1].textContent)
+        $("#tsuikaModal input[name='valid_flg1']").attr("checked", false);
+        $("#tsuikaModal input[name='valid_flg1'][value='" + $(".shozokuData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
+    })
+})
+</script>

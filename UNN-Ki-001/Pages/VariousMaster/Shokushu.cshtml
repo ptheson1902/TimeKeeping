@@ -2,16 +2,17 @@
 @model UNN_Ki_001.Pages.VariousMaster.ShokushuModel
 @{
 }
-<h1>職種マスタメンテナンス</h1>
+
 <div>
    <div class="container mt-5" style="max-width: 500px">
+       <h3>職種マスタメンテナンス</h3>
       <form class="card mb-4" method="Post">
          <div class="card-body">
             <div class="row mb-3 align-items-center">
-               <label class="col-5" for="shokushu_cd">職種コード</label>
+               <label class="col-4" for="shokushu_cd">職種コード</label>
                <input
                   type="text"
-                  class="form-control"
+                  class="col-4"
                   name="shokushu_cd"
                   size="30"
                   maxlength="10"
@@ -20,10 +21,10 @@
                 />
             </div>
             <div class="row mb-3 align-items-center">
-               <label class="col-5">職種名</label>
+               <label class="col-4">職種名</label>
                <input
                   type="text"
-                  class="form-control"
+                  class="col-4"
                   name="shokushu_nm"
                   id="shokushu_nm"
                   value = "@Model.Shokushu_nm"
@@ -119,10 +120,10 @@
          <form class="card mb-4" method="Post">
             <div class="card-body">
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="shokushu_cd1">職種コード</label>
+                  <label class="col-4" for="shokushu_cd1">職種コード</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class="col-4"
                      name="shokushu_cd1"
                      size="30"
                      maxlength="10"
@@ -130,10 +131,10 @@
                   />
                </div>
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="shokushu_nm1">職種名</label>
+                  <label class="col-4" for="shokushu_nm1">職種名</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class="col-4"
                      name="shokushu_nm1"
                      id="shokushu_nm1"
                   />
@@ -196,10 +197,10 @@
          <form class="card mb-4" method="Post">
             <div class="card-body">
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="shokushu_cd2">所属コード</label>
+                  <label class="col-4" for="shokushu_cd2">所属コード</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class="col-4"
                      name="shokushu_cd2"
                      size="30"
                      maxlength="10"
@@ -208,10 +209,10 @@
                   />
                </div>
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="shokushu_nm2">所属名</label>
+                  <label class="col-4" for="shokushu_nm2">所属名</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class="col-4"
                      name="shokushu_nm2"
                      id="shozoku_nm2"
                   />
@@ -266,3 +267,25 @@
       </div>
    </div>
 </div>
+<script>
+    //  職種コードをクリックする時、修正・削除のポップアップが表示
+$(".shokushu_cd").click(function () {
+    $("#updateModal input[name='shokushu_cd2']").val($(this).text())
+    $("#updateModal input[name='shokushu_nm2']").val($(this).parent().next().text())
+    $("#updateModal input[name='valid_flg2']").attr("checked", false);
+    $("#updateModal input[name='valid_flg2'][value='" + $(this).parent().next().next().children().val() + "']").attr("checked", true)
+})
+// 職種メンテナンスの複写機能(Copy)
+$(".shokushuData tr").click(function () {
+
+    $(".shokushuData tr").removeClass("selected bg-light")
+    $(this).addClass("selected bg-light");
+    $(".skCopy").click(function () {
+        $(".tsuika").click();
+        $("#tsuikaModal input[name='shokushu_cd1']").val($(".shokushuData tr.selected").children().children().text())
+        $("#tsuikaModal input[name='shokushu_nm1']").val($(".shokushuData tr.selected").children()[1].textContent)
+        $("#tsuikaModal input[name='valid_flg1']").attr("checked", false);
+        $("#tsuikaModal input[name='valid_flg1'][value='" + $(".shokushuData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
+    })
+})
+</script>

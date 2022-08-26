@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Npgsql;
@@ -7,12 +8,16 @@ using UNN_Ki_001.Data.Models;
 
 namespace UNN_Ki_001.Pages.VariousMaster
 {
-    public class ShozokuModel : PageModel
+    public class ShozokuModel : BasePageModel
     {
-        private readonly KintaiDbContext _context;
-        private readonly ApplicationDbContext context1;
+        
         public List<Display> Data = new List<Display>();
         public Display? Data1;
+
+        public ShozokuModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
+        {
+        }
+
         public string? Message { get; set; }
         public string? ErrorMessage { get; set; }
         public string? Shozoku_cd { get; set; }
@@ -20,11 +25,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
         public string? Valid_flg { get; set; }
 
 
-        public ShozokuModel(UNN_Ki_001.Data.KintaiDbContext context, ApplicationDbContext application)
-        {
-            _context = context;
-            context1 = application;
-        }
+       
 
         public void OnGet()
         {
@@ -32,12 +33,13 @@ namespace UNN_Ki_001.Pages.VariousMaster
         }
         public void OnPost()
         {
+            var shain = GetCurrentUserShainAsync().Result;
 
             var action = Request.Form["action"];
             switch (action)
             {
                 case "search":
-                    Search();
+                    Search(shain);
                     break;
                 default: break;
             }
@@ -45,7 +47,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
             switch (register_action)
             {       
                 case "register":
-                    Register();
+                    Register(shain);
                     break;
                 default: break;
             }
@@ -53,7 +55,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
             switch (update_action)
             {
                 case "update":
-                    Update();
+                    Update(shain);
                     break;
                 default: break;
             }
@@ -61,18 +63,19 @@ namespace UNN_Ki_001.Pages.VariousMaster
             switch (delete_action)
             {
                 case "delete":
-                    Delete();
+                    Delete(shain);
                     break;
                 default: break;
             }
         }
         //　検索
-        private void Search()
+        private void Search(M_Shain shain)
         {
              Shozoku_cd = Request.Form["shozoku_cd"];
              Shozoku_nm = Request.Form["shozoku_nm"];
              Valid_flg = Request.Form["valid_flg"];
-            var no = from m_shozoku in _context.m_shozokus
+            var no = from m_shozoku in _kintaiDbContext.m_shozokus
+                     where m_shozoku.KigyoCd.Equals(shain.KigyoCd)
                      orderby m_shozoku.ShozokuCd
                      select new { m_shozoku.ShozokuCd, m_shozoku.ShozokuNm, m_shozoku.ValidFlg } ;
             // 条件による検索すること(value＝nullは検索条件にならないこと。)
@@ -103,7 +106,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
             
         }
         // 新規
-        private void Register()
+        private void Register(M_Shain shain)
         {
             string shozoku_cd1 = Request.Form["shozoku_cd1"];
             string shozoku_nm1 = Request.Form["shozoku_nm1"];
@@ -124,8 +127,8 @@ namespace UNN_Ki_001.Pages.VariousMaster
             if (valid_flg1 != null && shozoku_nm1 != "" && shozoku_cd1 != "")
             {
                 M_Shozoku sz = new(shozoku_cd1, shozoku_nm1, valid_flg1, kigyo_cd1);
-                _context.m_shozokus.Add(sz);
-                var a = _context.SaveChanges();
+                _kintaiDbContext.m_shozokus.Add(sz);
+                var a = _kintaiDbContext.SaveChanges();
                 
                 if (a < 0)
                 {
@@ -138,7 +141,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
             }
         }
         //　更新
-        private void Update()
+        private void Update(M_Shain shain)
         {         
             string shozoku_cd2 = Request.Form["shozoku_cd2"];
             string shozoku_nm2 = Request.Form["shozoku_nm2"];
@@ -153,10 +156,11 @@ namespace UNN_Ki_001.Pages.VariousMaster
             }
             if (valid_flg2 != null && shozoku_nm2 != "")
             {
-                M_Shozoku sz = _context.m_shozokus.Where(e => e.ShozokuCd.Equals(shozoku_cd2)).FirstOrDefault();
+                M_Shozoku sz = _kintaiDbContext.m_shozokus.Where(e => e.ShozokuCd.Equals(shozoku_cd2)).FirstOrDefault();
                 sz.ShozokuNm = shozoku_nm2;
-                _context.m_shozokus.Update(sz);
-                var a = _context.SaveChanges();
+                sz.ValidFlg = valid_flg2;
+                _kintaiDbContext.m_shozokus.Update(sz);
+                var a = _kintaiDbContext.SaveChanges();
                 if (a < 0)
                 {
                     Message = "更新できませんでした。";
@@ -169,7 +173,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
                 
         }
         // 削除
-        private void Delete()
+        private void Delete(M_Shain shain)
         {
             string shozoku_cd2 = Request.Form["shozoku_cd2"];
             string shozoku_nm2 = Request.Form["shozoku_nm2"];
@@ -184,10 +188,10 @@ namespace UNN_Ki_001.Pages.VariousMaster
             }
             if (valid_flg2 != null && shozoku_nm2 != "")
             {
-                M_Shozoku sz = _context.m_shozokus.Where(e => e.ShozokuCd.Equals(shozoku_cd2)).FirstOrDefault();
+                M_Shozoku sz = _kintaiDbContext.m_shozokus.Where(e => e.ShozokuCd.Equals(shozoku_cd2)).FirstOrDefault();
                 sz.ShozokuNm = shozoku_nm2;
-                _context.m_shozokus.Remove(sz);
-                var a = _context.SaveChanges();
+                _kintaiDbContext.m_shozokus.Remove(sz);
+                var a = _kintaiDbContext.SaveChanges();
                 if (a < 0)
                 {
                     Message = "削除できませんでした。";

@@ -152,6 +152,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
             {
                 M_Koyokeitai kykt = _kintaiDbContext.m_koyokeitais.Where(e => e.KoyokeitaiCd.Equals(koyokeitai_cd2)&& e.KigyoCd.Equals(shain.KigyoCd)).FirstOrDefault();
                 kykt.KoyokeitaiNm = koyokeitai_nm2;
+                kykt.ValidFlg = valid_flg2;
                 _kintaiDbContext.m_koyokeitais.Update(kykt);
                 var a = _kintaiDbContext.SaveChanges();
                 if (a < 0)

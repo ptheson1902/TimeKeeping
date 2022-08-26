@@ -5,14 +5,19 @@ namespace UNN_Ki_001.Data.Models
 {
     [Table("m_shozoku", Schema = "public")]
     public class M_Shozoku 
+
     {
-       /* public M_Shozoku( string shozoku_cd , string shozoku_nm, string valid_flg, string kigyo_cd )
+        public M_Shozoku()
+        {
+
+        }
+        public M_Shozoku( string shozoku_cd , string shozoku_nm, string valid_flg, string kigyo_cd )
         {
             ShozokuCd = shozoku_cd;
             KigyoCd = kigyo_cd;
             ShozokuNm = shozoku_nm;
             ValidFlg = valid_flg;
-        }*/
+        }
 
         [Column("kigyo_cd")]
         public string? KigyoCd { get; set; }

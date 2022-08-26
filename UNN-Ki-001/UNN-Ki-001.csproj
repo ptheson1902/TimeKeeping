@@ -21,13 +21,6 @@
 
   <ItemGroup>
     <Compile Remove="Data\Models\T_KinmuOld.cs" />
-    <Compile Remove="Pages\VariousMaster\Shokushu.cshtml.cs" />
-    <Compile Remove="Pages\VariousMaster\Shozoku.cshtml.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Pages\VariousMaster\Shokushu.cshtml" />
-    <Content Remove="Pages\VariousMaster\Shozoku.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

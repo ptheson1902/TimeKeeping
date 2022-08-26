@@ -164,6 +164,3 @@ $(".next-month").click(function () {
     }
     GetData(year, month);
 })
-
-/
-
