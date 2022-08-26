@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "打刻登録";
 
-    var Date = DateTime.Now.AddDays(-1).ToString("yyyy年MM月dd日(dddd)");
+    var Date = DateTime.Now.ToString("yyyy年MM月dd日(dddd)");
 }
 <div class="main d-flex justify-content-center align-items-center">
     <div
@@ -14,7 +14,7 @@
             class="left d-flex flex-column align-items-center justify-content-between mx-5"
         >
             <div class="date">@Date</div>
-            <div class="time my-3"></div>
+            <div class="time my-3">16 : 24</div>
             <div class="button my-5 row">
                 <form method="post" class="col-6">
                     <input type="hidden" value="start" name="action" />
