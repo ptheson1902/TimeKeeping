@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using UNN_Ki_001.Data;
@@ -5,12 +6,15 @@ using UNN_Ki_001.Data.Models;
 
 namespace UNN_Ki_001.Pages.VariousMaster
 {
-    public class ShokushuModel : PageModel
+    public class ShokushuModel : BasePageModel
     {
-        private readonly KintaiDbContext _context;
-        private readonly ApplicationDbContext context1;
         public List<Display> Data = new List<Display>();
         public Display? Data1;
+
+        public ShokushuModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
+        {
+        }
+
         public string? Message { get; set; }
         public string? ErrorMessage { get; set; }
         public string? Shokushu_cd { get; set; }
@@ -18,32 +22,20 @@ namespace UNN_Ki_001.Pages.VariousMaster
         public string? Valid_flg { get; set; }
 
 
-        public ShokushuModel(UNN_Ki_001.Data.KintaiDbContext context, ApplicationDbContext application )
-        {
-            _context = context;
-            context1 = application;
-        }
+        
 
         public void OnGet()
         {
-/*            Data.Clear();
-            if (id != null)
-            {　
-                M_Shokushu sks = _context.m_shokushus.Where(e => e.ShokushuCd.Equals(id.ToString())).FirstOrDefault();
-                Data1 = new Display();
-                Data1.shokushu_nm = sks.ShokushuNm;
-                Data1.shokushu_cd = sks.ShokushuCd;
-                Data1.valid_flg = 　sks.ValidFlg;
-            }*/
+        
         }
         public void OnPost()
         {
-
+            var shain = GetCurrentUserShainAsync().Result;
             var action = Request.Form["action"];
             switch (action)
             {
                 case "search":
-                    Search();
+                    Search(shain);
                     break;
                 default: break;
             }
@@ -51,7 +43,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
             switch (register_action)
             {
                 case "register":
-                    Register();
+                    Register(shain);
                     break;
                 default: break;
             }
@@ -59,7 +51,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
             switch (update_action)
             {
                 case "update":
-                    Update();
+                    Update(shain);
                     break;
                 default: break;
             }
@@ -67,18 +59,19 @@ namespace UNN_Ki_001.Pages.VariousMaster
             switch (delete_action)
             {
                 case "delete":
-                    Delete();
+                    Delete(shain);
                     break;
                 default: break;
             }
         }
         //　検索
-        private void Search()
+        private void Search(M_Shain shain)
         {
             Shokushu_cd = Request.Form["shokushu_cd"];
             Shokushu_nm = Request.Form["shokushu_nm"];
             Valid_flg = Request.Form["valid_flg"];
-            var no = from m_shokushu in _context.m_shokushus
+            var no = from m_shokushu in _kintaiDbContext.m_shokushus
+                     where m_shokushu.KigyoCd.Equals(shain.KigyoCd)
                      orderby m_shokushu.ShokushuCd
                      select new { m_shokushu.ShokushuCd, m_shokushu.ShokushuNm, m_shokushu.ValidFlg };
             // 条件による検索すること(value＝nullは検索条件にならないこと。)
@@ -109,7 +102,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
 
         }
         // 新規
-        private void Register()
+        private void Register(M_Shain shain)
         {
             string shokushu_cd1 = Request.Form["shokushu_cd1"];
             string shokushu_nm1 = Request.Form["shokushu_nm1"];
@@ -130,8 +123,8 @@ namespace UNN_Ki_001.Pages.VariousMaster
             if (valid_flg1 != null && shokushu_nm1 != "" && shokushu_cd1 != "")
             {
                 M_Shokushu sk = new(shokushu_cd1, shokushu_nm1, valid_flg1, kigyo_cd1);
-                _context.m_shokushus.Add(sk);
-                var a = _context.SaveChanges();
+                _kintaiDbContext.m_shokushus.Add(sk);
+                var a = _kintaiDbContext.SaveChanges();
 
                 if (a < 0)
                 {
@@ -144,7 +137,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
             }
         }
         //　更新
-        private void Update()
+        private void Update(M_Shain shain)
         {
             string shokushu_cd2 = Request.Form["shokushu_cd2"];
             string shokushu_nm2 = Request.Form["shokushu_nm2"];
@@ -159,10 +152,11 @@ namespace UNN_Ki_001.Pages.VariousMaster
             }
             if (valid_flg2 != null && shokushu_nm2 != "")
             {
-                M_Shokushu sk = _context.m_shokushus.Where(e => e.ShokushuCd.Equals(shokushu_cd2)).FirstOrDefault();
+                M_Shokushu sk = _kintaiDbContext.m_shokushus.Where(e => e.ShokushuCd.Equals(shokushu_cd2)).FirstOrDefault();
                 sk.ShokushuNm = shokushu_nm2;
-                _context.m_shokushus.Update(sk);
-                var a = _context.SaveChanges();
+                sk.ValidFlg = valid_flg2;
+                _kintaiDbContext.m_shokushus.Update(sk);
+                var a = _kintaiDbContext.SaveChanges();
                 if (a < 0)
                 {
                     Message = "更新できませんでした。";
@@ -175,7 +169,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
 
         }
         // 削除
-        private void Delete()
+        private void Delete(M_Shain shain)
         {
             string shokushu_cd2 = Request.Form["shokushu_cd2"];
             string shokushu_nm2 = Request.Form["shokushu_nm2"];
@@ -190,10 +184,10 @@ namespace UNN_Ki_001.Pages.VariousMaster
             }
             if (valid_flg2 != null && shokushu_nm2 != "")
             {
-                M_Shokushu sk = _context.m_shokushus.Where(e => e.ShokushuCd.Equals(shokushu_cd2)).FirstOrDefault();
+                M_Shokushu sk = _kintaiDbContext.m_shokushus.Where(e => e.ShokushuCd.Equals(shokushu_cd2)).FirstOrDefault();
                 sk.ShokushuNm = shokushu_nm2;
-                _context.m_shokushus.Remove(sk);
-                var a = _context.SaveChanges();
+                _kintaiDbContext.m_shokushus.Remove(sk);
+                var a = _kintaiDbContext.SaveChanges();
                 if (a < 0)
                 {
                     Message = "削除できませんでした。";

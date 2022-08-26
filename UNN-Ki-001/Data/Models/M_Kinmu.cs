@@ -7,26 +7,8 @@ namespace UNN_Ki_001.Data.Models
     [Table("m_kinmu", Schema = "public")]
     public class M_Kinmu : Reloadable
     {
-        public M_Kinmu(string KigyoCd, string KinmuCd , string KinmuNm , string KinmuBunrui/* ,
-            string KinmuFrTm , string KinmuToTm , string Kyukei1FrTm , string Kyukei1ToTm ,
-            string KyukeiAutoFlg , string KinmuFrCtrlFlg , string KinmuFrMarumeKbn , string KinmuFrMarumeTm ,
-            string KinmuToMarumeKbn , string KinmuToMarumeTm , string KyukeiFrMarumeKbn ,
-            string KyukeiFrMarumeTm, string KyukeiToMarumeKbn , string KyukeiToMarumeTm*/)
-        {
-            this.KigyoCd = KigyoCd;
-            this.KinmuCd = KinmuCd;
-            this.KinmuNm = KinmuNm;
-            this.KinmuBunrui = KinmuBunrui;
-           /* this.KinmuFrTm = KinmuFrTm;
-            this.KinmuToTm = KinmuToTm;
-            this.Kyukei1FrTm = Kyukei1FrTm;
-            this.Kyukei1ToTm = Kyukei1ToTm;
-            this.KyukeiAutoFlg = KyukeiAutoFlg;*/
-
-        }
+        public M_Kinmu() { }
        
-
-
         protected override void Reload(KintaiDbContext context)
         {
             if(ShoteiTm == null)

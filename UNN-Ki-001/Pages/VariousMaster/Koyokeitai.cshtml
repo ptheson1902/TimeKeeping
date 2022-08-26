@@ -2,16 +2,17 @@
 @model UNN_Ki_001.Pages.VariousMaster.KoyokeitaiModel
 @{
 }
-<h1>雇用形態マスタメンテナンス</h1>
+
 <div>
    <div class="container mt-5" style="max-width: 500px">
+       <h3>雇用形態マスタメンテナンス</h3>
       <form class="card mb-4" method="Post">
          <div class="card-body">
             <div class="row mb-3 align-items-center">
-               <label class="col-5" for="koyokeitai_cd">雇用形態コード</label>
+               <label class="col-4" for="koyokeitai_cd">雇用形態コード</label>
                <input
                   type="text"
-                  class="form-control"
+                  class=" col-4"
                   name="koyokeitai_cd"
                   size="30"
                   maxlength="10"
@@ -19,10 +20,10 @@
                />
             </div>
             <div class="row mb-3 align-items-center">
-               <label class="col-5">雇用形態名</label>
+               <label class="col-4">雇用形態名</label>
                <input
                   type="text"
-                  class="form-control"
+                  class="l col-4"
                   name="koyokeitai_nm"
                   id="koyokeitai_nm"
                />
@@ -117,10 +118,10 @@
          <form class="card mb-4" method="Post">
             <div class="card-body">
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="koyokeitai_cd1">所属コード</label>
+                  <label class="col-4" for="koyokeitai_cd1">所属コード</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class="col-4"
                      name="koyokeitai_cd1"
                      size="30"
                      maxlength="10"
@@ -128,10 +129,10 @@
                   />
                </div>
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="koyokeitai_nm1">所属名</label>
+                  <label class="col-4" for="koyokeitai_nm1">所属名</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class=" col-4"
                      name="koyokeitai_nm1"
                      id="koyokeitai_nm1"
                   />
@@ -194,10 +195,10 @@
          <form class="card mb-4" method="Post">
             <div class="card-body">
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="koyokeitai_cd2">雇用形態コード</label>
+                  <label class="col-4" for="koyokeitai_cd2">雇用形態コード</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class=" col-4"
                      name="koyokeitai_cd2"
                      size="30"
                      maxlength="10"
@@ -206,10 +207,10 @@
                   />
                </div>
                <div class="row mb-3 align-items-center">
-                  <label class="col-5" for="koyokeitai_nm2">雇用形態名</label>
+                  <label class="col-4" for="koyokeitai_nm2">雇用形態名</label>
                   <input
                      type="text"
-                     class="form-control"
+                     class=" col-4"
                      name="koyokeitai_nm2"
                      id="koyokeitai_nm2"
                   />
@@ -264,3 +265,28 @@
       </div>
    </div>
 </div>
+<script>
+    
+    //  雇用形態コードをクリックする時、修正・削除のポップアップが表示
+    $(".koyokeitai_cd").click(function () {
+        $("#updateModal input[name='koyokeitai_cd2']").val($(this).text())
+        $("#updateModal input[name='koyokeitai_nm2']").val($(this).parent().next().text())
+        $("#updateModal input[name='valid_flg2']").attr("checked", false);
+        $("#updateModal input[name='valid_flg2'][value='" + $(this).parent().next().next().children().val() + "']").attr("checked", true)
+    })
+// 雇用形態メンテナンスの複写機能(Copy)
+$(".koyokeitaiData tr").click(function () {
+
+    $(".koyokeitaiData tr").removeClass("selected bg-light")
+    $(this).addClass("selected bg-light");
+    $(".kyktcopy").click(function () {
+        $(".tsuika").click();
+        $("#tsuikaModal input[name='koyokeitai_cd1']").val($(".koyokeitaiData tr.selected").children().children().text())
+        $("#tsuikaModal input[name='koyokeitai_nm1']").val($(".koyokeitaiData tr.selected").children()[1].textContent)
+        $("#tsuikaModal input[name='valid_flg1']").attr("checked", false);
+        $("#tsuikaModal input[name='valid_flg1'][value='" + $(".koyokeitaiData tr.selected").children().next().next().children().val() + "']").attr("checked", true)
+    })
+})
+
+
+</script>
