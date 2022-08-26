@@ -6,15 +6,19 @@ namespace UNN_Ki_001.Data.Models
     [Table("m_koyokeitai", Schema = "public")]
     public class M_Koyokeitai
     {
-        
-        /*public M_Koyokeitai( string koyokeitai_cd , string koyokeitai_nm, string valid_flg , string kigyo_cd)
+
+        public M_Koyokeitai()
+        {
+
+        }
+        public M_Koyokeitai( string koyokeitai_cd , string koyokeitai_nm, string valid_flg , string kigyo_cd)
         {
             KigyoCd = kigyo_cd;
             KoyokeitaiCd = koyokeitai_cd;
             KoyokeitaiNm = koyokeitai_nm;
             ValidFlg = valid_flg;
 
-        }*/
+        }
 
         [Column("kigyo_cd")]
         public string KigyoCd { get; set; }
