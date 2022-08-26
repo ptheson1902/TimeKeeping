@@ -1,11 +1,13 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.Serialization;
 using UNN_Ki_001.Data;
 using UNN_Ki_001.Data.Models;
 
@@ -14,6 +16,9 @@ namespace UNN_Ki_001.Pages.Attendance.Record
     [Authorize(Policy = "Rookie")]
     public class IndexModel : BasePageModel
     {
+        // 時刻フォーマットを宣言
+        public static readonly string TIME_FORMAT = "HH:mm";
+
         public List<Kinmuhyo> DataList = new();
         public List<string[]> MKinmuInfoList = new();
         public ShainSearchRecord Target = new();
@@ -57,17 +62,59 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public IActionResult OnPost(string targetListJson, string command = "")
+        public IActionResult OnPost(string targetListJson = "", string command = "", string json = "")
         {
+
             // パラメーターを受け取ります。
             TargetListJson = targetListJson;
 
             // ターゲットリストをデシリアライズします。
             // TODO: デシリアライズ失敗時のテストをしてください。
-            TargetList = JsonConvert.DeserializeObject<ShainSearchRecordList>(TargetListJson);
+            TargetList = JsonConvert.DeserializeObject<ShainSearchRecordList>(targetListJson);
             // もし存在しなければ社員検索へ飛ばします。
             if (TargetList == null)
                 return RedirectToPage("/Attendance/Record/Search");
+            Target = TargetList.Get();
+
+            // jsonが添付されていればDBに変更を適用します。
+            // デシリアライズする
+            var ChangeList = JsonConvert.DeserializeObject<Dictionary<string, KinmuRecordJson>>(json);
+            if (ChangeList != null)
+            {
+                foreach (var item in ChangeList)
+                {
+                    var kinmuDt = item.Key;
+                    var value = item.Value;
+
+                    // もしも既にレコードが存在すれば取り寄せる
+                    var kinmu = _kintaiDbContext.t_kinmus
+                        .Where(e => e.KigyoCd == Target.KigyoCd
+                            && e.ShainNo == Target.ShainNo
+                            && e.KinmuDt == kinmuDt)
+                        .FirstOrDefault();
+                    // そうでなければ作ります
+                    if(kinmu == null)
+                    {
+                        kinmu = new T_Kinmu();
+                        kinmu.KigyoCd = Target.KigyoCd;
+                        kinmu.KinmuDt = value.kinmuDt;
+                        kinmu.ShainNo = Target.ShainNo;
+
+                        _kintaiDbContext.Add(kinmu);
+                    }
+
+                    // パラメーターに従い値を変更
+                    kinmu.DakokuFrDate = value.dakokuFr;
+                    kinmu.DakokuToDate = value.dakokuTo;
+                    kinmu.KinmuFrDate = value.kinmuFr;
+                    kinmu.KinmuToDate = value.kinmuTo;
+                }
+
+
+
+                // 変更を適用
+                _kintaiDbContext.SaveChanges();
+            }
 
             // コマンドを適用して表示を変更します
             switch (command)
@@ -83,9 +130,6 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     break;
                 case "PrevShain":
                     Target = TargetList.Prev().Get();
-                    break;
-                default:
-                    Target = TargetList.Get();
                     break;
             }
 
@@ -160,18 +204,15 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 if (kinmu.MKinmu != null && kinmu.MKinmu.KinmuNm != null)
                     data.Yote = kinmu.MKinmu.KinmuNm;
 
-                // 時刻フォーマットを宣言
-                string timeFormat = "HH:mm";
-
                 // 時刻
                 if (kinmu.DakokuFrDate != null)
-                    data.DakokuStart = ((DateTime)kinmu.DakokuFrDate).ToString(timeFormat);
+                    data.DakokuStart = ((DateTime)kinmu.DakokuFrDate).ToString(TIME_FORMAT);
                 if (kinmu.DakokuToDate != null)
-                    data.DakokuEnd = ((DateTime)kinmu.DakokuToDate).ToString(timeFormat);
+                    data.DakokuEnd = ((DateTime)kinmu.DakokuToDate).ToString(TIME_FORMAT);
                 if (kinmu.KinmuFrDate != null)
-                    data.KinmuStart = ((DateTime)kinmu.KinmuFrDate).ToString(timeFormat);
+                    data.KinmuStart = ((DateTime)kinmu.KinmuFrDate).ToString(TIME_FORMAT);
                 if (kinmu.KinmuToDate != null)
-                    data.KinmuEnd = ((DateTime)kinmu.KinmuToDate).ToString(timeFormat);
+                    data.KinmuEnd = ((DateTime)kinmu.KinmuToDate).ToString(TIME_FORMAT);
 
                 // 休憩
                 if (kinmu.Kyukei != null)
@@ -296,5 +337,175 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
             return kinmuDtList;
         }
+    }
+
+    [DataContract]
+    class KinmuRecordJson
+    {
+        [DataMember(Name = "kinmuDt")]
+        public string kinmuDt = "";
+
+        public DateTime? dakokuFr;
+        public DateTime? dakokuTo;
+        public DateTime? kinmuFr;
+        public DateTime? kinmuTo;
+
+        [DataMember(Name = "dakokuFr")]
+        public string dakokuFrString
+        {
+            get
+            {
+                return dakokuFrString;
+            }
+            set
+            {
+                // パース
+                var array = value.Split(",");
+                var tm = array[0];
+                var kbn = array[1];
+
+
+                try
+                {
+                    // tmを変換
+                    var res = DateTime.ParseExact(tm, "yyyyMMdd_" + IndexModel.TIME_FORMAT, null);
+
+                    // kbnを適用
+                    if (kbn == "1")
+                    {
+                        res = res.AddDays(1);
+                    }
+                    else if (kbn == "-1")
+                    {
+                        res = res.AddDays(-1);
+                    }
+
+                    dakokuFr = res;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+                
+            }
+        }
+        [DataMember(Name = "dakokuTo")]
+        public string dakokuToString
+        {
+            get
+            {
+                return dakokuToString;
+            }
+            set
+            {
+                // パース
+                var array = value.Split(",");
+                var tm = array[0];
+                var kbn = array[1];
+
+                try
+                {
+                    // tmを変換
+                    var res = DateTime.ParseExact(tm, "yyyyMMdd_" + IndexModel.TIME_FORMAT, null);
+
+                    // kbnを適用
+                    if (kbn == "1")
+                    {
+                        res = res.AddDays(1);
+                    }
+                    else if (kbn == "-1")
+                    {
+                        res = res.AddDays(-1);
+                    }
+
+                    dakokuTo = res;
+                }
+                catch(Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+                
+            }
+        }
+        [DataMember(Name = "kinmuFr")]
+        public string kinmuFrString
+        {
+            get
+            {
+                return kinmuFrString;
+            }
+            set
+            {
+                // パース
+                var array = value.Split(",");
+                var tm = array[0];
+                var kbn = array[1];
+
+
+
+                try
+                {
+
+                    // tmを変換
+                    var res = DateTime.ParseExact(tm, "yyyyMMdd_" + IndexModel.TIME_FORMAT, null);
+                    // kbnを適用
+                    if (kbn == "1")
+                    {
+                        res = res.AddDays(1);
+                    }
+                    else if (kbn == "-1")
+                    {
+                        res = res.AddDays(-1);
+                    }
+
+                    kinmuFr = res;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+                
+            }
+        }
+        [DataMember(Name = "kinmuTo")]
+        public string kinmuToString
+        {
+            get
+            {
+                return kinmuToString;
+            }
+            set
+            {
+                // パース
+                var array = value.Split(",");
+                var tm = array[0];
+                var kbn = array[1];
+
+                
+
+                try
+                {
+                    // tmを変換
+                    var res = DateTime.ParseExact(tm, "yyyyMMdd_" + IndexModel.TIME_FORMAT, null);
+                    // kbnを適用
+                    if (kbn == "1")
+                    {
+                        res = res.AddDays(1);
+                    }
+                    else if (kbn == "-1")
+                    {
+                        res = res.AddDays(-1);
+                    }
+
+                    kinmuTo = res;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+                
+            }
+        }
+
     }
 }
