@@ -20,11 +20,11 @@
             <h4 class="col-md-2">社員情報</h4>
             <form method="post" action="" class="col-md-2 w-auto">
                 <input type="hidden" value="PrevShain" name="command" />
-                <input type="submit" class="test" value="前の社員" />
+                <button type="button" class="submit btn btn-sm btn-primary">前の社員</button>
             </form>
             <form method="post" action="" class="col-md-2 w-auto">
                 <input type="hidden" value="NextShain" name="command" />
-                <input type="submit" class="test" value="次の社員" />
+                <button type="button" class="submit btn btn-sm btn-primary">次の社員</button>
             </form>
         </div>
 
@@ -45,11 +45,12 @@
             <h4 class="col-md-2">勤怠情報</h4>
             <form method="post" action="" class="col-md-5 w-auto">
                 <input type="hidden" value="PrevMonth" name="command" />
-                <input type="submit" class="test" value="先月" />
+                @*<input type="button" class="test" value="先月" />*@
+                <button type="button" class="submit btn btn-sm btn-primary">先月</button>
             </form>
             <form method="post" action="" class="col-md-5 w-auto">
                 <input type="hidden" value="NextMonth" name="command" />
-                <input type="submit" class="test" value="翌月" />
+                <button type="button" class="submit btn btn-sm btn-primary">翌月</button>
             </form>
         </div>
         <div class="row">
@@ -61,7 +62,7 @@
             <!-- 有給 -->
             <form method="post" action="" class="col-md-2 align-content-end">
                 <input type="hidden" value="SaveChange" name="command" />
-                <input type="submit" class="test" value="登録" />
+                <button type="button" class="save-change btn btn-sm btn-primary">登録実行</button>
             </form>
         </div>
     </div>
@@ -81,13 +82,13 @@
                 <th>備考</th>
             </tr>
             @foreach(var item in Model.DataList) {
-                <tr class="Record" id="@item.KinmuDt">
+                <tr class="kinmu" data-origin="@item.KinmuDt">
                     <!-- 勤務日 -->
-                    <td>
+                    <td class="kinmu_dt">
                         @item.Day
                     </td>
                     <!-- 勤務内容 -->
-                    <td>
+                    <td class="mkinmu">
                         <select>                            
                             <option></option>
                             @foreach (var info in Model.MKinmuInfoList)
@@ -99,50 +100,69 @@
                         </select>
                     </td>
                     <!-- 打刻開始 -->
-                    <td>
-                        <input type="time" class="DakokuStart"
+                    <td class="kinmu_dakoku_fr">
+                        <select>
+                            <option value="-1">前日</option>
+                            <option value="0" selected>当日</option>
+                            <option value="1">翌日</option>
+                        </select>
+                        <input type="time"
                             value="@item.DakokuStart">
                     </td>
                     <!-- 打刻終了 -->
-                    <td>
-                        <input type="time" class="DakokuEnd"
+                    <td class="kinmu_dakoku_to">
+                        <select>
+                            <option value="-1">前日</option>
+                            <option value="0" selected>当日</option>
+                            <option value="1">翌日</option>
+                        </select>
+                        <input type="time"
                             value="@item.DakokuEnd">
                     </td>
                     <!-- 勤務開始 -->
-                    <td>
+                    <td class="kinmu_kinmu_fr">
+                        <select>
+                            <option value="-1">前日</option>
+                            <option value="0" selected>当日</option>
+                            <option value="1">翌日</option>
+                        </select>
                         <input type="time" class="KinmuStart"
                             value="@item.KinmuStart">
                     </td>
-                    <!-- 勤務開始 -->
-                    <td>
-                        <input type="time" class="KinmuEnd"
+                    <!-- 勤務終了 -->
+                    <td class="kinmu_kinmu_to">
+                        <select>
+                            <option value="-1">前日</option>
+                            <option value="0" selected>当日</option>
+                            <option value="1">翌日</option>
+                        </select>
+                        <input type="time"
                             value="@item.KinmuEnd">
                     </td>
                     <!-- 休憩 -->
-                    <td>
+                    <td class="kinmu_kyukei">
                         @item.Kyukei
                     </td>
                     <!-- 控除 -->
-                    <td>
+                    <td class="kinmu_kojo">
                         @item.Kojo
                     </td>
                     <!-- 総労働 -->
-                    <td>
+                    <td class="kinmu_sorodo">
                         @item.Sorodo
                     </td>
                     <!-- 備考 -->
-                    <td>
+                    <td class="kinmu_biko">
                         <textarea value="@item.Biko" class="w-100"rows="1"></textarea>
                     </td>
                 </tr>
             }
          </table>
      </div>
-
-
  </div>
 
-
+ <!-- 同期的にJavaScriptを読み込む -->
+<script type="text/javascript" src="../js/Attendance.Record_async.js" async></script>
 
    
 

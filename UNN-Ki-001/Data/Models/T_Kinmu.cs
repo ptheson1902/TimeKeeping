@@ -296,10 +296,10 @@ namespace UNN_Ki_001.Data.Models
         public DateTime? DakokuToDate { get; set; }
 
         [Column("kinmu_fr_date")]
-        public DateTime? KinmuFrDate { get; private set; }
+        public DateTime? KinmuFrDate { get; set; }
 
         [Column("kinmu_to_date")]
-        public DateTime? KinmuToDate { get; private set; }
+        public DateTime? KinmuToDate { get; set; }
 
 
         [Column("shotei")]
