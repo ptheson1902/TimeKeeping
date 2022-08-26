@@ -200,7 +200,7 @@
                      <option value="1">前日</option>
                      <option value="2">翌日</option>
                  </select>
-                 <input id="appt-time" type="time"asp-for="MKinmu.KinmuFrTm" >
+                 <input type="time"asp-for="MKinmu1.KinmuFrTm" >
                  -
                  <select class="col-2" asp-for="MKinmu1.KinmuToKbn">
                      <option value="0" selected>当日</option>
@@ -217,7 +217,7 @@
                      <option value="1">前日</option>
                      <option value="2">翌日</option>
                  </select>
-                 <input id="appt-time" type="time" asp-for="MKinmu1.Kyukei1FrTm" >
+                 <input type="time" asp-for="MKinmu1.Kyukei1FrTm" >
                  -
                   <select class="col-2" asp-for="MKinmu1.Kyukei1ToKbn">
                      <option></option>
@@ -225,7 +225,7 @@
                      <option value="1">前日</option>
                      <option value="2">翌日</option>
                  </select>
-                 <input id="appt-time" type="time" asp-for="MKinmu1.Kyukei1ToTm" value="">
+                 <input type="time" asp-for="MKinmu1.Kyukei1ToTm">
                </div>
                 <div class=" mb-3 align-items-center">
                  <label for="appt-time" class="col-3">休憩時間2</label>
@@ -235,33 +235,33 @@
                      <option value="1">前日</option>
                      <option value="2">翌日</option>
                  </select>
-                 <input id="appt-time" type="time"  asp-for="MKinmu1.Kyukei2FrTm" value="">
+                 <input type="time" asp-for="MKinmu1.Kyukei2FrTm">
                  -
-                  <select class="col-2"  asp-for="MKinmu1.Kyukei2ToKbn">
+                  <select class="col-2" asp-for="MKinmu1.Kyukei2ToKbn">
                      <option></option>
                      <option value="0">当日</option>
                      <option value="1">前日</option>
                      <option value="2">翌日</option>
                  </select>
-                 <input id="appt-time" type="time" asp-for="MKinmu1.Kyukei2ToTm" value="">
+                 <input type="time" asp-for="MKinmu1.Kyukei2ToTm">
                </div>
-                <div class=" mb-3 align-items-center">
+                <div class= mb-3 align-items-center">
                  <label for="appt-time" class="col-3">休憩時間3</label>
-                  <select class="col-2"  asp-for="MKinmu1.Kyukei3FrKbn">
+                  <select class="col-2" asp-for="MKinmu1.Kyukei3FrKbn">
                      <option></option>
                      <option value="0">当日</option>
                      <option value="1">前日</option>
                      <option value="2">翌日</option>
                  </select>
-                 <input id="appt-time" type="time" asp-for="MKinmu1.Kyukei3FrTm" value="">
+                 <input type="time" asp-for="MKinmu1.Kyukei3FrTm" value="">
                  -
-                  <select class="col-2"  asp-for="MKinmu1.Kyukei3ToKbn">
+                  <select class="col-2" asp-for="MKinmu1.Kyukei3ToKbn">
                      <option></option>
                      <option value="0">当日</option>
                      <option value="1">前日</option>
                      <option value="2">翌日</option>
                  </select>
-                 <input id="appt-time" type="time" asp-for="MKinmu1.Kyukei3ToTm">
+                 <input type="time" asp-for="MKinmu1.Kyukei3ToTm">
                </div>
                <div class=" mb-3 align-items-center">
                  <label for="shotei_tm" class="col-3">所定時間</label>
@@ -269,22 +269,22 @@
                </div>
                <div class="mb-3 align-items-center">
                  <label for="dakoku_settei">打刻設定</label>
-@*                 　<input type="checkbox" asp-for="MKinmu1.KyukeiAutoFlg">
-                   <label class="">休憩打刻を退勤打刻時に自動追加する</label>
-                   <input type="checkbox" asp-for="MKinmu1.KinmuFrCtrlFlg">
-                   <label class="">始業前打刻を勤務開始時間にあわせる</label>*@
+                 　<input type="checkbox" name="KyukeiAuto" value="1">
+                   <label class="" >休憩打刻を退勤打刻時に自動追加する</label>
+                   <input type="checkbox" name="KinmuAuto" value="1">
+                   <label class="" >始業前打刻を勤務開始時間にあわせる</label>
                </div>
                <div class=" mb-3 align-items-center">
                  <label for="marume">打刻丸め設定</label>
                  <div>
                      <label class="col-3">始業</label>
-                     <select class="col-3"  asp-for="MKinmu1.KinmuFrMarumeKbn">
+                     <select class="col-3" asp-for="MKinmu1.KinmuFrMarumeKbn">
                          <option></option>
                          <option value="0">丸めなし</option>
                          <option value="1">切り下げる</option>
                          <option value="2">切り上げる</option>
                      </select>
-                     <input type="text"  asp-for="MKinmu1.KinmuFrMarumeTm" class="col-2">
+                     <input type="text" asp-for="MKinmu1.KinmuFrMarumeTm" class="col-2">
                      <label>分単位</label>
                  </div>
                  <div>
@@ -295,18 +295,18 @@
                          <option value="1">切り下げる</option>
                          <option value="2">切り上げる</option>
                      </select>
-                     <input type="text"  asp-for="MKinmu1.KinmuToMarumeTm" class="col-2">
+                     <input type="text" asp-for="MKinmu1.KinmuToMarumeTm" class="col-2">
                      <label>分単位</label>
                  </div>
                  <div>
                      <label class="col-3">休憩開始</label>
-                     <select class="col-3"  asp-for="MKinmu1.KyukeiFrMarumeKbn">
+                     <select class="col-3" asp-for="MKinmu1.KyukeiFrMarumeKbn">
                          <option></option>
                          <option value="0">丸めなし</option>
                          <option value="1">切り下げる</option>
                          <option value="2">切り上げる</option>
                      </select>
-                     <input type="text"  asp-for="MKinmu1.KyukeiFrMarumeTm" class="col-2">
+                     <input type="text" asp-for="MKinmu1.KyukeiFrMarumeTm" class="col-2">
                      <label>分単位</label>
                  </div>
                   <div>
@@ -317,7 +317,7 @@
                          <option value="1">切り下げる</option>
                          <option value="2">切り上げる</option>
                      </select>
-                     <input type="text"  asp-for="MKinmu1.KyukeiToMarumeTm" class="col-2">
+                     <input type="text" asp-for="MKinmu1.KyukeiToMarumeTm" class="col-2">
                      <label>分単位</label>
                  </div>
                </div>
@@ -339,8 +339,6 @@
                      />
                </div>
             </div>
-             
-
                <div class="d-flex justify-content-end mt-2">
                   <input
                      type="button"

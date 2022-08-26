@@ -83,26 +83,35 @@ namespace UNN_Ki_001.Pages.VariousMaster
         private void Register(M_Shain? shain)
         {
             MKinmu1.KigyoCd = shain.KigyoCd;
-            if (MKinmu1.KinmuFrCtrlFlg != null && MKinmu1.KinmuFrCtrlFlg.Equals("false"))
-                MKinmu1.KinmuFrCtrlFlg = "0";
-            if (MKinmu1.KinmuFrCtrlFlg != null && MKinmu1.KinmuFrCtrlFlg.Equals("true"))
-                MKinmu1.KinmuFrCtrlFlg = "1";
-            if (MKinmu1.KyukeiAutoFlg != null && MKinmu1.KyukeiAutoFlg.Equals("false"))
-                MKinmu1.KyukeiAutoFlg = "0";
-            if (MKinmu1.KyukeiAutoFlg != null && MKinmu1.KyukeiAutoFlg.Equals("true"))
-                MKinmu1.KyukeiAutoFlg = "1";
-            _kintaiDbContext.m_kinmus.Add(MKinmu1);
-            try
-            {
-                _kintaiDbContext.SaveChanges();
-                Message = "ok";
-            }
-            catch
-            {
-                Debug.WriteLine("Error!!!");
-                Message = "false";
-            }
-        }
 
+            string a = Request.Form["KyukeiAuto"];
+            if (a == null)
+                a = "0";
+            string b = Request.Form["KinmuAuto"];
+            if (b == null)
+                b = "0";
+            /*if(MKinmu1.KinmuFrCtrlFlg != null && MKinmu1.KinmuFrCtrlFlg.Equals("false"))
+                MKinmu1.KinmuFrCtrlFlg = "0";
+            else 
+                MKinmu1.KinmuFrCtrlFlg = "1";
+
+            if (MKinmu1.KyukeiAutoFlg != null && MKinmu1.KyukeiAutoFlg.Equals("false"))
+            else
+                MKinmu1.KyukeiAutoFlg = "1";*/
+
+            MKinmu1.KyukeiAutoFlg = a;
+            MKinmu1.KinmuFrCtrlFlg = b;
+
+            MKinmu1.KinmuFrTm = MKinmu1.KinmuFrTm.Replace(":", "");
+            MKinmu1.KinmuToTm = MKinmu1.KinmuToTm.Replace(":", "");
+            MKinmu1.Kyukei1FrTm = MKinmu1.Kyukei1FrTm.Replace(":", "");
+            MKinmu1.Kyukei1ToTm = MKinmu1.Kyukei1ToTm.Replace(":", "");
+            MKinmu1.Kyukei2FrTm = MKinmu1.Kyukei2FrTm.Replace(":", "");
+            MKinmu1.Kyukei2ToTm = MKinmu1.Kyukei2ToTm.Replace(":", "");
+            MKinmu1.Kyukei3FrTm = MKinmu1.Kyukei3FrTm.Replace(":", "");
+            MKinmu1.Kyukei3ToTm = MKinmu1.Kyukei3ToTm.Replace(":", "");
+            _kintaiDbContext.Add(MKinmu1);
+            _kintaiDbContext.SaveChanges();
+        }
     }
 }
