@@ -42,43 +42,46 @@ namespace UNN_Ki_001.Data.Models
                 KinmuToDate = CalcKinmuTo(master, (DateTime)DakokuToDate);
             }
 
-            // 直前の勤務レコードと重複していないかどうかの確認
+
+            // 直後の勤務レコードと重複していないかどうかの確認
             if (KinmuFrDate != null)
             {
                 var tgt = context.t_kinmus
-                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuFrDate < ((DateTime)KinmuFrDate).ToUniversalTime())
-                    .OrderByDescending(e => e.KinmuFrDate)
+                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuFrDate > KinmuFrDate && e.KinmuDt != KinmuDt)
+                    .OrderBy(e => e.KinmuFrDate)
                     .FirstOrDefault();
+                if (tgt != null && tgt.KinmuFrDate < KinmuToDate)
+                {
+                    throw new Exception("直後の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。");
+                }
+            }
+            // 直前の勤務レコードと重複していないかどうかの確認
+            if (KinmuToDate != null)
+            {
+                var tgt = context.t_kinmus
+                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuToDate < KinmuToDate && e.KinmuDt != KinmuDt)
+                    .OrderByDescending(e => e.KinmuToDate)
+                    .FirstOrDefault();
+                // TODO: 注意点
                 if (tgt != null && tgt.KinmuToDate > KinmuFrDate)
                 {
                     throw new Exception("直前の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。");
                 }
             }
-            // 直後の勤務レコードと重複していないかどうかの確認
-            if (KinmuToDate != null)
-            {
-                var tgt = context.t_kinmus
-                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuToDate > ((DateTime)KinmuToDate).ToUniversalTime())
-                    .OrderBy(e => e.KinmuToDate)
-                    .FirstOrDefault();
-                // TODO: 注意点
-                if (tgt != null && tgt.KinmuFrDate > KinmuToDate)
-                {
-                    throw new Exception("直後の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。");
-                }
-            }
+
             // 実績時間の整合性を確認・修正
             if (KinmuFrDate != null && KinmuToDate != null)
             {
                 // 総労働時間がマイナスになるようなら訂正する(丸め処理によっては必要になる）
-                if(KinmuFrDate > KinmuToDate)
+                if (KinmuFrDate > KinmuToDate)
                 {
                     KinmuToDate = KinmuFrDate;
                 }
             }
-            
+
+
             // 所定時間の計算
-            if(Shotei == null)
+            if (Shotei == null)
             {
                 Shotei = CalcShotei(master);
             }

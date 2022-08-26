@@ -90,7 +90,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     var kinmu = _kintaiDbContext.t_kinmus
                         .Where(e => e.KigyoCd == Target.KigyoCd
                             && e.ShainNo == Target.ShainNo
-                            && e.KinmuDt == value.kinmuDt)
+                            && e.KinmuDt == kinmuDt)
                         .FirstOrDefault();
                     // ÇªÇ§Ç≈Ç»ÇØÇÍÇŒçÏÇËÇ‹Ç∑
                     if(kinmu == null)
@@ -345,10 +345,10 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         [DataMember(Name = "kinmuDt")]
         public string kinmuDt = "";
 
-        public DateTime dakokuFr;
-        public DateTime dakokuTo;
-        public DateTime kinmuFr;
-        public DateTime kinmuTo;
+        public DateTime? dakokuFr;
+        public DateTime? dakokuTo;
+        public DateTime? kinmuFr;
+        public DateTime? kinmuTo;
 
         [DataMember(Name = "dakokuFr")]
         public string dakokuFrString
