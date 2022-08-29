@@ -17,17 +17,23 @@ namespace UNN_Ki_001.Data.Models
 
         private int getShotei()
         {
-            TimeSpan kftm = TimeSpan.FromMinutes(int.Parse(KinmuFrTm == null ? "0" : KinmuFrTm));
-            TimeSpan kttm = TimeSpan.FromMinutes(int.Parse(KinmuToTm == null ? "0" : KinmuToTm));
-            TimeSpan kkftm1 = TimeSpan.FromMinutes(int.Parse(Kyukei1FrTm == null ? "0" : Kyukei1FrTm));
-            TimeSpan kkttm1 = TimeSpan.FromMinutes(int.Parse(Kyukei1ToTm == null ? "0" : Kyukei1ToTm));
-            TimeSpan kkftm2 = TimeSpan.FromMinutes(int.Parse(Kyukei2FrTm == null ? "0" : Kyukei2FrTm));
-            TimeSpan kkttm2 = TimeSpan.FromMinutes(int.Parse(Kyukei2ToTm == null ? "0" : Kyukei2ToTm));
-            TimeSpan kkftm3 = TimeSpan.FromMinutes(int.Parse(Kyukei3FrTm == null ? "0" : Kyukei3FrTm));
-            TimeSpan kkttm3 = TimeSpan.FromMinutes(int.Parse(Kyukei3ToTm == null ? "0" : Kyukei3ToTm));
+            TimeSpan kftm = TimeSpan.FromMinutes(Cal(KinmuFrTm));
+            TimeSpan kttm = TimeSpan.FromMinutes(Cal(KinmuToTm));
+            TimeSpan kkftm1 = TimeSpan.FromMinutes(Cal(Kyukei1FrTm));
+            TimeSpan kkttm1 = TimeSpan.FromMinutes(Cal(Kyukei1ToTm));
+            TimeSpan kkftm2 = TimeSpan.FromMinutes(Cal(Kyukei2FrTm));
+            TimeSpan kkttm2 = TimeSpan.FromMinutes(Cal(Kyukei2ToTm));
+            TimeSpan kkftm3 = TimeSpan.FromMinutes(Cal(Kyukei3FrTm));
+            TimeSpan kkttm3 = TimeSpan.FromMinutes(Cal(Kyukei3ToTm));
 
-            TimeSpan stm = (kftm - kttm - (kkftm1 - kkttm1) - (kkftm2 - kkttm2) - (kkftm3 - kkttm3));
+            TimeSpan stm = (kttm - kftm - (kkttm1 - kkftm1) - (kkttm2 - kkftm2) - (kkttm3 - kkftm3));
             return (int)stm.TotalMinutes;
+        }
+        private int Cal(string time)
+        {
+            if (time == null)
+                return 0;
+            return int.Parse(time.Substring(0,2)) * 60 + int.Parse(time.Substring(2));
         }
 
         [Key]

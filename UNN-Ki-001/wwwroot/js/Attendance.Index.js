@@ -10,7 +10,7 @@
         h = "0" + h;
     }
     $(".main .left .time").text(h + " : " + m);
-    setTimeout(function () { getdate() }, 1);
+    setTimeout(function () { Timer() }, 1);
 }
 Timer()
 // Calendar

@@ -29,6 +29,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
         public void OnPost()
         {
             var shain = GetCurrentUserShainAsync().Result;
+
             var action = Request.Form["action"];
             switch (action)
             {
