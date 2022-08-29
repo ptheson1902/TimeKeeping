@@ -10,7 +10,7 @@
         h = "0" + h;
     }
     $(".main .left .time").text(h + " : " + m);
-    setTimeout(function () { getdate() }, 1);
+    setTimeout(function () { Timer() }, 1);
 }
 Timer()
 // Calendar
@@ -154,7 +154,6 @@ function GetData(year, month) {
         cache: false,
         url: "/Attendance/GetData/" + year + "-" + month,
         method: "get",
-        Cache: "false",
         success: function (e) {
             Calendar(year, month, e);
         }
