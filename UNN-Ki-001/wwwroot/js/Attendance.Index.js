@@ -154,7 +154,6 @@ function GetData(year, month) {
         cache: false,
         url: "/Attendance/GetData/" + year + "-" + month,
         method: "get",
-        Cache: "false",
         success: function (e) {
             Calendar(year, month, e);
         }

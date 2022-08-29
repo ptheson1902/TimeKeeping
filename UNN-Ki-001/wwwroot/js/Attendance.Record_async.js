@@ -26,10 +26,10 @@ $(".kinmu").change(function () {
     // 値を取り出します。
     let res_cd = cd[0].value;
     // C#で取り込み時にまとめてパースするためにくっつけます。
-    let res_dakoku_fr = dt + "_" + dakoku_fr_tm.value + "," + dakoku_fr_kbn.value;
-    let res_dakoku_to = dt + "_" + dakoku_to_tm.value + "," + dakoku_to_kbn.value;
-    let res_kinmu_fr = dt + "_" + kinmu_fr_tm.value + "," + kinmu_fr_kbn.value;
-    let res_kinmu_to = dt + "_" + kinmu_to_tm.value + "," + kinmu_to_kbn.value;
+    let res_dakoku_fr = dt + "," + dakoku_fr_tm.value + "," + dakoku_fr_kbn.value;
+    let res_dakoku_to = dt + "," + dakoku_to_tm.value + "," + dakoku_to_kbn.value;
+    let res_kinmu_fr = dt + "," + kinmu_fr_tm.value + "," + kinmu_fr_kbn.value;
+    let res_kinmu_to = dt + "," + kinmu_to_tm.value + "," + kinmu_to_kbn.value;
     let res_biko = biko[0].value;
 
     // 連想配列を作成
@@ -66,3 +66,44 @@ $("form .save-change").click(function () {
     console.log(ChangeTrackerJson);
     $(this).parent().submit();
 })
+
+// 休憩ボタン押下時の処理
+function openKyukei(kinmuDt, shainNo, kigyoCd) {
+    // 非同期で休憩レコードのjsonを受信する
+    $.ajax({
+        url: "./Record/Kyukei",
+        method: "GET",
+        contentType: "application/json",
+        data: {
+            kinmuDt: kinmuDt,
+            shainNo: shainNo,
+            kigyoCd: kigyoCd
+        },
+        cache: false
+    }).done(function (res) {
+        // モーダルウィンドウ初期化
+        $target = $(".kyukei-table");
+        $target.empty();
+
+        // 行を追加
+        res.forEach(record => {
+            $template = $(".row-template").clone();
+
+            // 開始時刻
+            if (record.start != "") {
+                $start = $template.children(".start");
+                $start.children("input[type='time']").val(record.start);
+                $start.children("select").val(record.startKbn);
+            }
+
+            // 終了時刻
+            if (record.end != "") {
+                $end = $template.children(".end");
+                $end.children("input[type='time']").val(record.end);
+                $end.children("select").val(record.endKbn);
+            }
+
+            $target.append($template);
+        })
+    })
+}
