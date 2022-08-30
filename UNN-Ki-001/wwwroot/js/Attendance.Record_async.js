@@ -27,7 +27,9 @@ $(".kinmu").change(function () {
     */
 
     // 値を取り出します。
+    
     var res_cd = target.kinmuCd;
+    console.log(res_cd);
     // C#で取り込み時にまとめてパースするためにくっつけます。
     var res_dakoku_fr = target.kinmuDt + "," + target.dakokuFrTm + "," + target.dakokuFrKbn;
     var res_dakoku_to = target.kinmuDt + "," + target.dakokuToTm + "," + target.dakokuToKbn
@@ -95,7 +97,7 @@ function kinmuRecord(kinmu) {
 
     // 値の取り出し
     let kinmuDt = kinmu.data("origin").toString();
-    console.log(kinmuDt);
+    let kinmuCd = kinmu.children(".mkinmu").children("select").value;
 
     let dakokuFr = kinmu.children(".kinmu_dakoku_fr");
     let dakokuFrTm = dakokuFr.children("input")[0].value;
@@ -116,7 +118,8 @@ function kinmuRecord(kinmu) {
     // オブジェクトの生成
     let obj = {
         kinmuDt: kinmuDt,
-        kinmuCd: kinmu.children(".mkinmu").children("select").value,
+        kinmuCd: kinmuCd,
+        kinmuCd: kinmu.children(".mkinmu").children("select").val(),
         dakokuFrTm: dakokuFrTm,
         dakokuFrKbn: dakokuFrKbn,
         dakokuToTm: dakokuToTm,
@@ -152,7 +155,6 @@ $("form .save-change").click(function () {
     // フォームに追加する
     $(this).parent().append($("<input type=\"hidden\" name=\"json\"/>").val(ChangeTrackerJson));
     // 送信
-    console.log(ChangeTrackerJson);
     $(this).parent().submit();
 })
 
