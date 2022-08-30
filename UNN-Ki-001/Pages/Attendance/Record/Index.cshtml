@@ -6,15 +6,27 @@
     ViewData["Title"] = "勤務表";
     var isNotAdmin = !User.IsInRole("Admin");
 }
- <h1>@ViewData["Title"]</h1>
-
  <!-- 全てのフォームにonLoadで追加するデータ -->
 <input type="hidden" id="targetListJson" name="targetListJson" value='@Model.TargetListJson' />
- 
  <!-- メインコンテナ -->
  <div class="container-fluid">
-
-
+    @*<div class="top row">
+        <div class="col-2 title">社員番号</div>
+        <div class="col-10">
+            <div class="title">勤務表</div>
+            <div class="monthBtn">
+                <div class="date">2022年8月</div>
+                <div class="listBtn">
+                    <form method="post" action="" class="col-md-4" style="">
+                        <input type="hidden" value="PrevMonth" name="command" />
+                        <button type="submit" value="PrevMonth" name="command" class="prevMonth btn btn-sm btn-light">前月</button>
+                    </form>
+                    <button type="button" class="nowMonth btn-sm btn-light">当月</button>
+                    <button type="button" class="nextMonth btn-sm btn-light">翌月</button>
+                </div>
+            </div>
+        </div>
+    </div>*@
      <!-- 社員情報 -->
     <div class="row border mb-5 align-items-center">
         <div class="row">
