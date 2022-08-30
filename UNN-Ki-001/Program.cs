@@ -37,7 +37,7 @@ builder.Services.AddAuthorization(options =>
     // Admin許可用のポリシー
     options.AddPolicy("Admin", builder =>
     {
-        builder.RequireRole("Admin", "Manager");
+        builder.RequireRole("Admin");
     });
 
     // ついでにManager用も用意しておく

@@ -232,8 +232,6 @@ namespace UNN_Ki_001.Data.Models
 
             int totalMinutes = 0;
 
-            Debug.WriteLine("数は" + list.Count);
-
             // 勤務時間の枠に押し込む
             foreach (var item in list)
             {
@@ -290,7 +288,7 @@ namespace UNN_Ki_001.Data.Models
         public string? KinmuDt { get; set; }
 
         [Column("kinmu_cd")]
-        public string? KinmuCd { get; private set; }
+        public string? KinmuCd { get; set; }
 
         [Column("dakoku_fr_date")]
         public DateTime? DakokuFrDate { get; set; }

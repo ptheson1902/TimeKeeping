@@ -20,11 +20,11 @@
             <h4 class="col-md-2">社員情報</h4>
             <form method="post" action="" class="col-md-2 w-auto">
                 <input type="hidden" value="PrevShain" name="command" />
-                <button type="button" class="submit btn btn-sm btn-primary">前の社員</button>
+                <button type="button" class="submit btn btn-sm btn-secondary">前の社員</button>
             </form>
             <form method="post" action="" class="col-md-2 w-auto">
                 <input type="hidden" value="NextShain" name="command" />
-                <button type="button" class="submit btn btn-sm btn-primary">次の社員</button>
+                <button type="button" class="submit btn btn-sm btn-secondary">次の社員</button>
             </form>
         </div>
 
@@ -43,24 +43,29 @@
     <div class="row mb-3 align-items-center">
         <div class="row">
             <h4 class="col-md-2">勤怠情報</h4>
-            <form method="post" action="" class="col-md-5 w-auto">
-                <input type="hidden" value="PrevMonth" name="command" />
-                @*<input type="button" class="test" value="先月" />*@
-                <button type="button" class="submit btn btn-sm btn-primary">先月</button>
-            </form>
-            <form method="post" action="" class="col-md-5 w-auto">
-                <input type="hidden" value="NextMonth" name="command" />
-                <button type="button" class="submit btn btn-sm btn-primary">翌月</button>
-            </form>
         </div>
         <div class="row">
-            <h4 class="col-md-10">@((Model.TargetList == null) ? "日時エラー" : Model.TargetList.CurrentDate.ToString("yyyy年MM月"))</h4>
+            <h4 class="col-md-4">@((Model.TargetList == null) ? "日時エラー" : Model.TargetList.CurrentDate.ToString("yyyy年MM月度"))</h4>
+            <div class="row rounded-pill" style="max-width:300px">
+                <form method="post" action="" class="col-md-4" style="">
+                    <input type="hidden" value="PrevMonth" name="command" />
+                    <button type="button" class="submit bg-primary rounded-start" style="width: 100px; border-radius: 50rem 0 0 50rem !important">先月</button>
+                </form>
+                <form method="post" action="" class="col-md-4">
+                    <input type="hidden" value="NowMonth" name="command" />
+                    <button type="button" class="submit bg-primary" style="width: 100px;">今月</button>
+                </form>
+                <form method="post" action="" class="col-md-4" style="">
+                    <input type="hidden" value="NextMonth" name="command" />
+                    <button type="button" class="submit bg-primary rounded-end" style="width: 100px; border-radius: 0 50rem 50rem 0 !important">翌月</button>
+                </form>
+            </div>
             <!-- 所定労働時間 -->
             <!-- 総労働 -->
             <!-- 所定日数 -->
             <!-- 休日 -->
             <!-- 有給 -->
-            <form method="post" action="" class="col-md-2 align-content-end">
+            <form method="post" action="" class="col-md-2 align-content-end ms-3">
                 <input type="hidden" value="SaveChange" name="command" />
                 <button type="button" class="save-change btn btn-sm btn-primary">登録実行</button>
             </form>
@@ -81,7 +86,9 @@
                 <th>総労働</th>
                 <th>備考</th>
             </tr>
+
             @foreach(var item in Model.DataList) {
+
                 <tr class="kinmu" data-origin="@item.KinmuDt">
                     <!-- 勤務日 -->
                     <td class="kinmu_dt">
@@ -101,48 +108,44 @@
                     </td>
                     <!-- 打刻開始 -->
                     <td class="kinmu_dakoku_fr">
-                        <select>
-                            <option value="-1">前日</option>
-                            <option value="0" selected>当日</option>
-                            <option value="1">翌日</option>
+                        <select disabled>
+                            <option value="1" selected="@(item.DakokuFrKbn == 1 ? true : false)">前日</option>
+                            <option value="0" selected="@(item.DakokuFrKbn == 0 ? true : false)">当日</option>
+                            <option value="2" selected="@(item.DakokuFrKbn == 2 ? true : false)">翌日</option>
                         </select>
-                        <input type="time"
-                            value="@item.DakokuStart">
+                        <input type="time" value="@item.DakokuStart" disabled>
                     </td>
                     <!-- 打刻終了 -->
                     <td class="kinmu_dakoku_to">
-                        <select>
-                            <option value="-1">前日</option>
-                            <option value="0" selected>当日</option>
-                            <option value="1">翌日</option>
+                        <select disabled>
+                            <option value="1" selected="@(item.DakokuFrKbn == 1 ? true : false)">前日</option>
+                            <option value="0" selected="@(item.DakokuFrKbn == 0 ? true : false)">当日</option>
+                            <option value="2" selected="@(item.DakokuFrKbn == 2 ? true : false)">翌日</option>
                         </select>
-                        <input type="time"
-                            value="@item.DakokuEnd">
+                        <input type="time" value="@item.DakokuEnd" disabled>
                     </td>
                     <!-- 勤務開始 -->
                     <td class="kinmu_kinmu_fr">
                         <select>
-                            <option value="-1">前日</option>
-                            <option value="0" selected>当日</option>
-                            <option value="1">翌日</option>
+                            <option value="1" selected="@(item.DakokuFrKbn == 1 ? true : false)">前日</option>
+                            <option value="0" selected="@(item.DakokuFrKbn == 0 ? true : false)">当日</option>
+                            <option value="2" selected="@(item.DakokuFrKbn == 2 ? true : false)">翌日</option>
                         </select>
-                        <input type="time" class="KinmuStart"
-                            value="@item.KinmuStart">
+                        <input type="time" class="KinmuStart" value="@item.KinmuStart">
                     </td>
                     <!-- 勤務終了 -->
                     <td class="kinmu_kinmu_to">
                         <select>
-                            <option value="-1">前日</option>
-                            <option value="0" selected>当日</option>
-                            <option value="1">翌日</option>
+                            <option value="1" selected="@(item.DakokuFrKbn == 1 ? true : false)">前日</option>
+                            <option value="0" selected="@(item.DakokuFrKbn == 0 ? true : false)">当日</option>
+                            <option value="2" selected="@(item.DakokuFrKbn == 2 ? true : false)">翌日</option>
                         </select>
-                        <input type="time"
-                            value="@item.KinmuEnd">
+                        <input type="time" value="@item.KinmuEnd">
                     </td>
                     <!-- 休憩 -->
                     <td class="kinmu_kyukei">
                         @item.Kyukei
-                    </td>
+                        <button type="button" class="btn-kyukei btn-secondary kyukei-dakoku" onclick="openKyukei('@item.KinmuDt', '@Model.Target.ShainNo', '@Model.Target.KigyoCd');" data-bs-toggle="modal" data-bs-target="#kyukei-modal">詳細</button>
                     <!-- 控除 -->
                     <td class="kinmu_kojo">
                         @item.Kojo
@@ -153,13 +156,66 @@
                     </td>
                     <!-- 備考 -->
                     <td class="kinmu_biko">
-                        <textarea value="@item.Biko" class="w-100"rows="1"></textarea>
+                        <textarea class="w-100"rows="1">@item.Biko</textarea>
                     </td>
                 </tr>
             }
          </table>
      </div>
  </div>
+
+
+ <!-- 休憩Modal -->
+<div class="modal fade" id="kyukei-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">休憩</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <!-- 本文 -->
+            <table class="border">
+                <thead>
+                    <tr>
+                        <th>開始時間</th>
+                        <th>終了時間</th>
+                    </tr>
+                </thead>
+                <tbody class="kyukei-table">
+
+                </tbody>
+                <tbody hidden>
+                    <tr class="row-template">
+                        <td class="start">
+                            <select>
+                                <option value="1">前日</option>
+                                <option value="0">当日</option>
+                                <option value="2">翌日</option>
+                            </select>
+                            <input type="time" />
+                        </td>
+                        <td class="end">
+                            <select>
+                                <option value="1">前日</option>
+                                <option value="0">当日</option>
+                                <option value="2">翌日</option>
+                            </select>
+                            <input type="time" />
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+            
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+    </div>
+</div>
 
  <!-- 同期的にJavaScriptを読み込む -->
 <script type="text/javascript" src="../js/Attendance.Record_async.js" async></script>

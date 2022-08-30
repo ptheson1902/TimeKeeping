@@ -55,6 +55,12 @@
             return this;
         }
 
+        public ShainSearchRecordList NowMonth()
+        {
+            CurrentDate = DateTime.Now;
+            return this;
+        }
+
         public ShainSearchRecordList PrevMonth()
         {
             CurrentDate = CurrentDate.AddMonths(-1);

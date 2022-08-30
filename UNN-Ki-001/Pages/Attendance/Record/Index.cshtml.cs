@@ -36,25 +36,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         /// <returns></returns>
         public IActionResult OnGet()
         {
-            // 表示対象をセッションから確定します。
-            TargetListJson = HttpContext.Session.GetString(Constants.SEARCH_RECORD_LIST) ?? "";
-            TargetList = JsonConvert.DeserializeObject<ShainSearchRecordList>(TargetListJson);
-            // もし存在しなければ社員検索へ飛ばして作成してもらいます。
-            if(TargetList == null)
-                return RedirectToPage("/Attendance/Record/Search");
-
-            // 表示内容を生成します。
-            Target = TargetList.Get();
-            var mKinmuList = _kintaiDbContext.m_kinmus
-                .Where(e => e.KigyoCd == Target.KigyoCd)
-                .ToList();
-            foreach(var item in mKinmuList)
-            {
-                MKinmuInfoList.Add(new string[] { item.KigyoCd, item.KinmuCd, item.KinmuNm ?? "名称未設定" });
-            }
-            DataList = CreateData(Target, TargetList.CurrentDate);
-
-            return Page();
+            return Init();
         }
 
         /// <summary>
@@ -64,89 +46,122 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         /// <returns></returns>
         public IActionResult OnPost(string targetListJson = "", string command = "", string json = "")
         {
+            // 管理者じゃなければパラメーターを上書きする
+            if (!User.IsInRole("Admin"))
+            {
+                targetListJson = "";
+                command = "";
+                json = "";
+            }
 
-            // パラメーターを受け取ります。
-            TargetListJson = targetListJson;
+            return Init(targetListJson, command, json);
+        }
 
-            // ターゲットリストをデシリアライズします。
-            // TODO: デシリアライズ失敗時のテストをしてください。
-            TargetList = JsonConvert.DeserializeObject<ShainSearchRecordList>(targetListJson);
-            // もし存在しなければ社員検索へ飛ばします。
+        private IActionResult Init(string targetListJson = "", string command = "", string json = "")
+        {
+            if (targetListJson == "")
+            {
+                // 表示対象をセッションから確定します。
+                TargetListJson = HttpContext.Session.GetString(Constants.SEARCH_RECORD_LIST) ?? "";
+            }
+            else
+            {
+                // 表示対象をパラメーターから取得します
+                TargetListJson = targetListJson;
+            }
+            // デシリアライズ実行
+            TargetList = JsonConvert.DeserializeObject<ShainSearchRecordList>(TargetListJson);
+
+            // もし存在しなければ社員検索へ飛ばして作成してもらいます。
             if (TargetList == null)
                 return RedirectToPage("/Attendance/Record/Search");
-            Target = TargetList.Get();
 
-            // jsonが添付されていればDBに変更を適用します。
-            // デシリアライズする
-            var ChangeList = JsonConvert.DeserializeObject<Dictionary<string, KinmuRecordJson>>(json);
-            if (ChangeList != null)
+            // コマンドを処理、ターゲットの情報を確定します。
+            if (command == "NextMonth")
             {
-                foreach (var item in ChangeList)
+                TargetList.NextMonth();
+            }
+            else if(command == "NowMonth")
+            {
+                TargetList.NowMonth();
+            }
+            else if (command == "PrevMonth")
+            {
+                TargetList.PrevMonth();
+            }
+            else if (command == "NextShain")
+            {
+                Target = TargetList.Next().Get();
+            }
+            else if(command == "PrevShain")
+            {
+                Target = TargetList.Prev().Get();
+            }
+            if(Target.KigyoCd == "" || Target.ShainNo == "")
+            {
+                Target = TargetList.Get();
+            }
+
+            // jsonが指定されていればDBを変更処理する
+            if (json != "")
+            {
+                // デシリアライズする
+                var ChangeList = JsonConvert.DeserializeObject<Dictionary<string, KinmuRecordJson>>(json);
+                if (ChangeList != null)
                 {
-                    var kinmuDt = item.Key;
-                    var value = item.Value;
-
-                    // もしも既にレコードが存在すれば取り寄せる
-                    var kinmu = _kintaiDbContext.t_kinmus
-                        .Where(e => e.KigyoCd == Target.KigyoCd
-                            && e.ShainNo == Target.ShainNo
-                            && e.KinmuDt == kinmuDt)
-                        .FirstOrDefault();
-                    // そうでなければ作ります
-                    if(kinmu == null)
+                    foreach (var item in ChangeList)
                     {
-                        kinmu = new T_Kinmu();
-                        kinmu.KigyoCd = Target.KigyoCd;
-                        kinmu.KinmuDt = value.kinmuDt;
-                        kinmu.ShainNo = Target.ShainNo;
+                        var kinmuDt = item.Key;
+                        var value = item.Value;
 
-                        _kintaiDbContext.Add(kinmu);
-                    }
+                        // もしも既にレコードが存在すれば取り寄せる
+                        var kinmu = _kintaiDbContext.t_kinmus
+                            .Where(e => e.KigyoCd == Target.KigyoCd
+                                && e.ShainNo == Target.ShainNo
+                                && e.KinmuDt == kinmuDt)
+                            .FirstOrDefault();
+                        // そうでなければ作ります
+                        if (kinmu == null)
+                        {
+                            kinmu = new T_Kinmu();
+                            kinmu.KigyoCd = Target.KigyoCd;
+                            kinmu.KinmuDt = kinmuDt;
+                            kinmu.ShainNo = Target.ShainNo;
 
-                    // パラメーターに従い値を変更
-                    kinmu.DakokuFrDate = value.dakokuFr;
-                    kinmu.DakokuToDate = value.dakokuTo;
-                    kinmu.KinmuFrDate = value.kinmuFr;
-                    kinmu.KinmuToDate = value.kinmuTo;
+                            _kintaiDbContext.Add(kinmu);
+                        }
+
+                        // パラメーターに従い値を変更
+                        //kinmu.DakokuFrDate = value.dakokuFr; // 打刻のみ変更するとReloadableによって勤務記録が作成されるのが
+                        //kinmu.DakokuToDate = value.dakokuTo; // 一見するとバグなので、いったん変更できないようにしています。
+                        kinmu.KinmuFrDate = value.kinmuFr;
+                        kinmu.KinmuToDate = value.kinmuTo;
+                        kinmu.KinmuCd = value.kinmuCd;
+                        kinmu.Biko = value.biko;
+                    }   
+
+                    // 変更を適用
+                    _kintaiDbContext.SaveChanges();
                 }
-
-
-
-                // 変更を適用
-                _kintaiDbContext.SaveChanges();
             }
 
-            // コマンドを適用して表示を変更します
-            switch (command)
-            {
-                case "NextMonth":
-                    TargetList.NextMonth();
-                    break;
-                case "PrevMonth":
-                    TargetList.PrevMonth();
-                    break;
-                case "NextShain":
-                    Target = TargetList.Next().Get();
-                    break;
-                case "PrevShain":
-                    Target = TargetList.Prev().Get();
-                    break;
-            }
-
-            // 表示内容を生成します。
+            // View表示する勤務表の内容を生成します。
             DataList = CreateData(Target, TargetList.CurrentDate);
+
+            // それに使う勤務マスタの名称を取得します。
             var mKinmuList = _kintaiDbContext.m_kinmus
-            .Where(e => e.KigyoCd == Target.KigyoCd)
-            .ToList();
+                .Where(e => e.KigyoCd == Target.KigyoCd)
+                .ToList();
             foreach (var item in mKinmuList)
             {
                 MKinmuInfoList.Add(new string[] { item.KigyoCd, item.KinmuCd, item.KinmuNm ?? "名称未設定" });
             }
-            Target = TargetList.Get();
 
             // 再びシリアライズしてビューに渡します
             // TODO: シリアライズ失敗時のテストをしてください。
             TargetListJson = JsonConvert.SerializeObject(TargetList);
+            // ついでにセッションも上書きします。
+            HttpContext.Session.SetString(Constants.SEARCH_RECORD_LIST, TargetListJson);
 
             return Page();
         }
@@ -205,18 +220,47 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     data.Yote = kinmu.MKinmu.KinmuNm;
 
                 // 時刻
+                int standardYM = int.Parse(kinmuDt);
+
                 if (kinmu.DakokuFrDate != null)
-                    data.DakokuStart = ((DateTime)kinmu.DakokuFrDate).ToString(TIME_FORMAT);
+                {
+                    var datetime = (DateTime)kinmu.DakokuFrDate;
+                    data.DakokuStart = datetime.ToString(TIME_FORMAT);
+                    // 区分の計算
+                    int targetYM = int.Parse(datetime.ToString("yyyyMMdd"));
+                    data.DakokuFrKbn = (targetYM == standardYM) ? 0 : (targetYM > standardYM) ? 1 : 2;
+                }
                 if (kinmu.DakokuToDate != null)
-                    data.DakokuEnd = ((DateTime)kinmu.DakokuToDate).ToString(TIME_FORMAT);
+                {
+                    var datetime = (DateTime)kinmu.DakokuToDate;
+                    data.DakokuEnd = datetime.ToString(TIME_FORMAT);
+                    // 区分の計算
+                    int targetYM = int.Parse(datetime.ToString("yyyyMMdd"));
+                    data.DakokuToKbn = (targetYM == standardYM) ? 0 : (targetYM > standardYM) ? 1 : 2;
+                }
                 if (kinmu.KinmuFrDate != null)
-                    data.KinmuStart = ((DateTime)kinmu.KinmuFrDate).ToString(TIME_FORMAT);
+                {
+                    var datetime = (DateTime)kinmu.KinmuFrDate;
+
+                    data.KinmuStart = datetime.ToString(TIME_FORMAT);
+                    // 区分の計算
+                    int targetYM = int.Parse(datetime.ToString("yyyyMMdd"));
+                    data.KinmuFrKbn = ( targetYM == standardYM) ? 0 : (targetYM > standardYM) ? 1 : 2;
+                }
                 if (kinmu.KinmuToDate != null)
-                    data.KinmuEnd = ((DateTime)kinmu.KinmuToDate).ToString(TIME_FORMAT);
+                {
+                    var datetime = (DateTime)kinmu.KinmuToDate;
+                    data.KinmuEnd = datetime.ToString(TIME_FORMAT);
+                    // 区分の計算
+                    int targetYM = int.Parse(datetime.ToString("yyyyMMdd"));
+                    data.KinmuToKbn = (targetYM == standardYM) ? 0 : (targetYM > standardYM) ? 1 : 2;
+                }
 
                 // 休憩
                 if (kinmu.Kyukei != null)
                     data.Kyukei = MinutesToString((int)kinmu.Kyukei);
+                else
+                    data.Kyukei = "00:00";
 
                 //総労働
                 if (kinmu.Sorodo != null)
@@ -267,9 +311,13 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         public string KinmuDt;
         public string Yote { get; set; }
         public string DakokuStart { get; set; }
+        public int DakokuFrKbn { get; set; }
         public string DakokuEnd { get; set; }
+        public int DakokuToKbn { get; set; }
         public string KinmuStart { get; set; }
+        public int KinmuFrKbn { get; set; }
         public string KinmuEnd { get; set; }
+        public int KinmuToKbn { get; set; }
         public string Kyukei { get; set; }
         public string Kojo { get; set; }
         public string Sorodo { get; set; }
@@ -359,34 +407,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             }
             set
             {
-                // パース
-                var array = value.Split(",");
-                var tm = array[0];
-                var kbn = array[1];
-
-
-                try
-                {
-                    // tmを変換
-                    var res = DateTime.ParseExact(tm, "yyyyMMdd_" + IndexModel.TIME_FORMAT, null);
-
-                    // kbnを適用
-                    if (kbn == "1")
-                    {
-                        res = res.AddDays(1);
-                    }
-                    else if (kbn == "-1")
-                    {
-                        res = res.AddDays(-1);
-                    }
-
-                    dakokuFr = res;
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
-                
+                dakokuFr = FormatDate(value);
             }
         }
         [DataMember(Name = "dakokuTo")]
@@ -398,33 +419,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             }
             set
             {
-                // パース
-                var array = value.Split(",");
-                var tm = array[0];
-                var kbn = array[1];
-
-                try
-                {
-                    // tmを変換
-                    var res = DateTime.ParseExact(tm, "yyyyMMdd_" + IndexModel.TIME_FORMAT, null);
-
-                    // kbnを適用
-                    if (kbn == "1")
-                    {
-                        res = res.AddDays(1);
-                    }
-                    else if (kbn == "-1")
-                    {
-                        res = res.AddDays(-1);
-                    }
-
-                    dakokuTo = res;
-                }
-                catch(Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
-                
+                dakokuTo = FormatDate(value);
             }
         }
         [DataMember(Name = "kinmuFr")]
@@ -436,35 +431,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             }
             set
             {
-                // パース
-                var array = value.Split(",");
-                var tm = array[0];
-                var kbn = array[1];
-
-
-
-                try
-                {
-
-                    // tmを変換
-                    var res = DateTime.ParseExact(tm, "yyyyMMdd_" + IndexModel.TIME_FORMAT, null);
-                    // kbnを適用
-                    if (kbn == "1")
-                    {
-                        res = res.AddDays(1);
-                    }
-                    else if (kbn == "-1")
-                    {
-                        res = res.AddDays(-1);
-                    }
-
-                    kinmuFr = res;
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
-                
+                kinmuFr = FormatDate(value);
             }
         }
         [DataMember(Name = "kinmuTo")]
@@ -476,36 +443,26 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             }
             set
             {
-                // パース
-                var array = value.Split(",");
-                var tm = array[0];
-                var kbn = array[1];
-
-                
-
-                try
-                {
-                    // tmを変換
-                    var res = DateTime.ParseExact(tm, "yyyyMMdd_" + IndexModel.TIME_FORMAT, null);
-                    // kbnを適用
-                    if (kbn == "1")
-                    {
-                        res = res.AddDays(1);
-                    }
-                    else if (kbn == "-1")
-                    {
-                        res = res.AddDays(-1);
-                    }
-
-                    kinmuTo = res;
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
-                
+                kinmuTo = FormatDate(value);
             }
         }
 
+        private DateTime? FormatDate(string str)
+        {
+            // パース
+            var array = str.Split(",");
+            if (array.Length == 3 && array[0] != "" && array[1] != "" && array[2] != "")
+            {
+                DateControl dc = new DateControl(array[0], array[1], array[2]);
+                return dc.Origin;
+            }
+            return null;
+        }
+
+        [DataMember]
+        public string? kinmuCd { get; set; }
+
+        [DataMember]
+        public string? biko { get; set; }
     }
 }
