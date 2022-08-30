@@ -44,20 +44,20 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public IActionResult OnPost(string targetListJson = "", string command = "", string json = "")
+        public IActionResult OnPost(string targetListJson = "", string json = "", string kyukeiJson = "", string command = "")
         {
             // 管理者じゃなければパラメーターを上書きする
             if (!User.IsInRole("Admin"))
             {
                 targetListJson = "";
-                command = "";
                 json = "";
+                kyukeiJson = "";
             }
 
-            return Init(targetListJson, command, json);
+            return Init(targetListJson, command, json, kyukeiJson);
         }
 
-        private IActionResult Init(string targetListJson = "", string command = "", string json = "")
+        private IActionResult Init(string targetListJson = "", string command = "", string json = "", string kyukeiJson = "")
         {
             if (targetListJson == "")
             {
@@ -102,6 +102,57 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 Target = TargetList.Get();
             }
 
+            // 休憩jsonが指定されていればjsonの処理
+            if(kyukeiJson != "")
+            {
+
+
+                // デシリアライズする
+                var ChangeList = JsonConvert.DeserializeObject<KyukeiRecordJsonList>(kyukeiJson);
+
+                if(ChangeList != null)
+                {
+                    // 日付を取得
+                    var kinmuDt = ChangeList.kinmuDt;
+                    // まず既存の休憩をすべて削除する
+                    var kyukeis = _kintaiDbContext.t_Kyukeis
+                        .Where(e => e.KigyoCd == Target.KigyoCd
+                            && e.ShainNo == Target.ShainNo
+                            && e.KinmuDt == kinmuDt)
+                        .ToList();
+                    _kintaiDbContext.RemoveRange(kyukeis);
+
+                    // 勤務レコードを用意する
+                    var kinmu = _kintaiDbContext.t_kinmus
+                        .Where(e => e.KigyoCd == Target.KigyoCd
+                            && e.ShainNo == Target.ShainNo
+                            && e.KinmuDt == kinmuDt)
+                        .FirstOrDefault();
+                    if (kinmu == null)
+                    {
+                        kinmu = new T_Kinmu(Target.KigyoCd, Target.ShainNo, kinmuDt);
+                    }
+
+                    // jsonをもとに新規作成して追加
+                    int count = 0;
+                    foreach (var item in ChangeList.list)
+                    {
+                        // 日時を変換
+                        DateControl frDc = new DateControl(kinmuDt, item.dakokuFrTm.Replace(":", ""), item.dakokuFrKbn);
+                        DateControl toDc = new DateControl(kinmuDt, item.dakokuToTm.Replace(":", ""), item.dakokuToKbn);
+                        // 休憩レコードを作成
+                        T_Kyukei kyukei = new(Target.KigyoCd, Target.ShainNo, kinmuDt, count++, (T_Kinmu)kinmu);
+                        kyukei.DakokuFrDate = frDc.Origin;
+                        kyukei.DakokuToDate = toDc.Origin;
+
+                        // DBに追加
+                        _kintaiDbContext.Add(kyukei);
+
+                    }
+                    _kintaiDbContext.SaveChanges();
+                }
+            }
+
             // jsonが指定されていればDBを変更処理する
             if (json != "")
             {
@@ -130,6 +181,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
                             _kintaiDbContext.Add(kinmu);
                         }
+
 
                         // パラメーターに従い値を変更
                         //kinmu.DakokuFrDate = value.dakokuFr; // 打刻のみ変更するとReloadableによって勤務記録が作成されるのが
@@ -388,6 +440,29 @@ namespace UNN_Ki_001.Pages.Attendance.Record
     }
 
     [DataContract]
+    class KyukeiRecordJsonList
+    {
+        [DataMember(Name = "kinmuDt")]
+        public string kinmuDt { get; set; }
+
+        [DataMember(Name = "list")]
+        public List<KyukeiRecordJson> list { get; set; }
+    }
+
+    [DataContract]
+    class KyukeiRecordJson
+    {
+        [DataMember(Name ="dakokuFrTm")]
+        public string dakokuFrTm { get; set; }
+        [DataMember(Name = "dakokuFrKbn")]
+        public string dakokuFrKbn { get; set; }
+        [DataMember(Name = "dakokuToTm")]
+        public string dakokuToTm { get; set; }
+        [DataMember(Name = "dakokuToKbn")]
+        public string dakokuToKbn { get; set; }
+    }
+
+    [DataContract]
     class KinmuRecordJson
     {
         [DataMember(Name = "kinmuDt")]
@@ -453,6 +528,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             var array = str.Split(",");
             if (array.Length == 3 && array[0] != "" && array[1] != "" && array[2] != "")
             {
+                array[1] = array[1].Replace(":", "");
                 DateControl dc = new DateControl(array[0], array[1], array[2]);
                 return dc.Origin;
             }

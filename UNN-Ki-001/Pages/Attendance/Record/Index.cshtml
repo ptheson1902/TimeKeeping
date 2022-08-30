@@ -4,6 +4,7 @@
 
 @{
     ViewData["Title"] = "勤務表";
+    var isNotAdmin = !User.IsInRole("Admin");
 }
  <h1>@ViewData["Title"]</h1>
 
@@ -126,26 +127,26 @@
                     </td>
                     <!-- 勤務開始 -->
                     <td class="kinmu_kinmu_fr">
-                        <select>
+                        <select disabled="@isNotAdmin">
                             <option value="1" selected="@(item.DakokuFrKbn == 1 ? true : false)">前日</option>
                             <option value="0" selected="@(item.DakokuFrKbn == 0 ? true : false)">当日</option>
                             <option value="2" selected="@(item.DakokuFrKbn == 2 ? true : false)">翌日</option>
                         </select>
-                        <input type="time" class="KinmuStart" value="@item.KinmuStart">
+                        <input type="time" class="KinmuStart" value="@item.KinmuStart" disabled="@isNotAdmin">
                     </td>
                     <!-- 勤務終了 -->
                     <td class="kinmu_kinmu_to">
-                        <select>
+                        <select disabled="@isNotAdmin">
                             <option value="1" selected="@(item.DakokuFrKbn == 1 ? true : false)">前日</option>
                             <option value="0" selected="@(item.DakokuFrKbn == 0 ? true : false)">当日</option>
                             <option value="2" selected="@(item.DakokuFrKbn == 2 ? true : false)">翌日</option>
                         </select>
-                        <input type="time" value="@item.KinmuEnd">
+                        <input type="time" value="@item.KinmuEnd" disabled="@isNotAdmin">
                     </td>
                     <!-- 休憩 -->
                     <td class="kinmu_kyukei">
                         @item.Kyukei
-                        <button type="button" class="btn-kyukei btn-secondary kyukei-dakoku" onclick="openKyukei('@item.KinmuDt', '@Model.Target.ShainNo', '@Model.Target.KigyoCd');" data-bs-toggle="modal" data-bs-target="#kyukei-modal">詳細</button>
+                        <button  disabled="@isNotAdmin" type="button" class="btn-kyukei btn-secondary kyukei-dakoku" onclick="openKyukei('@item.KinmuDt', '@Model.Target.ShainNo', '@Model.Target.KigyoCd');" data-bs-toggle="modal" data-bs-target="#kyukei-modal">詳細</button>
                     <!-- 控除 -->
                     <td class="kinmu_kojo">
                         @item.Kojo
@@ -156,7 +157,7 @@
                     </td>
                     <!-- 備考 -->
                     <td class="kinmu_biko">
-                        <textarea class="w-100"rows="1">@item.Biko</textarea>
+                        <textarea class="w-100"rows="1"  disabled="@isNotAdmin">@item.Biko</textarea>
                     </td>
                 </tr>
             }
@@ -178,6 +179,7 @@
             <table class="border">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>開始時間</th>
                         <th>終了時間</th>
                     </tr>
@@ -185,33 +187,40 @@
                 <tbody class="kyukei-table">
 
                 </tbody>
-                <tbody hidden>
+                
+                <tbody class="kyukei-template" hidden>
                     <tr class="row-template">
-                        <td class="start">
-                            <select>
-                                <option value="1">前日</option>
-                                <option value="0">当日</option>
-                                <option value="2">翌日</option>
-                            </select>
-                            <input type="time" />
-                        </td>
-                        <td class="end">
-                            <select>
-                                <option value="1">前日</option>
-                                <option value="0">当日</option>
-                                <option value="2">翌日</option>
-                            </select>
-                            <input type="time" />
-                        </td>
-                    </tr>
+                            <td>
+                                <input type="checkbox" />
+                            </td>
+                            <td class="start">
+                                <select name="dakokuFrKbn">
+                                    <option value="1">前日</option>
+                                    <option value="0" selected>当日</option>
+                                    <option value="2">翌日</option>
+                                </select>
+                                <input type="time" name="dakokuFr" />
+                            </td>
+                            <td class="end">
+                                <select name="dakokuToKbn">
+                                    <option value="1">前日</option>
+                                    <option value="0" selected>当日</option>
+                                    <option value="2">翌日</option>
+                                </select>
+                                <input type="time" name="dakokuTo" />
+                            </td>
+                        </tr>
                 </tbody>
-
             </table>
-            
+            <form method="post" id="kyukeiForm">
+                <input class="kyukeiJson" type="hidden" name="kyukeiJson" />
+            </form>
         </div>
         <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+            <button class="add" onclick="addKyuke();">行追加</button>
+            <button class="remove" onclick="deleteKyukei();">選択行削除</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="kyukeiSaveChange();">Save changes</button>
         </div>
     </div>
     </div>
