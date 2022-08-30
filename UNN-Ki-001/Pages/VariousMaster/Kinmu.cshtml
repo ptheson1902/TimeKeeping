@@ -4,401 +4,598 @@
 }
 
 <div>
-   <input type="hidden" id="data" value="@Model._test" />
-   <div class="container mt-5" style="max-width: 50%">
-       <h3>勤務マスタメンテナンス</h3>
-      <form class="card mb-4" method="Post">
-         <div class="card-body">
-            <div class="row mb-3 align-items-center">
-               <label class="col-3" for="shokushu_cd">勤務コード</label>
-               <input
-                  type="text"
-                  class="col-3"
-                  asp-for="MKinmu.KinmuCd"
-                  size="30"
-                  maxlength="10"
-                />
+    <input type="hidden" id="data" value="@Model._searchListString" />
+    <div class="container mt-3 mb-5">
+        <h3>勤務マスタメンテナンス</h3>
+        <div class="text-danger">@Model.Message</div>
+        <form class="card mb-4 SearchForm" method="Post">
+            <div class="card-header d-flex justify-content-between">
+                <div class="card-title">勤務検索条件</div>
+                <div class="minimizeBtn"><i class="fa-solid fa-minimize"></i></div>
+                <div class="maximizeBtn d-none"><i class="fa-solid fa-maximize"></i></div>
             </div>
-            <div class="row mb-3 align-items-center">
-               <label class="col-3">勤務名</label>
-               <input
-                  type="text"
-                  class="col-3"
-                  asp-for="MKinmu.KinmuNm"
-               />
-            </div>
-             <div class="row mb-3 align-items-center">
-               <label class="col-3">勤務分類</label>
-               <select class="col-3" asp-for="MKinmu.KinmuBunrui">
-                    
-                        <option  value="01" selected>通常勤務</option>
-                        <option  value="02" selected>所定休日</option>
-                        <option  value="03" selected>法定休日</option>
-                        <option  value="05" selected>振替休日</option>
-                        <option  value="06" selected>代休</option>
-                        <option  value="07" selected>有給休暇</option>
-                        <option  value="08" selected>午前半休</option>
-                        <option selected></option>
-                </select>
-            </div>
-            <div class="row mb-3 align-items-center">
-               <div class="col-7">
-                  有効/無効
-                     <label asp-for="MKinmu.ValidFlg">有効</label>
-                     <input
-                        type="radio"
-                        name="valid_flg"
-                        value="1"
-                        id="valid_flg"
-                        @(Model.ValidFlg =="1" ? "checked" : "")
-                     />
-                     <label for="valid_flg">無効</label>
-                     <input
-                        type="radio"
-                        name="valid_flg"
-                        value="0"
-                        id="valid_flg"
-                        @(Model.ValidFlg =="0" ? "checked" : "")
-                     />
-               </div>
-            </div>
-            <div class="d-flex justify-content-end mt-2">
-               <input type="hidden" value="search" name="action" />
-               <button type="submit" class="search btn btn-secondary mx-3">
-                  検索
-               </button>
-            </div>
-            <div class="d-flex justify-content-end mt-2">
-               <input
-                  type="button"
-                  class="tsuika btn btn-secondary mx-3"
-                  value="追加"
-                  data-bs-toggle="modal"
-                  data-bs-target="#tsuikaModal"
-               />
-               <input
-                  type="button"
-                  class="kinmuCopy btn btn-secondary mx-3"
-                  value="複写"
-               />
-            </div>
-         </div>
-      </form>
-     <div class="text-danger">@Model.Message</div>
-      <div class="p-2">
-         <table class="table table-bordered" id="mytable">
-            <thead class="table-primary">
-               <tr class="text-center">
-                  <th class="col-2">職種コード</th>
-                  <th class="col-3">職種名</th>
-                  <th class="col-2">勤務分類</th>
-                  <th class="col-2">勤務時間</th>
-                  <th class="col-2">休憩時間</th>
-                  <th class="col-1">有効</th>
-               </tr>
-            </thead>
-            <tbody class="kinmuData ">
-                @if (@Model._targetList!= null) { 
-                    @foreach (var kinmu in Model._targetList) {
-                        <tr>
-                            <td>
-                                <div class="kinmu_cd text-decoration-underline text-primary" data-bs-toggle="modal" data-bs-target="#tsuikaModal">@kinmu.KinmuCd</div>
-                            </td>
-                            <td>@kinmu.KinmuNm</td>
-                            @if(@kinmu.KinmuBunrui == "01")
-                                {
-                                    <td>通常勤務</td>
-                                }
-                                else if(@kinmu.KinmuBunrui == "02")
-                                {
-                                    <td>所定休日</td>
-                                }
-                                else if(@kinmu.KinmuBunrui == "03")
-                                {
-                                    <td>法定休日</td>
-                                }
-                                
-                                else if(@kinmu.KinmuBunrui == "05")
-                                {
-                                    <td>振替休日</td>
-                                }
-                                else if(@kinmu.KinmuBunrui == "06")
-                                {
-                                    <td>代休</td>
-                                }
-                                else if(@kinmu.KinmuBunrui == "07")
-                                {
-                                    <td>A有給休暇</td>
-                                }
-                                else if(@kinmu.KinmuBunrui == "08")
-                                {
-                                    <td>午前半休</td>
-                                }
-                                <td> @kinmu.KinmuFrTm-@kinmu.KinmuToTm</td>
-                                <td> @kinmu.Kyukei1FrTm-@kinmu.Kyukei1ToTm</td>
-                            <td>
-                                <input type="checkbox" value="@kinmu.ValidFlg" @(kinmu.ValidFlg == "0" ? "" : "checked") disabled />
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-         </table>
-      </div>
-   </div>
-</div>
-@*職種メンテナンス登録(追加ポップアップ)*@
-<div
-   class="modal fade"
-   id="tsuikaModal"
-   tabindex="-1"
-   aria-labelledby="userModalLabel"
-   aria-hidden="true"
->
-   <div class="modal-dialog modal-lg">
-      <div class="tsuikaModalContent modal-content" style="width: 70%">
-         <div class="modal-header">
-            <div class="d-flex justify-content-between w-100"></div>
-         </div>
-         <form class="card mb-4 ModalForm" method="Post">
             <div class="card-body">
-               <div class=" mb-3 align-items-center">
-                  <label for="kinmu_cd1" class="col-3">勤務コード</label>
-                  <input
-                     type="text"
-                     class="kinmu_cd col-3"
-                     asp-for="MKinmu1.KinmuCd"
-                     size="30"
-                     maxlength="10"
-                     required
-                  />
-               </div>
-               <div class=" mb-3 align-items-center">
-                  <label  for="kinmu_nm1" class="col-3">勤務名</label>
-                  <input
-                     type="text"
-                     class="col-3"
-                     asp-for="MKinmu1.KinmuNm"
-                     required
-             
-                  />
-               </div>
-               <div class=" mb-3 align-items-center">
-                  <label for="kinmu_bunrui" class="col-3">勤務分類</label>
-                  <select class="col-3" asp-for="MKinmu1.KinmuBunrui" required>
-                        <option value="01" selected>通常勤務</option>
-                        <option value="02">所定休日</option>
-                        <option value="03">法定休日</option>
-                        <option value="05">振替休日</option>
-                        <option value="06">代休</option>
-                        <option value="07">有給休暇</option>
-                        <option value="08">午前半休</option>
-                </select>
-               </div>
-               <div class=" mb-3 align-items-center">
-                 <label for="appt-time" class="col-3">勤務時間</label>
-                 <select class="col-2" asp-for="MKinmu1.KinmuFrKbn" required>
-                     <option value="0" selected>当日</option>
-                     <option value="1">前日</option>
-                     <option value="2">翌日</option>
-                 </select>
-                 <input type="time"asp-for="MKinmu1.KinmuFrTm" required >
-                 -
-                 <select class="col-2" asp-for="MKinmu1.KinmuToKbn" required>
-                     <option value="0" selected>当日</option>
-                     <option value="1">前日</option>
-                     <option value="2">翌日</option>
-                  </select>
-                 <input id="appt-time" type="time" asp-for="MKinmu1.KinmuToTm" required>
-               </div>
-               <div class=" mb-3 align-items-center">
-                 <label for="appt-time" class="col-3">休憩時間1</label>
-                  <select class="col-2" asp-for="MKinmu1.Kyukei1FrKbn" required>
-                     <option></option>
-                     <option value="0">当日</option>
-                     <option value="1">前日</option>
-                     <option value="2">翌日</option>
-                 </select>
-                 <input type="time" asp-for="MKinmu1.Kyukei1FrTm" required >
-                 -
-                  <select class="col-2" asp-for="MKinmu1.Kyukei1ToKbn" required>
-                     <option></option>
-                     <option value="0">当日</option>
-                     <option value="1">前日</option>
-                     <option value="2">翌日</option>
-                 </select>
-                 <input type="time" asp-for="MKinmu1.Kyukei1ToTm" required>
-               </div>
-                <div class=" mb-3 align-items-center">
-                 <label for="appt-time" class="col-3">休憩時間2</label>
-                  <select class="col-2" asp-for="MKinmu1.Kyukei2FrKbn" >
-                     <option></option>
-                     <option value="0">当日</option>
-                     <option value="1">前日</option>
-                     <option value="2">翌日</option>
-                 </select>
-                 <input type="time" asp-for="MKinmu1.Kyukei2FrTm">
-                 -
-                  <select class="col-2" asp-for="MKinmu1.Kyukei2ToKbn">
-                     <option></option>
-                     <option value="0">当日</option>
-                     <option value="1">前日</option>
-                     <option value="2">翌日</option>
-                 </select>
-                 <input type="time" asp-for="MKinmu1.Kyukei2ToTm">
-               </div>
-                <div class= mb-3 align-items-center">
-                 <label for="appt-time" class="col-3">休憩時間3</label>
-                  <select class="col-2" asp-for="MKinmu1.Kyukei3FrKbn">
-                     <option></option>
-                     <option value="0">当日</option>
-                     <option value="1">前日</option>
-                     <option value="2">翌日</option>
-                 </select>
-                 <input type="time" asp-for="MKinmu1.Kyukei3FrTm" value="">
-                 -
-                  <select class="col-2" asp-for="MKinmu1.Kyukei3ToKbn">
-                     <option></option>
-                     <option value="0">当日</option>
-                     <option value="1">前日</option>
-                     <option value="2">翌日</option>
-                 </select>
-                 <input type="time" asp-for="MKinmu1.Kyukei3ToTm">
-               </div>
-               <div class="mb-3 align-items-center">
-                 <label for="dakoku_settei">打刻設定</label>
-                 　<input type="checkbox" name="KyukeiAuto" value="1">
-                   <label class="" >休憩打刻を退勤打刻時に自動追加する</label>
-                   <input type="checkbox" name="KinmuAuto" value="1">
-                   <label class="" >始業前打刻を勤務開始時間にあわせる</label>
-               </div>
-               <div class=" mb-3 align-items-center">
-                 <label for="marume">打刻丸め設定</label>
-                 <div>
-                     <label class="col-3">始業</label>
-                     <select class="col-3" asp-for="MKinmu1.KinmuFrMarumeKbn" required>
-                         <option></option>
-                         <option value="0">丸めなし</option>
-                         <option value="1">切り下げる</option>
-                         <option value="2">切り上げる</option>
-                     </select>
-                     <input type="text" asp-for="MKinmu1.KinmuFrMarumeTm" class="col-2" >
-                     <label>分単位</label>
-                 </div>
-                 <div>
-                     <label class="col-3">終業</label>
-                     <select class="col-3" asp-for="MKinmu1.KinmuToMarumeKbn" required>
-                         <option></option>
-                         <option value="0">丸めなし</option>
-                         <option value="1">切り下げる</option>
-                         <option value="2">切り上げる</option>
-                     </select>
-                     <input type="text" asp-for="MKinmu1.KinmuToMarumeTm" class="col-2" >
-                     <label>分単位</label>
-                 </div>
-                 <div>
-                     <label class="col-3">休憩開始</label>
-                     <select class="col-3" asp-for="MKinmu1.KyukeiFrMarumeKbn" required>
-                         <option></option>
-                         <option value="0">丸めなし</option>
-                         <option value="1">切り下げる</option>
-                         <option value="2">切り上げる</option>
-                     </select>
-                     <input type="text" asp-for="MKinmu1.KyukeiFrMarumeTm" class="col-2">
-                     <label>分単位</label>
-                 </div>
-                  <div>
-                     <label class="col-3">休憩終了</label>
-                    <select class="col-3"  asp-for="MKinmu1.KyukeiToMarumeKbn" required>
-                         <option></option>
-                         <option value="0">丸めなし</option>
-                         <option value="1">切り下げる</option>
-                         <option value="2">切り上げる</option>
-                     </select>
-                     <input type="text" asp-for="MKinmu1.KyukeiToMarumeTm" class="col-2">
-                     <label>分単位</label>
-                 </div>
-               </div>
-                <div class="row mb-3 align-items-center">
-               <div class="col-7">
-                  有効/無効
-                     <label for="valid_flg" asp-for="MKinmu1.ValidFlg">有効</label>
-                     <input
-                        type="radio"
-                        value="1"
-                        asp-for="MKinmu1.ValidFlg"
-                        selected
-                     />
-                     <label for="valid_flg">無効</label>
-                     <input
-                        type="radio"
-                        value="0"
-                        asp-for="MKinmu1.ValidFlg"
-                     />
-               </div>
+                <!-- 勤務コード -->
+                <div class="row g-3 align-items-center mb-3">
+                    <div class="col-3">
+                        <label asp-for="MKinmuSearch.KinmuCd" class="col-form-label">勤務コード</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" asp-for="MKinmuSearch.KinmuCd" class="form-control">
+                    </div>
+                </div>
+                <!-- 勤務名 -->
+                <div class="row g-3 align-items-center mb-3">
+                    <div class="col-3">
+                        <label asp-for="MKinmuSearch.KinmuNm" class="col-form-label">勤務名</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" asp-for="MKinmuSearch.KinmuNm" class="form-control">
+                    </div>
+                </div>
+                <!-- 勤務分類 -->
+                <div class="row g-3 align-items-center mb-3">
+                    <div class="col-3">
+                        <label asp-for="MKinmuSearch.KinmuBunrui" class="col-form-label">勤務分類</label>
+                    </div>
+                    <div class="col-auto">
+                        <select class="form-select"
+                            aria-label="Default select"
+                            asp-for="MKinmuSearch.KinmuBunrui"
+                        >
+                            <option></option>
+                            <option value="01"> 通常勤務</option>
+                            <option value="02">所定休日</option>
+                            <option value="03">法定休日</option>
+                            <option value="04">振替休日</option>
+                            <option value="05">代休</option>
+                            <option value="06">有給休暇</option>
+                            <option value="07">午前半休</option>
+                            <option value="08">午後半休</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- 有効/無効 -->
+                <div class="row g-3 align-items-center mb-3">
+                    <div class="col-3">
+                      <label asp-for="MKinmuSearch.ValidFlg" class="col-form-label">有効/無効</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="radio"
+                            value="1"
+                            id="ValidFlg1"
+                            asp-for="MKinmuSearch.ValidFlg"
+                            checked='@(Model.ValidFlg == "1" || Model.ValidFlg == null ? true : false)'
+                        />
+                        <label for="ValidFlg1">有効</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="radio"
+                            value="0"
+                            id="ValidFlg2"
+                               asp-for="MKinmuSearch.ValidFlg"
+                            checked='@(Model.ValidFlg == "0" ? true : false)'
+                        />
+                        <label for="ValidFlg2">無効</label>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <input type="hidden" value="search" name="action" />
+                    <button
+                        type="submit"
+                        class="search btn btn-primary me-5 px-4"
+                    >
+                        <i class="fa-solid fa-magnifying-glass me-3"></i>
+                        検索
+                    </button>
+                </div>
             </div>
-               <div class="d-flex justify-content-end mt-2">
-                  <input
-                     type="button"
-                     class="cancel btn btn-secondary mx-3"
-                     value="キャンセル"
-                     data-bs-dismiss="modal"
-                  />
-                  <button
-                     type="submit"
-                     class="register btn btn-secondary mx-3"
-                     value="register"
-                     name="register_action"
-                  >
-                     登録
-                  </button>
-               </div>
+        </form>
+        
+        @if(Model._searchList!= null) {
+        <div class="card mb-5">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fa-solid fa-table-list"></i>
+                    検索結果
+                </div>
             </div>
-         </form>
-      </div>
-   </div>
+            <div class="d-flex justify-content-start my-2">
+                <button
+                    type="button"
+                    class="kinmuInsert btn btn-success mx-3"
+                    data-bs-toggle="modal"
+                    data-bs-target="#KinmuModal">
+                    <i class="fa-solid fa-circle-plus me-2"></i>
+                    追加
+                </button>
+                <button
+                    type="button"
+                    class="kinmuCopy btn btn-info mx-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#KinmuModal">
+                    <i class="fa-solid fa-copy me-3"></i>
+                    複写
+                </button>
+            </div>
+            <table class="table table-bordered" id="mytable">
+                <thead class="table-primary">
+                    <tr class="text-center">
+                        <th class="col-1 text-center">職種コード</th>
+                        <th class="col-2">職種名</th>
+                        <th class="col-2">勤務分類</th>
+                        <th class="col-2 text-center">勤務時間</th>
+                        <th class="col-2 text-center">休憩時間１</th>
+                        <th class="col-1 text-center">休憩時間２</th>
+                        <th class="col-1 text-center">休憩時間３</th>
+                            <th class="col-1 text-center">有効</th>
+                    </tr>
+                </thead>
+                <tbody class="kinmuData">
+                    @foreach (var kinmu in Model._searchList) {
+                    <tr>
+                        <td class="text-center">
+                            <div
+                                class="kinmuSelected text-decoration-underline text-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#KinmuModal">@kinmu.KinmuCd</div>
+                        </td>
+                        <td>@kinmu.KinmuNm</td>
+                        <td>@kinmu.KinmuBunrui</td>
+                        <td class="text-center">@kinmu.KinmuFrTm - @kinmu.KinmuToTm</td>
+                        <td class="text-center">@kinmu.Kyukei1FrTm - @kinmu.Kyukei1ToTm</td>
+                        <td class="text-center">@kinmu.Kyukei2FrTm - @kinmu.Kyukei2ToTm</td>
+                        <td class="text-center">@kinmu.Kyukei3FrTm - @kinmu.Kyukei3ToTm</td>
+                        <td class="text-center">
+                            <input type="checkbox"
+                            value="@kinmu.ValidFlg" @(kinmu.ValidFlg ==
+                            "0" ? "" : "checked") disabled />
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </div>
 </div>
-@if(Model._test != null){
-    <script>
-        var data = $("#data").val()
-        console.log(JSON.parse(data))
-        var json = JSON.parse(data)
+@*　勤務マスタメンテナンス（ポップアップ）　*@
+<div class="modal fade"
+     id="KinmuModal"
+     tabindex="-1"
+     aria-labelledby="KinmuModalLabel"
+     aria-hidden="true"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="KinmuModalContent modal-content">
+            <form class="card mb-4 KinmuModalForm" method="Post">
+                <div class="card-body">
+                    <h5>勤務マスタ設定</h5>
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3 ps-4">
+                            <label asp-for="MKinmuCRUD.KinmuCd"
+                                class="col-form-label">勤務コード</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="text"
+                                class="kinmuCd form-control"
+                                asp-for="MKinmuCRUD.KinmuCd"
+                                required />
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3 ps-4">
+                            <label asp-for="MKinmuCRUD.KinmuNm"
+                                class="col-form-label">勤務名</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="text"
+                                class="kinmuNm form-control"
+                                asp-for="MKinmuCRUD.KinmuNm"
+                                required />
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3 ps-4">
+                            <label asp-for="MKinmuCRUD.KinmuBunrui"
+                                class="col-form-label">勤務分類</label>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select kinmuBunrui"
+                                aria-label="Default select"
+                                asp-for="MKinmuCRUD.KinmuBunrui"
+                                required
+                            >
+                                <option value="01" selected>
+                                    通常勤務
+                                </option>
+                                <option value="02">所定休日</option>
+                                <option value="03">法定休日</option>
+                                <option value="04">振替休日</option>
+                                <option value="05">代休</option>
+                                <option value="06">有給休暇</option>
+                                <option value="07">午前半休</option>
+                                <option value="08">午後半休</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3 ps-4">
+                            <label asp-for="MKinmuCRUD.KinmuFrTm"
+                                class="col-form-label">勤務時間</label>
+                        </div>
+                        <div class="col-4">
+                            <div class="d-flex">
+                                <select class="form-select me-2 kinmuFrKbn"
+                                    aria-label="Default select"
+                                    asp-for="MKinmuCRUD.KinmuFrKbn"
+                                    required
+                                >
+                                    <option value="0" selected>
+                                        当日
+                                    </option>
+                                    <option value="1">前日</option>
+                                    <option value="2">翌日</option>
+                                </select>
+                                <input type="time"
+                                    asp-for="MKinmuCRUD.KinmuFrTm"
+                                    class="form-control kinmuFrTm"
+                                    required />
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="d-flex">
+                                <select class="form-select me-2 kinmuToKbn"
+                                    aria-label="Default select"
+                                    asp-for="MKinmuCRUD.KinmuToKbn"
+                                    required
+                                >
+                                    <option value="0" selected>
+                                        当日
+                                    </option>
+                                    <option value="1">前日</option>
+                                    <option value="2">翌日</option>
+                                </select>
+                                <input type="time"
+                                    asp-for="MKinmuCRUD.KinmuToTm"
+                                    class="form-control kinmuToTm"
+                                    required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3 ps-4">
+                            <label asp-for="MKinmuCRUD.Kyukei1FrTm"
+                                class="col-form-label">休憩時間１</label>
+                        </div>
+                        <div class="col-4">
+                            <div class="d-flex">
+                                <select class="form-select me-2 kyukei1FrKbn"
+                                    aria-label="Default select"
+                                    asp-for="MKinmuCRUD.Kyukei1FrKbn"
+                                    required
+                                >
+                                    <option value="0" selected>
+                                        当日
+                                    </option>
+                                    <option value="1">前日</option>
+                                    <option value="2">翌日</option>
+                                </select>
+                                <input type="time"
+                                    asp-for="MKinmuCRUD.Kyukei1FrTm"
+                                    class="form-control kyukei1FrTm"
+                                    required />
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="d-flex">
+                                <select class="form-select me-2 kyukei1ToKbn"
+                                    aria-label="Default select"
+                                    asp-for="MKinmuCRUD.Kyukei1ToKbn"
+                                    required
+                                >
+                                    <option value="0" selected>
+                                        当日
+                                    </option>
+                                    <option value="1">前日</option>
+                                    <option value="2">翌日</option>
+                                </select>
+                                <input type="time"
+                                    asp-for="MKinmuCRUD.Kyukei1ToTm"
+                                    class="form-control kyukei1ToTm"
+                                    required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3 ps-4">
+                            <label asp-for="MKinmuCRUD.Kyukei2FrTm"
+                                   class="col-form-label">休憩時間２</label>
+                        </div>
+                        <div class="col-4">
+                            <div class="d-flex">
+                                <select class="form-select me-2 kyukei2FrKbn"
+                                    aria-label="Default select"
+                                    asp-for="MKinmuCRUD.Kyukei2FrKbn"
+                                >
+                                    <option selected></option>
+                                    <option value="0">当日</option>
+                                    <option value="1">前日</option>
+                                    <option value="2">翌日</option>
+                                </select>
+                                <input type="time"
+                                    asp-for="MKinmuCRUD.Kyukei2FrTm"
+                                    class="form-control kyukei2FrTm" />
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="d-flex">
+                                <select class="form-select me-2"
+                                    aria-label="Default select kyukei2ToKbn"
+                                    asp-for="MKinmuCRUD.Kyukei2ToKbn"
+                                >
+                                    <option selected></option>
+                                    <option value="0">当日</option>
+                                    <option value="1">前日</option>
+                                    <option value="2">翌日</option>
+                                </select>
+                                <input type="time"
+                                    asp-for="MKinmuCRUD.Kyukei2ToTm"
+                                       class="form-control kyukei2ToTm" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3 ps-4">
+                            <label asp-for="MKinmuCRUD.Kyukei3FrTm"
+                                 class="col-form-label">休憩時間３</label>
+                        </div>
+                        <div class="col-4">
+                            <div class="d-flex">
+                                <select class="form-select me-2 kyukei3FrKbn"
+                                    aria-label="Default select"
+                                    asp-for="MKinmuCRUD.Kyukei3FrKbn"
+                                >
+                                    <option selected></option>
+                                    <option value="0">当日</option>
+                                    <option value="1">前日</option>
+                                    <option value="2">翌日</option>
+                                </select>
+                                <input type="time"
+                                    asp-for="MKinmuCRUD.Kyukei3FrTm"
+                                       class="form-control kyukei3FrTm" />
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="d-flex">
+                                <select class="form-select me-2 kyukei3ToKbn"
+                                        aria-label="Default select"
+                                        asp-for="MKinmuCRUD.Kyukei3ToKbn">
+                                    <option selected></option>
+                                    <option value="0">当日</option>
+                                    <option value="1">前日</option>
+                                    <option value="2">翌日</option>
+                                </select>
+                                <input type="time"
+                                       asp-for="MKinmuCRUD.Kyukei3ToTm"
+                                       class="form-control kyukei3ToTm" />
+                            </div>
+                        </div>
+                    </div>
 
-@*        data.forEach(e => {
-            console.log(e)
-        })*@
+                    <div class="row g-3 align-items-center">
+                        <div class="col-3 ps-4">
+                            <label class="col-form-label">打刻設定</label>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input type="checkbox"
+                                    class="form-check-input"
+                                    name="KyukeiAutoFlg"
+                                    value="1"
+                                    id="KyukeiAutoFlg" />
+                                <label class="form-check-label"
+                                    for="KyukeiAutoFlg">
+                                    休憩打刻を退勤打刻時に自動追加する
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3 ps-4"></div>
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input type="checkbox"
+                                    class="form-check-input"
+                                    name="KinmuFrCtrlFlg"
+                                    value="1"
+                                    id="KinmuFrCtrlFlg" />
+                                <label class="form-check-label"
+                                    for="KinmuFrCtrlFlg">
+                                    始業前打刻を勤務開始時間にあわせる
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <h5>打刻丸め設定</h5>
+                    <!-- 勤務開始時間の丸目 -->
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3 ps-4">
+                            <label asp-for="MKinmuCRUD.KinmuFrMarumeKbn"
+                                class="col-form-label">始業</label>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select me-2 kinmuFrMarumeKbn"
+                                aria-label="Default select"
+                                asp-for="MKinmuCRUD.KinmuFrMarumeKbn"
+                                required
+                            >
+                                <option value="0" selected>
+                                    丸めなし
+                                </option>
+                                <option value="1">切り下げる</option>
+                                <option value="2">切り上げる</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <input type="number"
+                                asp-for="MKinmuCRUD.KinmuFrMarumeTm"
+                                class="form-control kinmuFrMarumeTm"
+                                value="0"
+                            />
+                        </div>
+                        <div class="col-auto">
+                            <label asp-for="MKinmuCRUD.KinmuFrMarumeTm"
+                                class="col-form-label">分単位</label>
+                        </div>
+                    </div>
+                    <!-- 勤務終了時間の丸目 -->
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3 ps-4">
+                            <label asp-for="MKinmuCRUD.KinmuToMarumeKbn"
+                                class="col-form-label">終業</label>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select me-2 kinmuToMarumeKbn"
+                                aria-label="Default select"
+                                asp-for="MKinmuCRUD.KinmuToMarumeKbn"
+                                required
+                            >
+                                <option value="0" selected>
+                                    丸めなし
+                                </option>
+                                <option value="1">切り下げる</option>
+                                <option value="2">切り上げる</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <input type="number"
+                                asp-for="MKinmuCRUD.KinmuToMarumeTm"
+                                class="form-control kinmuToMarumeTm"
+                                value="0"
+                            />
+                        </div>
+                        <div class="col-auto">
+                            <label asp-for="MKinmuCRUD.KinmuToMarumeTm"
+                                class="col-form-label">分単位</label>
+                        </div>
+                    </div>
+                    <!-- 休憩開始時間の丸目 -->
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3 ps-4">
+                            <label asp-for="MKinmuCRUD.KyukeiFrMarumeKbn"
+                                class="col-form-label">休憩始</label>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select me-2 kyukeiFrMarumeKbn"
+                                    aria-label="Default select"
+                                    asp-for="MKinmuCRUD.KyukeiFrMarumeKbn"
+                                    required>
+                                <option value="0" selected>
+                                    丸めなし
+                                </option>
+                                <option value="1">切り下げる</option>
+                                <option value="2">切り上げる</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <input type="number"
+                                asp-for="MKinmuCRUD.KyukeiFrMarumeTm"
+                                class="form-control kyukeiFrMarumeTm"
+                                value="0"    
+                            />
+                        </div>
+                        <div class="col-auto">
+                            <label asp-for="MKinmuCRUD.KyukeiFrMarumeTm"
+                                class="col-form-label">分単位</label>
+                        </div>
+                    </div>
+                    <!-- 休憩終了時間の丸目 -->
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3 ps-4">
+                            <label asp-for="MKinmuCRUD.KyukeiToMarumeKbn"
+                                class="col-form-label">休憩終</label>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select me-2 kyukeiToMarumeKbn"
+                                aria-label="Default select"
+                                asp-for="MKinmuCRUD.KyukeiToMarumeKbn"
+                                required
+                            >
+                                <option value="0" selected>
+                                    丸めなし
+                                </option>
+                                <option value="1">切り下げる</option>
+                                <option value="2">切り上げる</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <input type="number"
+                                asp-for="MKinmuCRUD.KyukeiToMarumeTm"
+                                class="form-control kyukeiToMarumeTm"
+                                value="0"
+                            />
+                        </div>
+                        <div class="col-auto">
+                            <label asp-for="MKinmuCRUD.KyukeiToMarumeTm"
+                                class="col-form-label">分単位</label>
+                        </div>
+                    </div>
 
-    $(".kinmu_cd").click(function() {
-        var cd = $(this).text();
-        json.forEach(e => {
-            if (e.KinmuCd == cd) {
-                console.log(e)
-                $(".kinmu_cd").val(e.KinmuCd)
-            }
-        })
-    })
-    $(".kinmuCopy").click(function() {
-        var cd = $(".kinmuData tr.selected").children().children().text();
-        console.log(cd)
-        json.forEach(e => {
-            if (e.KinmuCd == cd) {
-                console.log(e)
-                $(".kinmu_cd").val(e.KinmuCd)
-            }
-        })
-    })
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3">
+                            <label asp-for="MKinmuCRUD.ValidFlg"
+                                class="col-form-label">有効/無効</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="radio"
+                                class="validFlg"
+                                value="1"
+                                id="validFlg1"
+                                asp-for="MKinmuCRUD.ValidFlg"
+                                checked />
+                            <label for="validFlg1">有効</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="radio"
+                                class="validFlg"
+                                value="0"
+                                id="validFlg2"
+                                asp-for="MKinmuCRUD.ValidFlg" />
+                            <label for="validFlg2">無効</label>
+                        </div>
+                    </div>
 
-    </script>
+                    <div class="d-flex justify-content-center my-3">
+                        <button type="submit"
+                            class="submitBtn btn mx-3 px-4"
+                            name="action"
+                            value="insert"
+                        >
+                        </button>
+
+                        <button type="submit"
+                            class="d-none deleteBtn btn btn-danger mx-3 px-4"
+                            name="action"
+                            value="delete"
+                        >
+                            削除
+                        </button>
+
+                        <button type="button"
+                            class="cancelBtn btn btn-secondary mx-3"
+                            value="キャンセル"
+                            data-bs-dismiss="modal">
+                            キャンセル
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@if(Model._searchListString != null){
+    <script src="~/js/_VariousMaster.Kinmu.js" asp-append-version="true"></script>
 }
+<script src="~/js/VariousMasterCommon.js" asp-append-version="true"></script>
 
-<script>
-    $(".tsuika").click(function(){
-        $(".ModalForm")[0].reset();
-    })
-
-    $(".kinmuData tr").click(function() {
-        $(".kinmuData tr").removeClass("selected bg-light")
-        $(".")
-        $(this).addClass("selected bg-light")
-    })
-</script>

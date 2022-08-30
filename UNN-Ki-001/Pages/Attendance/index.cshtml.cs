@@ -72,60 +72,8 @@ namespace UNN_Ki_001.Pages.Attendance
             if (shain == null)
             {
                 Message = "ユーザーに社員が登録されていません。";
-                return;
+                return; //RedirectToPage("/");
             }
-            // パターン1のテストデーター
-            //DateTime dkf = DateTime.ParseExact("20220801 09:00:00", "yyyyMMdd HH:mm:ss", null);
-            //DateTime dkt = DateTime.ParseExact("20220801 23:00:00", "yyyyMMdd HH:mm:ss", null);
-
-            // パターン2のテストデーター
-            //DateTime dkf = DateTime.ParseExact("20220802 09:00:00", "yyyyMMdd HH:mm:ss", null);
-            //DateTime dkt = DateTime.ParseExact("20220802 18:00:00", "yyyyMMdd HH:mm:ss", null);
-
-            // パターン3のテストデーター
-            //DateTime dkf = DateTime.ParseExact("20220803 09:15:00", "yyyyMMdd HH:mm:ss", null);
-            //DateTime dkt = DateTime.ParseExact("20220803 18:00:00", "yyyyMMdd HH:mm:ss", null);
-
-            // パターン4のテストデーター
-            //DateTime dkf = DateTime.ParseExact("20220804 09:00:00", "yyyyMMdd HH:mm:ss", null);
-            //DateTime dkt = DateTime.ParseExact("20220804 15:00:00", "yyyyMMdd HH:mm:ss", null);
-
-            // パターン5のテストデーター
-            //DateTime dkf = DateTime.ParseExact("20220805 09:00:00", "yyyyMMdd HH:mm:ss", null);
-            //DateTime dkt = DateTime.ParseExact("20220805 15:00:00", "yyyyMMdd HH:mm:ss", null);
-
-            // パターン6のテストデーター
-            //DateTime dkf = DateTime.ParseExact("20220806 09:00:00", "yyyyMMdd HH:mm:ss", null);
-            //DateTime dkt = DateTime.ParseExact("20220806 15:00:00", "yyyyMMdd HH:mm:ss", null);
-
-            // パターン7のテストデーター
-            //DateTime dkf = DateTime.ParseExact("20220807 09:00:00", "yyyyMMdd HH:mm:ss", null);
-            //DateTime dkt = DateTime.ParseExact("20220807 18:00:00", "yyyyMMdd HH:mm:ss", null);
-
-            // パターン8のテストデーター
-            //DateTime dkf = DateTime.ParseExact("20220808 13:00:00", "yyyyMMdd HH:mm:ss", null);
-            //DateTime dkt = DateTime.ParseExact("20220808 18:00:00", "yyyyMMdd HH:mm:ss", null);
-
-            // パターン9のテストデーター
-            //DateTime dkf = DateTime.ParseExact("20220809 13:30:00", "yyyyMMdd HH:mm:ss", null);
-            //DateTime dkt = DateTime.ParseExact("20220809 18:00:00", "yyyyMMdd HH:mm:ss", null);
-
-            // パターン10のテストデーター
-            //DateTime dkf = DateTime.ParseExact("20220810 13:00:00", "yyyyMMdd HH:mm:ss", null);
-            //DateTime dkt = DateTime.ParseExact("20220810 17:00:00", "yyyyMMdd HH:mm:ss", null);
-
-            // パターン11のテストデーター
-            //DateTime dkf = DateTime.ParseExact("20220811 09:00:00", "yyyyMMdd HH:mm:ss", null);
-            //DateTime dkt = DateTime.ParseExact("20220811 12:00:00", "yyyyMMdd HH:mm:ss", null);
-
-            // パターン12のテストデーター
-            //DateTime dkf = DateTime.ParseExact("20220812 09:30:00", "yyyyMMdd HH:mm:ss", null);
-            //DateTime dkt = DateTime.ParseExact("20220812 12:00:00", "yyyyMMdd HH:mm:ss", null);
-
-            // パターン13のテストデーター
-            //DateTime dkf = DateTime.ParseExact("20220813 09:00:00", "yyyyMMdd HH:mm:ss", null);
-            //DateTime dkt = DateTime.ParseExact("20220813 11:00:00", "yyyyMMdd HH:mm:ss", null);
-
             var action = Request.Form["action"];
             switch (action)
             {
@@ -141,16 +89,14 @@ namespace UNN_Ki_001.Pages.Attendance
             try
             {
                 _kintaiDbContext.SaveChanges();
+                Message = "true";
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
                 Message = "打刻に失敗しました。";
             }
-            finally
-            {
-                DisabledButton(shain);
-            }
+            //return RedirectToPage("/Attendance/Index");
         }
 
         private void End(M_Shain shain)

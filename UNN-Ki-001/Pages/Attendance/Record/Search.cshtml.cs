@@ -12,15 +12,15 @@ namespace UNN_Ki_001.Pages.Attendance.Record
     [Authorize(Policy = "Rookie")]
     public class Search : BasePageModel
     {
-        public string? Test { get; set; }
-        public string? Test1 { get; set; }
-        public string? Test2 { get; set; }
+        public string? ShozokuCd { get; set; }
+        public string? ShokushuCd { get; set; }
+        public string? KoyokeitaiCd { get; set; }
+        public string? Message { get; set; }
         public List<M_Shozoku> Shozoku { get; set; }
         public List<M_Shokushu> Shokushu { get; set; }
         public List<M_Koyokeitai> Koyokeitai { get; set; }
         public Search(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
-            
         }
 
 
@@ -35,25 +35,25 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         {
 
             // 現在の社員を取得
-            var me = GetCurrentUserShainAsync().Result;
+            var shain = GetCurrentUserShainAsync().Result;
 
             // 一般権限の場合、自身のみを追加して勤務表へ
             if (!User.IsInRole("Admin"))
             {
-                if(me == null)
+                if(shain == null)
                 {
                     // 何の権限も持たない場合はIndexページへ
                     return RedirectToPage("/Index");
                 }
 
                 // 自身のみが追加されたリストを作成
-                _targetList.Add(me);
+                _targetList.Add(shain);
                 var tempList = CreateRecordList(_targetList);
                 // セッションに格納して勤務表ページへ飛ぶ
                 return SendToKinmuhyo(tempList, 0);
             }
 
-            GetData(me);
+            GetData(shain);
 
             return Page();
         }
@@ -82,8 +82,8 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         public IActionResult OnPost(string command, int index)
         {
             // 現在の社員を取得
-            var me = GetCurrentUserShainAsync().Result;
-            GetData(me);
+            var shain = GetCurrentUserShainAsync().Result;
+            GetData(shain);
             // 行選択時の処理
             if (command != null && command.Equals("sub") && index >= 0)
             {
@@ -101,18 +101,18 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             // 入力の空白文字を削除
             Input.ReplaceAll(" ", "");
             Input.ReplaceAll("　", "");
-            Test = Input.ShozokuCd;
-            Test1 = Input.ShokushuCd;
-            Test2 = Input.KoyokeitaiCd;
+            ShozokuCd = Input.ShozokuCd;
+            ShokushuCd = Input.ShokushuCd;
+            KoyokeitaiCd = Input.KoyokeitaiCd;
             
             // 社員とその関連データを一括Select
             _targetList = _kintaiDbContext.m_shains
+                .Where(e => e.KigyoCd.Equals(shain.KigyoCd))
                 .Include(shain => shain.Shokushu)
                 .Include(shain => shain.Shozoku)
                 .Include(shain => shain.Koyokeitai)
                 .WhereIf(Input.No != null, shain => shain.ShainNo.Equals(Input.No!))
                 .WhereIf(Input.Name != null, shain => (shain.NameSei + shain.NameMei).Equals(Input.Name!))
-                .WhereIf(Input.KigyoCd != null, shain => shain.KigyoCd.Contains(Input.KigyoCd!))
                 .WhereIf(Input.KoyokeitaiCd != null, shain =>     // 雇用形態
                     shain.Koyokeitai != null
                     && shain.Koyokeitai.KoyokeitaiCd.Equals(Input.KoyokeitaiCd!))
@@ -124,12 +124,11 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     && shain.Shokushu.ShokushuCd.Equals(Input.ShokushuCd!))
                 .OrderBy(shain => shain.ShainNo)
                 .ToList();
-
+            if (_targetList == null)
+                Message = "検索結果がありません。";
             // 検索結果をシリアライズ可能なListにしてセッションに一時データとして格納
             var tempList = CreateRecordList(_targetList);
             HttpContext.Session.SetObj(_TEMP_SEARCH_RESULT_LIST, tempList);
-
-
             return Page();
         }
 
@@ -176,24 +175,18 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         
         public class InputModel
         {
-            [Display(Name = "企業コード")]
-            public string? KigyoCd { get; set; }
             [Display(Name = "社員番号")]
             public string? No { get; set; }
             [Display(Name = "氏名")]
             public string? Name { get; set; }
-
             [Display(Name = "所属")]
             public string? ShozokuCd { get; set; }
             [Display(Name = "職種")]
             public string? ShokushuCd { get; set; }
             [Display(Name = "雇用形態")]
             public string? KoyokeitaiCd { get; set; }
-
             public void ReplaceAll(string tgt, string val)
             {
-                if(KigyoCd != null)
-                    KigyoCd = KigyoCd.Replace(tgt, val);
                 if (No != null)
                     No = No.Replace(tgt, val);
                 if (Name != null)
