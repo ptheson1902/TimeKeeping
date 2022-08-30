@@ -22,10 +22,10 @@ namespace UNN_Ki_001.Data
                 count = 0;
                 foreach(var record in ChangeTracker.Entries<Reloadable>().ToList())
                 {
-                    if (!record.Entity.isReloaded)
+                    if (!record.Entity.isReloaded && record.State != EntityState.Deleted)
                     {
                         count++;
-                        Debug.Write("リロード実行" + record.ToString());
+                        Debug.Write("再計算実行" + record.Entity.ToString() + "\n");
                         record.Entity.run(this);
                     }
                 }

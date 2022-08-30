@@ -38,15 +38,17 @@ namespace UNN_Ki_001.Data.Models
                         throw new Exception("休憩時間が既存のレコードと重複してしまいます。");
                     }
                 }
+            }
 
-                // 勤務レコードの再計算をトリガーする
-                var kinmu = context.t_kinmus
-                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuDt!.Equals(KinmuDt) && e.Kyukei != null)
-                    .FirstOrDefault();
-                if(kinmu != null)
-                {
-                    context.Attach((T_Kinmu)kinmu);
-                }
+            // 勤務レコードの再計算をトリガーする
+            var kinmu = context.t_kinmus
+                .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuDt!.Equals(KinmuDt))
+                .ToList()
+                .FirstOrDefault();
+
+            if (kinmu != null)
+            {
+                context.Attach((T_Kinmu)kinmu);
             }
         }
 

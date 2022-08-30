@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
@@ -24,10 +25,10 @@ namespace UNN_Ki_001.Data.Models
         
         protected override void Reload(KintaiDbContext context)
         {
-
             // マスターレコードの取得
             M_Kinmu? master = context.m_kinmus
                 .Where(e => e.KinmuCd.Equals(KinmuCd) && e.KigyoCd.Equals(KigyoCd))
+                .ToList()
                 .FirstOrDefault();
 
             // 実績開始時間の計算
@@ -42,17 +43,22 @@ namespace UNN_Ki_001.Data.Models
                 KinmuToDate = CalcKinmuTo(master, (DateTime)DakokuToDate);
             }
 
-
+            
             // 直後の勤務レコードと重複していないかどうかの確認
             if (KinmuFrDate != null)
             {
                 var tgt = context.t_kinmus
                     .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuFrDate > KinmuFrDate && e.KinmuDt != KinmuDt)
                     .OrderBy(e => e.KinmuFrDate)
+                    .AsNoTracking()
+                    .ToList()
                     .FirstOrDefault();
-                if (tgt != null && tgt.KinmuFrDate < KinmuToDate)
+                if (tgt != null)
                 {
-                    throw new Exception("直後の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。");
+                    if(tgt.KinmuFrDate < KinmuToDate)
+                    {
+                        throw new Exception("直後の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。");
+                    }
                 }
             }
             // 直前の勤務レコードと重複していないかどうかの確認
@@ -61,13 +67,19 @@ namespace UNN_Ki_001.Data.Models
                 var tgt = context.t_kinmus
                     .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuToDate < KinmuToDate && e.KinmuDt != KinmuDt)
                     .OrderByDescending(e => e.KinmuToDate)
+                    .AsNoTracking()
+                    .ToList()
                     .FirstOrDefault();
                 // TODO: 注意点
-                if (tgt != null && tgt.KinmuToDate > KinmuFrDate)
+                if (tgt != null)
                 {
-                    throw new Exception("直前の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。");
+                    if(tgt.KinmuToDate > KinmuFrDate)
+                    {
+                        throw new Exception("直前の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。");
+                    }
                 }
             }
+            
 
             // 実績時間の整合性を確認・修正
             if (KinmuFrDate != null && KinmuToDate != null)
@@ -228,13 +240,29 @@ namespace UNN_Ki_001.Data.Models
                 .Where(e => e.KigyoCd.Equals(KigyoCd) && e.ShainNo.Equals(ShainNo) && e.KinmuDt.Equals(KinmuDt)
                     && e.DakokuFrDate != null && e.DakokuToDate != null)
                 .OrderBy(e => e.SeqNo)
+                .AsNoTracking()
                 .ToList();
+
+            // チェンジトラッカーからも取得
+            var list2 = context.ChangeTracker.Entries<T_Kyukei>()
+                 .Where(e => e.Entity.KigyoCd.Equals(KigyoCd) && e.Entity.ShainNo.Equals(ShainNo) && e.Entity.KinmuDt.Equals(KinmuDt))
+                 .ToList();
+            foreach(var item in list2)
+            {
+                list.Add(item.Entity);
+            }
+
 
             int totalMinutes = 0;
 
             // 勤務時間の枠に押し込む
             foreach (var item in list)
             {
+                // remove中なら計算に含めません
+                if(context.Entry(item).State == Microsoft.EntityFrameworkCore.EntityState.Deleted)
+                {
+                    continue;
+                }
                 // コンパイラにNULLじゃないことを保証します
                 if (item.DakokuToDate == null || item.DakokuFrDate == null)
                 {
@@ -260,7 +288,7 @@ namespace UNN_Ki_001.Data.Models
             return totalMinutes;
         }
 
-        private void ClearInfo()
+        public void ClearInfo()
         {
             Shotei = null;
             Kyukei = null;
