@@ -111,17 +111,17 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 .Include(shain => shain.Shokushu)
                 .Include(shain => shain.Shozoku)
                 .Include(shain => shain.Koyokeitai)
-                .WhereIf(Input.No != null, shain => shain.ShainNo.Equals(Input.No!))
-                .WhereIf(Input.Name != null, shain => (shain.NameSei + shain.NameMei).Equals(Input.Name!))
+                .WhereIf(Input.No != null, shain => shain.ShainNo.Contains(Input.No))
+                .WhereIf(Input.Name != null, shain => (shain.NameSei + shain.NameMei).Contains(Input.Name))
                 .WhereIf(Input.KoyokeitaiCd != null, shain =>     // ŒÙ—pŒ`‘Ô
                     shain.Koyokeitai != null
-                    && shain.Koyokeitai.KoyokeitaiCd.Equals(Input.KoyokeitaiCd!))
+                    && shain.Koyokeitai.KoyokeitaiCd.Contains(Input.KoyokeitaiCd))
                 .WhereIf(Input.ShozokuCd != null, shain =>        // Š‘®
                     shain.Shozoku != null
-                    && shain.Shozoku.ShozokuCd!.Equals(Input.ShozokuCd!))
+                    && shain.Shozoku.ShozokuCd!.Contains(Input.ShozokuCd))
                 .WhereIf(Input.ShokushuCd != null, shain =>       // EŽí
                     shain.Shokushu != null
-                    && shain.Shokushu.ShokushuCd.Equals(Input.ShokushuCd!))
+                    && shain.Shokushu.ShokushuCd.Contains(Input.ShokushuCd))
                 .OrderBy(shain => shain.ShainNo)
                 .ToList();
             if (_targetList == null)
