@@ -3,145 +3,104 @@
 @{
     ViewData["Title"] = "社員検索";
 }
-<script src="~/js/Attendance.Record.Search.js"></script>
-
-@*<div class="container mt-5" style="max-width: 800px">
-    <form class="card mb-4" id="MainForm" method="Post">
-        <!-- 識別用 -->
-        <input type="hidden" name="command" value="main" />
-
-        <!-- 社員番号 -->
-        <label asp-for="Input.No" for="inputNo" ></label>
-        <input asp-for="Input.No" id="inputNo" />
-            
-        <!-- 氏名 -->
-        <label asp-for="Input.Name" for="inputName" ></label>
-        <input asp-for="Input.Name" id="inputName" />
-
-        <!-- 所属 -->
-        <label asp-for="Input.ShozokuName" for="inputShozokuName" ></label>
-        <input asp-for="Input.ShozokuName" id="inputShozokuName" />
-
-        <!-- 職種 -->
-        <label asp-for="Input.ShokushuName" for="inputShokushuName" ></label>
-        <input asp-for="Input.ShokushuName" id="inputShokushuName" />
-
-        <!-- 雇用形態 -->
-        <label asp-for="Input.KoyokeitaiName" for="inputKoyokeitaiName" ></label>
-        <input asp-for="Input.KoyokeitaiName" id="inputKoyokeitaiName" />
-        
-        <!-- クリアボタン -->  
-        <button type="button" class="btn btn-primary btn-lg"
-            style="padding-left: 2.5rem; padding-right: 2.5rem;">クリア</button>
-
-        <!-- 検索ボタン -->
-        <button type="submit" class="btn btn-primary btn-lg"
-            style="padding-left: 2.5rem; padding-right: 2.5rem;">検索</button>
-    </form>
-</div>
-<div class="container mt-5" style="max-width: 800px">
-        <!-- テーブルを作成 -->
-        <table>
-            <tr>
-                <th>
-                    社員番号
-                </th>
-            </tr>
-        @{
-            if(Model._targetList != null)
-            {
-                var list = Model._targetList;
-                for(int i = 0; i < list.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            <a href="#" onclick="SendPost(@i);">
-                                @list[i].ShainNo
-                            </a>
-                        </td>
-                    </tr>
-                }
-            }
-        }
-        </table>
-</div>
-<form id="SubForm" method="Post">
-    <input type="hidden" name="command" value="sub" />
-    <input type="hidden" name="index" value="" />
-</form>*@
-
-
-
-   
-   <div>    
-   <div class="container mt-5" style="max-width: 800px">
+<div>
+    <div class="container mt-3 mb-5" style="max-width: 800px;">
        <h3 class="align-items-center">@ViewData["Title"]</h3>
-      <form class="card mb-4" method="Post" id="MainForm">
+      <form class="card mb-4 SearchForm" method="Post" id="MainForm">
+        <div class="card-header d-flex justify-content-between">
+            <div class="card-title">社員検索条件</div>
+            <div class="minimizeBtn"><i class="fa-solid fa-minimize"></i></div>
+            <div class="maximizeBtn d-none"><i class="fa-solid fa-maximize"></i></div>
+        </div>
          <div class="card-body">
             <!-- 識別用 -->
             <input type="hidden" name="command" value="main" />
-            <div class="row mb-3 align-items-center">
-               
+            <div class="row g-3 align-items-center mb-3">
                 <!-- 社員番号 -->
-                <label asp-for="Input.No" for="inputNo" class="col-3"></label>
-                <input asp-for="Input.No" id="inputNo" class="col-3" />
+                <div class="col-3">
+                    <label asp-for="Input.No" for="inputNo" class="col-form-label"></label>
+                </div>
+                <div class="col-auto">
+                    <input class="form-control" asp-for="Input.No" id="inputNo">
+                </div>
             </div>
-            <div class="row mb-3 align-items-center">
+            <div class="row g-3 align-items-center mb-3">
                 <!-- 氏名 -->
-                <label asp-for="Input.Name" for="inputName" class="col-3"></label>
-                <input asp-for="Input.Name" id="inputName"class="col-3" />
+                <div class="col-3">
+                    <label asp-for="Input.Name" for="inputName" class="col-form-label"></label>
+                </div>
+                <div class="col-auto">
+                    <input class="form-control" asp-for="Input.Name" id="inputName">
+                </div>
             </div>
-            <div class="row mb-3 align-items-center">
+
+            <div class="row g-3 align-items-center mb-3">
                 <!-- 所属 -->
-                <label asp-for="Input.ShozokuCd" for="inputShozokuName" class="col-3" ></label>
-                <select name="Input.ShozokuCd" class="col-3">
-                    <option></option>
-                    @foreach (var item in @Model.Shozoku)
-                    {
-                        <option value="@item.ShozokuCd" selected="@(Model.Test!=null && Model.Test!.Equals(item.ShozokuCd)  ? true : false)">@item.ShozokuNm</option>
-                    }
-                </select>
+                <div class="col-3">
+                    <label asp-for="Input.ShozokuCd" for="inputShozokuName" class="col-form-label"></label>
+                </div>
+                <div class="col-auto">
+                    <select name="Input.ShozokuCd" class="form-select"
+                            aria-label="Default select">
+                        <option></option>
+                        @foreach (var item in @Model.Shozoku)
+                        {
+                            <option value="@item.ShozokuCd" selected="@(Model.ShozokuCd!=null && Model.ShozokuCd!.Equals(item.ShozokuCd)  ? true : false)">@item.ShozokuNm</option>
+                        }
+                    </select>
+                </div>
             </div>
-            <div class="row mb-3 align-items-center">
-                 <!-- 職種 -->
-                <label asp-for="Input.ShokushuCd" for="inputShokushuName" class="col-3"></label>
-                <select name="Input.ShokushuCd" class="col-3">
-                    <option></option>
-                    @foreach (var item in @Model.Shokushu)
-                    {
-                        <option value="@item.ShokushuCd" selected="@(Model.Test1!=null && Model.Test1!.Equals(item.ShokushuCd)  ? true : false)">@item.ShokushuNm</option>
-                    }
-                </select>
-             </div>
-            <div class="row mb-3 align-items-center">
+
+            <div class="row g-3 align-items-center mb-3">
+                <!-- 職種 -->
+                <div class="col-3">
+                    <label asp-for="Input.ShokushuCd" class="col-form-label"></label>
+                </div>
+                <div class="col-auto">
+                    <select name="Input.ShokushuCd" class="form-select"
+                            aria-label="Default select">
+                        <option></option>
+                        @foreach (var item in @Model.Shokushu)
+                        {
+                            <option value="@item.ShokushuCd" selected="@(Model.ShokushuCd!=null && Model.ShokushuCd!.Equals(item.ShokushuCd)  ? true : false)">@item.ShokushuNm</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row g-3 align-items-center mb-3">
                 <!-- 雇用形態 -->
-                <label asp-for="Input.KoyokeitaiCd" for="inputKoyokeitaiName" class="col-3" ></label>
-                 <select name="Input.KoyokeitaiCd" class="col-3">
-                    <option></option>
-                    @foreach (var item in @Model.Koyokeitai)
-                    {
-                        <option value="@item.KoyokeitaiCd" selected="@(Model.Test2!=null && Model.Test2!.Equals(item.KoyokeitaiCd)  ? true : false)">@item.KoyokeitaiNm</option>
-                    }
-                </select>
+                <div class="col-3">
+                    <label asp-for="Input.KoyokeitaiCd" class="col-form-label"></label>
+                </div>
+                <div class="col-auto">
+                    <select name="Input.KoyokeitaiCd" class="form-select"
+                            aria-label="Default select">
+                        <option></option>
+                        @foreach (var item in @Model.Koyokeitai)
+                        {
+                            <option value="@item.KoyokeitaiCd" selected="@(Model.KoyokeitaiCd!=null && Model.KoyokeitaiCd!.Equals(item.KoyokeitaiCd)  ? true : false)">@item.KoyokeitaiNm</option>
+                        }
+                    </select>
+                </div>
             </div>
-            <div class="d-flex justify-content-end mt-2">
-               <input type="hidden" value="search" name="action" />
-               <button type="submit" class="search btn btn-secondary mx-3">
-                  検索
-               </button>
-            </div>        
-         </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="search btn btn-primary me-5 px-4" value="search" name="action">
+                        <i class="fa-solid fa-magnifying-glass me-3"></i>
+                    検索
+                </button>
+            </div>
+        </div>
       </form>
-      <div class="p-2">
-         <table class="table table-bordered" id="mytable">
+        <div class="mb-5">
+            <table class="table table-bordered" id="mytable">
             <thead class="table-primary">
-               <tr class="text-center">
-                  <th class="col-2">社員番号</th>
-                  <th class="col-3">氏名</th>
-                  <th class="col-2">所属名</th>
-                  <th class="col-2">職種名</th>
-                  <th class="col-3">雇用形態名</th>
-               </tr>
+                <tr class="text-center">
+                    <th class="col-2">社員番号</th>
+                    <th class="col-3">氏名</th>
+                    <th class="col-2">所属名</th>
+                    <th class="col-2">職種名</th>
+                    <th class="col-3">雇用形態名</th>
+                </tr>
             </thead>
             <tbody class="shokushuData ">
                 @if (Model._targetList != null)
@@ -176,22 +135,18 @@
                                     @list[i].Koyokeitai.KoyokeitaiNm
                                 }
                             </td>
-
-
                         </tr>
-
                     }
-                }
+                }           
             </tbody>
-         </table>
-         @if(Model._targetList == null)
-            {
-                <div>結果がありません。</div>
-            }
-      </div>
-   </div>
+            </table>
+        <div class="text-danger">@Model.Message</div>
+        </div>
+    </div>
 </div>
 <form id="SubForm" method="Post">
     <input type="hidden" name="command" value="sub" />
     <input type="hidden" name="index" value="" />
 </form>
+<script src="~/js/Attendance.Record.Search.js"></script>
+<script src="~/js/VariousMasterCommon.js"></script>

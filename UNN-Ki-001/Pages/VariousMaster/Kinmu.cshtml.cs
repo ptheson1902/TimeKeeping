@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
-using System.Diagnostics;
 using UNN_Ki_001.Data;
 using UNN_Ki_001.Data.Models;
 
@@ -10,126 +8,186 @@ namespace UNN_Ki_001.Pages.VariousMaster
 {
     public class KinmuModel : BasePageModel
     {
-        public List<M_Kinmu> _targetList { get; set; }
-        public string? _test { get; set; }
+        public List<M_Kinmu>? _searchList { get; set; }
+        public string? _searchListString { get; set; }
         [BindProperty]
-        public M_Kinmu MKinmu { get; set; }
+        public M_Kinmu? MKinmuSearch { get; set; }
         [BindProperty]
-        public M_Kinmu MKinmu1 { get; set; }
-
+        public M_Kinmu? MKinmuCRUD { get; set; }
+        public string? Message { get; set; }
+        public string? ValidFlg { get; set; }
         public KinmuModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
         }
-
-        public List<M_Kinmu> Kinmu { get; set; }
-        [BindProperty]
-        public string? KinmuCd { get; set; }
-        [BindProperty]
-        public string? KinmuNm { get; set; }
-        [BindProperty]
-        public string? ValidFlg { get; set; }
-        [BindProperty]
-        public string? KinmuBunrui { get; set; }
-        public string? Message { get; set; }
         
-        public void OnGet()
-        {
-        }                                                     
-        public void OnPost()
+        public IActionResult OnGet()
         {
             var shain = GetCurrentUserShainAsync().Result;
-            var action = Request.Form["action"];
+            if (shain == null)
+                return RedirectToPage("/");
+            return Page();
+        }                                                     
+        public IActionResult OnPost(string action)
+        {
+            var shain = GetCurrentUserShainAsync().Result;
+            Console.WriteLine(action);
+            if (shain == null)
+                return RedirectToPage("/");
             switch (action)
             {
                 case "search":
                     Search(shain);
                     break;
-                default: break;
-            }
-            var register_action = Request.Form["register_action"];
-            switch (register_action)
-            {
-                case "register":
-                    Register(shain);
+                case "insert":
+                    Insert(shain);
                     break;
-                default: break;
-            }
-            /*var update_action = Request.Form["update_action"];
-            switch (update_action)
-            {
                 case "update":
-                    Update();
+                    Update(shain);
+                    break;
+                case "delete":
+                    Delete(shain);
                     break;
                 default: break;
             }
-            var delete_action = Request.Form["delete_action"];
-            switch (delete_action)
-            {
-                case "delete":
-                    Delete();
-                    break;
-                default: break;
-            }*/
+            return Page();
         }
         //　検索
-        private void Search(M_Shain? shain)
+        private void Search(M_Shain shain)
         {
-            _targetList = _kintaiDbContext.m_kinmus
+            _searchList = _kintaiDbContext.m_kinmus
                 .Where(e => e.KigyoCd.Equals(shain.KigyoCd))
-                .WhereIf(MKinmu.KinmuCd != null, e => e.KinmuCd!.Equals(MKinmu.KinmuCd))
-                .WhereIf(MKinmu.KinmuNm != null, e => e.KinmuNm!.Equals(MKinmu.KinmuNm))
-                .WhereIf(MKinmu.KinmuBunrui != null, e => e.KinmuBunrui!.Equals(MKinmu.KinmuBunrui!))
-                .WhereIf(MKinmu.ValidFlg != null, e => e.ValidFlg!.Equals(MKinmu.ValidFlg!))
+                .WhereIf(MKinmuSearch!.KinmuCd != null, e => e.KinmuCd!.Equals(MKinmuSearch.KinmuCd))
+                .WhereIf(MKinmuSearch.KinmuNm != null, e => e.KinmuNm.Equals(MKinmuSearch.KinmuNm))
+                .WhereIf(MKinmuSearch.KinmuBunrui != null, e => e.KinmuBunrui.Equals(MKinmuSearch.KinmuBunrui!))
+                .WhereIf(MKinmuSearch.ValidFlg != null, e => e.ValidFlg.Equals(MKinmuSearch.ValidFlg!))
+                .OrderBy(e => e.KinmuCd)
+                .OrderBy(e => e.KinmuNm)
                 .ToList();
-            _test = JsonConvert.SerializeObject(_targetList);
+            foreach(var item in _searchList)
+            {
+                item.KinmuFrTm = Cal(item.KinmuFrTm);
+                item.KinmuToTm = Cal(item.KinmuToTm);
+                item.Kyukei1FrTm = Cal(item.Kyukei1FrTm);
+                item.Kyukei1ToTm = Cal(item.Kyukei1ToTm);
+                item.Kyukei2FrTm = Cal(item.Kyukei2FrTm);
+                item.Kyukei2ToTm = Cal(item.Kyukei2ToTm);
+                item.Kyukei3FrTm = Cal(item.Kyukei3FrTm);
+                item.Kyukei3ToTm = Cal(item.Kyukei3ToTm);
+                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("01"))
+                    item.KinmuBunrui = "通常勤務";
+                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("02"))
+                    item.KinmuBunrui = "所定休日";
+                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("03"))
+                    item.KinmuBunrui = "法定休日";
+                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("04"))
+                    item.KinmuBunrui = "振替休日";
+                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("05"))
+                    item.KinmuBunrui = "代休";
+                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("06"))
+                    item.KinmuBunrui = "A有給休暇";
+                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("07"))
+                    item.KinmuBunrui = "午前半休";
+                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("08"))
+                    item.KinmuBunrui = "午後半休";
+            }
+            ValidFlg = MKinmuSearch.ValidFlg;
+            _searchListString = JsonConvert.SerializeObject(_searchList);
         }
-        private void Register(M_Shain? shain)
+
+        private string Cal(string? time)
         {
-            MKinmu1.KigyoCd = shain.KigyoCd;
+            if (time == null)
+                return "";
+            return time.Substring(0, 2) + ":" + time.Substring(2);
+        }
 
-            string a = Request.Form["KyukeiAuto"];
-            if (a == null)
-                a = "0";
-            string b = Request.Form["KinmuAuto"];
-            if (b == null)
-                b = "0";
-            /*if(MKinmu1.KinmuFrCtrlFlg != null && MKinmu1.KinmuFrCtrlFlg.Equals("false"))
-                MKinmu1.KinmuFrCtrlFlg = "0";
-            else 
-                MKinmu1.KinmuFrCtrlFlg = "1";
+        private void Insert(M_Shain shain)
+        {
+            string KyukeiAutoFlg = Request.Form["KyukeiAutoFlg"];
+            string KinmuFrCtrlFlg = Request.Form["KinmuFrCtrlFlg"];
+            MKinmuCRUD.KyukeiAutoFlg = KyukeiAutoFlg;
+            MKinmuCRUD.KinmuFrCtrlFlg = KinmuFrCtrlFlg;
+            MKinmuCRUD = Required(MKinmuCRUD, shain.KigyoCd);
 
-            if (MKinmu1.KyukeiAutoFlg != null && MKinmu1.KyukeiAutoFlg.Equals("false"))
-            else
-                MKinmu1.KyukeiAutoFlg = "1";*/
+            try
+            {
+                _kintaiDbContext.Add(MKinmuCRUD);
+                _kintaiDbContext.SaveChanges();
+                Message = "勤務マスタの登録が出来ました。";
+            }
+            catch
+            {
+                Message = "勤務マスタの登録に失敗しました。";
+            }
+        }
+        private void Update(M_Shain shain)
+        {
+            string KyukeiAutoFlg = Request.Form["KyukeiAutoFlg"];
+            string KinmuFrCtrlFlg = Request.Form["KinmuFrCtrlFlg"];
+            MKinmuCRUD.KyukeiAutoFlg = KyukeiAutoFlg;
+            MKinmuCRUD.KinmuFrCtrlFlg = KinmuFrCtrlFlg;
+            MKinmuCRUD = Required(MKinmuCRUD, shain.KigyoCd);
+            try
+            {
+                _kintaiDbContext.Update(MKinmuCRUD);
+                _kintaiDbContext.SaveChanges();
+                Message = "勤務マスタの更新が出来ました。";
+            }
+            catch
+            {
+                Message = "勤務マスタの更新に失敗しました。";
+            }
+        }
+        private void Delete(M_Shain shain)
+        {
+            string KyukeiAutoFlg = Request.Form["KyukeiAutoFlg"];
+            string KinmuFrCtrlFlg = Request.Form["KinmuFrCtrlFlg"];
+            MKinmuCRUD.KyukeiAutoFlg = KyukeiAutoFlg;
+            MKinmuCRUD.KinmuFrCtrlFlg = KinmuFrCtrlFlg;
+            MKinmuCRUD = Required(MKinmuCRUD, shain.KigyoCd);
+            try
+            {
+                _kintaiDbContext.Remove(MKinmuCRUD);
+                _kintaiDbContext.SaveChanges();
+                Message = "勤務マスタの削除が出来ました。";
+            }
+            catch
+            {
+                Message = "勤務マスタの削除に失敗しました。";
+            }
+        }
+        private M_Kinmu Required(M_Kinmu m_Kinmu, string kigyoCd)
+        {
+            m_Kinmu.KigyoCd = kigyoCd;
+            if (m_Kinmu.KyukeiAutoFlg == null)
+                m_Kinmu.KyukeiAutoFlg = "0";
+            if (m_Kinmu.KinmuFrCtrlFlg == null)
+                m_Kinmu.KinmuFrCtrlFlg = "0";
+            if (m_Kinmu.KinmuFrTm != null)
+                m_Kinmu.KinmuFrTm = m_Kinmu.KinmuFrTm.Replace(":", "");
 
-            MKinmu1.KyukeiAutoFlg = a;
-            MKinmu1.KinmuFrCtrlFlg = b;
-            if(MKinmu1.KinmuFrTm != null)
-                MKinmu1.KinmuFrTm = MKinmu1.KinmuFrTm.Replace(":", "");
+            if (m_Kinmu.KinmuToTm != null)
+                m_Kinmu.KinmuToTm = m_Kinmu.KinmuToTm.Replace(":", "");
 
-            if (MKinmu1.KinmuToTm != null)
-                MKinmu1.KinmuToTm = MKinmu1.KinmuToTm.Replace(":", "");
+            if (m_Kinmu.Kyukei1FrTm != null)
+                m_Kinmu.Kyukei1FrTm = m_Kinmu.Kyukei1FrTm.Replace(":", "");
 
-            if (MKinmu1.Kyukei1FrTm != null)
-                MKinmu1.Kyukei1FrTm = MKinmu1.Kyukei1FrTm.Replace(":", "");
+            if (m_Kinmu.Kyukei1ToTm != null)
+                m_Kinmu.Kyukei1ToTm = m_Kinmu.Kyukei1ToTm.Replace(":", "");
 
-            if (MKinmu1.Kyukei1ToTm != null)
-                MKinmu1.Kyukei1ToTm = MKinmu1.Kyukei1ToTm.Replace(":", "");
+            if (m_Kinmu.Kyukei2FrTm != null)
+                m_Kinmu.Kyukei2FrTm = m_Kinmu.Kyukei2FrTm.Replace(":", "");
 
-            if (MKinmu1.Kyukei2FrTm != null)
-                MKinmu1.Kyukei2FrTm = MKinmu1.Kyukei2FrTm.Replace(":", "");
+            if (m_Kinmu.Kyukei2ToTm != null)
+                m_Kinmu.Kyukei2ToTm = m_Kinmu.Kyukei2ToTm.Replace(":", "");
 
-            if (MKinmu1.Kyukei2ToTm != null)
-                MKinmu1.Kyukei2ToTm = MKinmu1.Kyukei2ToTm.Replace(":", "");
+            if (m_Kinmu.Kyukei3FrTm != null)
+                m_Kinmu.Kyukei3FrTm = m_Kinmu.Kyukei3FrTm.Replace(":", "");
 
-            if (MKinmu1.Kyukei3FrTm != null)
-                MKinmu1.Kyukei3FrTm = MKinmu1.Kyukei3FrTm.Replace(":", "");
+            if (m_Kinmu.Kyukei3ToTm != null)
+                m_Kinmu.Kyukei3ToTm = m_Kinmu.Kyukei3ToTm.Replace(":", "");
 
-            if (MKinmu1.Kyukei3ToTm != null)
-                MKinmu1.Kyukei3ToTm = MKinmu1.Kyukei3ToTm.Replace(":", "");
-
-            _kintaiDbContext.Add(MKinmu1);
-            _kintaiDbContext.SaveChanges();
+            return m_Kinmu;
         }
     }
 }

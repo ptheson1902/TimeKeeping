@@ -29,7 +29,7 @@ namespace UNN_Ki_001.Data.Models
             TimeSpan stm = (kttm - kftm - (kkttm1 - kkftm1) - (kkttm2 - kkftm2) - (kkttm3 - kkftm3));
             return (int)stm.TotalMinutes;
         }
-        private int Cal(string time)
+        private int Cal(string? time)
         {
             if (time == null)
                 return 0;
@@ -39,14 +39,11 @@ namespace UNN_Ki_001.Data.Models
         [Key]
         [Column("kigyo_cd")]
         public string KigyoCd { get; set; }
-
         [Key]
         [Column("kinmu_cd")]
         public string KinmuCd { get; set; }
-
         [Column("kinmu_nm")]
         public string? KinmuNm { get; set; }
-
         [Column("kinmu_bunrui")]
         public string? KinmuBunrui { get; set; }
 

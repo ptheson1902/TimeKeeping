@@ -39,11 +39,5 @@ namespace UNN_Ki_001.Pages.Attendance
                     .OrderBy(a => a.KinmuDt));
             }
         }
-        [HttpPost]
-        public JsonResult? OnPost(string test = "")
-        {
-            Console.WriteLine(test);
-            return null;
-        }
     }
 }

@@ -40,94 +40,94 @@ body {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.25);
 }
 
-    .header #logo .companyName {
-        font-size: 0.8rem;
-    }
+.header #logo .companyName {
+    font-size: 0.8rem;
+}
 
-    .header .nav-custom {
-        width: 100%;
-    }
+.header .nav-custom {
+    width: 100%;
+}
 
-        .header .nav-custom .navbar-nav {
-            padding: 0;
-        }
+.header .nav-custom .navbar-nav {
+    padding: 0;
+}
 
-            .header .nav-custom .navbar-nav .nav-item .nav-link {
-                color: #000;
-            }
+.header .nav-custom .navbar-nav .nav-item .nav-link {
+    color: #000;
+}
 
 .main {
     margin-top: 4rem;
 }
 
-    .main .left .date {
-        font-weight: 400;
-        font-size: 1.6rem;
-        line-height: 39px;
-        color: #000000;
-    }
+.main .left .date {
+    font-weight: 400;
+    font-size: 1.6rem;
+    line-height: 39px;
+    color: #000000;
+}
 
-    .main .left .time {
-        font-weight: 500;
-        font-size: 7.6rem;
-        line-height: 155px;
-        color: #000000;
-    }
+.main .left .time {
+    font-weight: 500;
+    font-size: 7.6rem;
+    line-height: 155px;
+    color: #000000;
+}
 
-    .main .left .button .in {
-        font-size: 1rem;
-        font-weight: bold;
-        width: 10rem;
-        height: 5rem;
-        border-radius: 2.5rem;
-        background: #64FF56;
-        box-shadow: 0 0 8px #0ACF83;
-    }
+.main .left .button .in {
+    font-size: 1rem;
+    font-weight: bold;
+    width: 10rem;
+    height: 5rem;
+    border-radius: 2.5rem;
+    background: #64FF56;
+    box-shadow: 0 0 8px #0ACF83;
+}
 
-        .main .left .button .in:hover {
-            box-shadow: 0px 0px 30px #0ACF83;
-        }
+.main .left .button .in:hover {
+    box-shadow: 0px 0px 30px #0ACF83;
+}
 
-    .main .left .button .out {
-        font-size: 1rem;
-        font-weight: bold;
-        width: 10rem;
-        height: 5rem;
-        border-radius: 2.5rem;
-        background: #E3FF36;
-        box-shadow: 0px 0px 8px #C1C500;
-    }
+.main .left .button .out {
+    font-size: 1rem;
+    font-weight: bold;
+    width: 10rem;
+    height: 5rem;
+    border-radius: 2.5rem;
+    background: #E3FF36;
+    box-shadow: 0px 0px 8px #C1C500;
+}
 
-        .main .left .button .out:hover {
-            box-shadow: 0px 0px 30px #C1C500;
-        }
+.main .left .button .out:hover {
+    box-shadow: 0px 0px 30px #C1C500;
+}
 
-    .main .right #calendar .panel .calendar .fc-header .fc-header-left button, .main .right #calendar .panel .calendar .fc-header .fc-header-right button {
-        width: 60px;
-        height: 40px;
-        background-color: transparent;
-    }
+.main .right #calendar .panel .calendar .fc-header .fc-header-left button, .main .right #calendar .panel .calendar .fc-header .fc-header-right button {
+    width: 60px;
+    height: 40px;
+    background-color: transparent;
+}
 
-        .main .right #calendar .panel .calendar .fc-header .fc-header-left button:hover > i, .main .right #calendar .panel .calendar .fc-header .fc-header-right button:hover > i {
-            color: #1880FB;
-            font-size: 20px;
-        }
+.main .right #calendar .panel .calendar .fc-header .fc-header-left button:hover > i, .main .right #calendar .panel .calendar .fc-header .fc-header-right button:hover > i {
+    color: #1880FB;
+    font-size: 20px;
+}
 
-    .main .right #calendar .panel .calendar .fc-content .fc-border-separate thead tr {
-        height: 3rem;
-    }
+.main .right #calendar .panel .calendar .fc-content .fc-border-separate thead tr {
+    height: 3rem;
+}
 
-        .main .right #calendar .panel .calendar .fc-content .fc-border-separate thead tr th {
-            width: 3rem;
-        }
+.main .right #calendar .panel .calendar .fc-content .fc-border-separate thead tr th {
+    width: 3rem;
+}
 
-    .main .right #calendar .panel .calendar .fc-content .fc-border-separate tbody tr {
-        height: 3.5rem;
-    }
+.main .right #calendar .panel .calendar .fc-content .fc-border-separate tbody tr {
+    height: 3.5rem;
+}
 
-        .main .right #calendar .panel .calendar .fc-content .fc-border-separate tbody tr td > div {
-            margin: 0 auto;
-        }
+.main .right #calendar .panel .calendar .fc-content .fc-border-separate tbody tr td > div {
+    margin: 0 auto;
+}
 
 .taikin {
     display: flex;
@@ -171,6 +171,32 @@ body {
     background-color: red;
 }
 
+.SearchForm .card-body {
+    animation: In 0.5s ease-in-out;
+}
+
+.minimize {
+    display: none !important;
+}
+
+#mytable tr{
+    cursor:pointer;
+}
+
+@keyframes In {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.bg-selected {
+    background: #ffc07c;
+}
+
 @media (max-width: 991px) {
     .desktop, .phone, .footer {
         display: none;
@@ -194,6 +220,7 @@ body {
         align-items: center !important;
     }
 }
+
 
 @media (max-width: 429px) {
     .desktop, .tablet {
@@ -289,35 +316,35 @@ body {
         cursor: pointer;
     }
 
-        .nav-item-icon .title {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: -150%;
-            font-size: 0.8rem;
-            text-align: center;
-            transition: bottom 0.35s ease-out;
-        }
+    .nav-item-icon .title {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -150%;
+        font-size: 0.8rem;
+        text-align: center;
+        transition: bottom 0.35s ease-out;
+    }
 
-        .nav-item-icon *[class^="icon-"] {
-            position: absolute;
-            top: 0.7rem;
-            left: 0;
-            right: 0;
-            margin: 0 auto;
-            transition: top 0.35s ease-out;
-        }
+    .nav-item-icon *[class^="icon-"] {
+        position: absolute;
+        top: 0.7rem;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        transition: top 0.35s ease-out;
+    }
 
-        .nav-item-icon.active .title {
-            bottom: 1rem;
-        }
+    .nav-item-icon.active .title {
+        bottom: 1rem;
+    }
 
-        .nav-item-icon.active *[class^="icon-"] {
-            position: absolute;
-            top: -0.7rem;
-        }
+    .nav-item-icon.active *[class^="icon-"] {
+        position: absolute;
+        top: -0.7rem;
+    }
 
-            .nav-item-icon.active *[class^="icon-"] i {
-                color: red;
-            }
+    .nav-item-icon.active *[class^="icon-"] i {
+        color: red;
+    }
 }

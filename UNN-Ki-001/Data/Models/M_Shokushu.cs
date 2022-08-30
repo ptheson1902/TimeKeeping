@@ -20,8 +20,10 @@ namespace UNN_Ki_001.Data.Models
             ValidFlg = valid_flg;
 
         }
+        [Key]
         [Column("kigyo_cd")]
         public string KigyoCd { get; set; }
+        [Key]
         [Column("shokushu_cd")]
         public string ShokushuCd { get; set; }
         [Column("shokushu_nm")]

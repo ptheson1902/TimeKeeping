@@ -18,9 +18,10 @@ namespace UNN_Ki_001.Data.Models
             ShozokuNm = shozoku_nm;
             ValidFlg = valid_flg;
         }
-
+        [Key]
         [Column("kigyo_cd")]
         public string? KigyoCd { get; set; }
+        [Key]
         [Column("shozoku_cd")]
         public string? ShozokuCd { get; set; }
 
