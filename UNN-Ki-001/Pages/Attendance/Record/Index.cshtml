@@ -11,10 +11,9 @@
  <!-- 全てのフォームにonLoadで追加するデータ -->
 <input type="hidden" id="targetListJson" name="targetListJson" value='@Model.TargetListJson' />
  
+
  <!-- メインコンテナ -->
  <div class="container-fluid">
-
-
      <!-- 社員情報 -->
     <div class="row border mb-5 align-items-center">
         <div class="row">
@@ -50,15 +49,15 @@
             <div class="row rounded-pill" style="max-width:300px">
                 <form method="post" action="" class="col-md-4" style="">
                     <input type="hidden" value="PrevMonth" name="command" />
-                    <button type="button" class="submit bg-primary rounded-start" style="width: 100px; border-radius: 50rem 0 0 50rem !important">先月</button>
+                    <button type="button" class="submit btn bg-secondary rounded-start" style="width: 100px; border-radius: 50rem 0 0 50rem !important">先月</button>
                 </form>
                 <form method="post" action="" class="col-md-4">
                     <input type="hidden" value="NowMonth" name="command" />
-                    <button type="button" class="submit bg-primary" style="width: 100px;">今月</button>
+                    <button type="button" class="submit btn bg-secondary" style="width: 100px;">今月</button>
                 </form>
                 <form method="post" action="" class="col-md-4" style="">
                     <input type="hidden" value="NextMonth" name="command" />
-                    <button type="button" class="submit bg-primary rounded-end" style="width: 100px; border-radius: 0 50rem 50rem 0 !important">翌月</button>
+                    <button type="button" class="submit btn bg-secondary rounded-end" style="width: 100px; border-radius: 0 50rem 50rem 0 !important">翌月</button>
                 </form>
             </div>
             <!-- 所定労働時間 -->
@@ -72,6 +71,8 @@
         </div>
     </div>
 
+    <!-- エラーメッセージ仮置き場 -->
+    <b class="errorMessage"></b>
      <div class="row mb-3 align-items-center">
             <table id="main-contents" class="Nesting table table-striped">
             <tr class="table-dark">
@@ -118,34 +119,34 @@
                     <!-- 打刻終了 -->
                     <td class="kinmu_dakoku_to">
                         <select disabled>
-                            <option value="1" selected="@(item.DakokuFrKbn == 1 ? true : false)">前日</option>
-                            <option value="0" selected="@(item.DakokuFrKbn == 0 ? true : false)">当日</option>
-                            <option value="2" selected="@(item.DakokuFrKbn == 2 ? true : false)">翌日</option>
+                            <option value="1" selected="@(item.DakokuToKbn == 1 ? true : false)">前日</option>
+                            <option value="0" selected="@(item.DakokuToKbn == 0 ? true : false)">当日</option>
+                            <option value="2" selected="@(item.DakokuToKbn == 2 ? true : false)">翌日</option>
                         </select>
                         <input type="time" value="@item.DakokuEnd" disabled>
                     </td>
                     <!-- 勤務開始 -->
                     <td class="kinmu_kinmu_fr">
                         <select disabled="@isNotAdmin">
-                            <option value="1" selected="@(item.DakokuFrKbn == 1 ? true : false)">前日</option>
-                            <option value="0" selected="@(item.DakokuFrKbn == 0 ? true : false)">当日</option>
-                            <option value="2" selected="@(item.DakokuFrKbn == 2 ? true : false)">翌日</option>
+                            <option value="1" selected="@(item.KinmuFrKbn == 1 ? true : false)">前日</option>
+                            <option value="0" selected="@(item.KinmuFrKbn == 0 ? true : false)">当日</option>
+                            <option value="2" selected="@(item.KinmuFrKbn == 2 ? true : false)">翌日</option>
                         </select>
                         <input type="time" class="KinmuStart" value="@item.KinmuStart" disabled="@isNotAdmin">
                     </td>
                     <!-- 勤務終了 -->
                     <td class="kinmu_kinmu_to">
                         <select disabled="@isNotAdmin">
-                            <option value="1" selected="@(item.DakokuFrKbn == 1 ? true : false)">前日</option>
-                            <option value="0" selected="@(item.DakokuFrKbn == 0 ? true : false)">当日</option>
-                            <option value="2" selected="@(item.DakokuFrKbn == 2 ? true : false)">翌日</option>
+                            <option value="1" selected="@(item.KinmuToKbn == 1 ? true : false)">前日</option>
+                            <option value="0" selected="@(item.KinmuToKbn == 0 ? true : false)">当日</option>
+                            <option value="2" selected="@(item.KinmuToKbn == 2 ? true : false)">翌日</option>
                         </select>
                         <input type="time" value="@item.KinmuEnd" disabled="@isNotAdmin">
                     </td>
                     <!-- 休憩 -->
                     <td class="kinmu_kyukei">
                         @item.Kyukei
-                        <button  disabled="@isNotAdmin" type="button" class="btn-kyukei btn-secondary kyukei-dakoku" onclick="openKyukei('@item.KinmuDt', '@Model.Target.ShainNo', '@Model.Target.KigyoCd');" data-bs-toggle="modal" data-bs-target="#kyukei-modal">詳細</button>
+                        <button  hidden="@isNotAdmin" disabled="@(item.KinmuStart == "N/A" || item.KinmuEnd == "N/A")" type="button" class="btn-kyukei btn btn-secondary kyukei-dakoku" onclick="openKyukei('@item.KinmuDt', '@Model.Target.ShainNo', '@Model.Target.KigyoCd');" data-bs-toggle="modal" data-bs-target="#kyukei-modal">詳細</button>
                     <!-- 控除 -->
                     <td class="kinmu_kojo">
                         @item.Kojo

@@ -57,6 +57,23 @@ namespace UNN_Ki_001.Data.Models
 
         }
 
+        public override bool Equals(object? target)
+        {
+            if (target == null || this.GetType() != target.GetType())
+            {
+                return false;
+            }
+
+            T_Kyukei kyukei = (T_Kyukei)target;
+
+            if (kyukei.KigyoCd == KigyoCd && kyukei.ShainNo == ShainNo && kyukei.KinmuDt == KinmuDt && kyukei.SeqNo == SeqNo)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public T_Kyukei(string kigyoCd, string shainNo, string kinmuDt, int seqNo, T_Kinmu kinmu)
         {
             KigyoCd = kigyoCd;
