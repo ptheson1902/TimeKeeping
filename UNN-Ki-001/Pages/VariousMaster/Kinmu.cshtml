@@ -179,6 +179,7 @@
                         <div class="col-auto">
                             <input type="text"
                                 class="kinmuCd form-control"
+                                maxlength="4"
                                 asp-for="MKinmuCRUD.KinmuCd"
                                 required />
                         </div>
@@ -191,6 +192,7 @@
                         <div class="col-auto">
                             <input type="text"
                                 class="kinmuNm form-control"
+                                   maxlength="20"
                                 asp-for="MKinmuCRUD.KinmuNm"
                                 required />
                         </div>
@@ -440,7 +442,8 @@
                         <div class="col-2">
                             <input type="number"
                                 asp-for="MKinmuCRUD.KinmuFrMarumeTm"
-                                class="form-control kinmuFrMarumeTm"
+                                   class="form-control text-end kinmuFrMarumeTm"
+                                maxlength="2"
                                 value="0"
                             />
                         </div>
@@ -471,7 +474,8 @@
                         <div class="col-2">
                             <input type="number"
                                 asp-for="MKinmuCRUD.KinmuToMarumeTm"
-                                class="form-control kinmuToMarumeTm"
+                                   class="form-control text-end kinmuToMarumeTm"
+                                maxlength="2"
                                 value="0"
                             />
                         </div>
@@ -501,7 +505,8 @@
                         <div class="col-2">
                             <input type="number"
                                 asp-for="MKinmuCRUD.KyukeiFrMarumeTm"
-                                class="form-control kyukeiFrMarumeTm"
+                                class="form-control text-end kyukeiFrMarumeTm"
+                                maxlength="2"
                                 value="0"    
                             />
                         </div>
@@ -532,7 +537,8 @@
                         <div class="col-2">
                             <input type="number"
                                 asp-for="MKinmuCRUD.KyukeiToMarumeTm"
-                                class="form-control kyukeiToMarumeTm"
+                                class="form-control text-end kyukeiToMarumeTm"
+                                maxlength="2"
                                 value="0"
                             />
                         </div>

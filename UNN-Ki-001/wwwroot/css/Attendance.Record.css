@@ -1,1 +1,71 @@
-﻿
+﻿body {
+    background: #ffe2e7;
+}
+
+.top .shainTitle {
+    cursor: pointer;
+    border-end-end-radius: 15px;
+}
+
+.top .kinmuTitle {
+    width: 100%;
+    border-end-start-radius: 15px;
+}
+
+    .top .kinmuTitle #mytable1 tr {
+        font-size: 0.8rem;
+    }
+
+        .top .kinmuTitle #mytable1 tr th, .top .kinmuTitle #mytable1 tr td {
+            padding: 0.25rem;
+        }
+
+.top .monthBtn .listBtn {
+    padding: 2px;
+    background: yellow;
+}
+
+.main {
+    font-size: 0.8rem;
+}
+
+    .main .shainInfo {
+        border-start-end-radius: 15px;
+        transition: all 0.5s ease-in-out;
+        animation: out 0.5s ease-in-out;
+    }
+
+    .main .kinmuInfo {
+        width: 100%;
+        border-start-start-radius: 15px;
+        transition: width 0.5s ease-in-out;
+    }
+
+.test {
+    transform: translateX(-100%);
+    animation: in 0.5s 0.5s;
+}
+
+@keyframes in {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+@keyframes out {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

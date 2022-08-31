@@ -40,3 +40,8 @@ function SzkData(e, isReadonly) {
     // 職種マスタの有効/無効
     $(".SzkModalForm input[value='" + e.ValidFlg + "'].validFlg").attr("checked", true)
 }
+
+$(".SzkModalForm").submit(function () {
+    if (!confirm("test"))
+        return false;
+})

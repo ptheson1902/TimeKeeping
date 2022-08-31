@@ -96,10 +96,10 @@
             <thead class="table-primary">
                 <tr class="text-center">
                     <th class="col-2">社員番号</th>
-                    <th class="col-3">氏名</th>
+                    <th class="col-4">氏名</th>
                     <th class="col-2">所属名</th>
                     <th class="col-2">職種名</th>
-                    <th class="col-3">雇用形態名</th>
+                    <th class="col-2">雇用形態名</th>
                 </tr>
             </thead>
             <tbody class="shokushuData ">
@@ -109,7 +109,7 @@
                     for (int i = 0; i < list.Count; i++)
                     {
                         <tr>
-                            <td>
+                            <td class="text-center">
                                 <a href="#" onclick="SendPost(@i);">
                                     @list[i].ShainNo
                                 </a>
@@ -117,19 +117,19 @@
                             <td>
                                 @list[i].NameSei @list[i].NameMei
                             </td>
-                            <td>
+                            <td class="text-center">
                                 @if (list[i].Shozoku != null)
                                 {
                                     @list[i].Shozoku.ShozokuNm
                                 }
                             </td>
-                            <td>
+                            <td class="text-center">
                                 @if (list[i].Shokushu != null)
                                 {
                                     @list[i].Shokushu.ShokushuNm
                                 }
                             </td>
-                            <td>
+                            <td class="text-center">
                                 @if (list[i].Koyokeitai != null)
                                 {
                                     @list[i].Koyokeitai.KoyokeitaiNm
