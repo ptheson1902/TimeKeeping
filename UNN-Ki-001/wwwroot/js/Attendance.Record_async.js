@@ -3,65 +3,55 @@ $("form").append($("#targetListJson"));
 
 // 変更リクエストパラメーター
 var ChangeTracker = {};
+var ErrorList = {};
 
 // 基本情報変更登録時の処理
-$(".kinmu").change(function () {
+$(".kinmu").focusout(function () {
     // オブジェクトを生成します
     var target = kinmuRecord($(this));
 
-    /* ##################################################
-     * 月をまたいだ取得がこれじゃできない
-     * ##################################################
-    // 前後のレコードも取り出します(なければNullable)
-    var after = kinmuRecord($(this).next(".kinmu"));
-    var before = kinmuRecord($(this).prev(".kinmu"));
-    // 重複チェック
-    if (before != null && doubleCheck(target, before)) {
-        console.log("直前のレコードと重複しています。");
-        return;
-    }
-    if (after != null && doubleCheck(target, after)) {
-        console.log("直後のレコードと重複しています。");
-        return;
-    }
-    */
-
-    // 値を取り出します。
-    
-    var res_cd = target.kinmuCd;
-    console.log(res_cd);
-    // C#で取り込み時にまとめてパースするためにくっつけます。
-    var res_dakoku_fr = target.kinmuDt + "," + target.dakokuFrTm + "," + target.dakokuFrKbn;
-    var res_dakoku_to = target.kinmuDt + "," + target.dakokuToTm + "," + target.dakokuToKbn
-    var res_kinmu_fr = target.kinmuDt + "," + target.kinmuFrTm + "," + target.kinmuFrKbn;
-    var res_kinmu_to = target.kinmuDt + "," + target.kinmuToTm + "," + target.kinmuToKbn;
-    var res_biko = target.biko;
-
-    // 連想配列を作成
-    var OneChange = {
-        kinmuCd: res_cd
-        , dakokuFr: res_dakoku_fr
-        , dakokuTo: res_dakoku_to
-        , kinmuFr: res_kinmu_fr
-        , kinmuTo: res_kinmu_to
-        , biko: res_biko
+    // エラーチェック
+    if (target.kinmuFrDate > target.kinmuToDate) {
+        $(this).css('background-color', 'orange');
+        ErrorList[$(this).data("origin")] = target;
+        delete ChangeTracker[$(this).data("origin")];
+    } else {
+        $(this).css('background-color', '');
+        ChangeTracker[$(this).data("origin")] = target;
+        delete ErrorList[$(this).data("origin")];
     }
 
-    ChangeTracker[$(this).data("origin")] = OneChange
+    // 休憩入力可否チェック
+    let kyukeiButton = $(this).find(".btn-kyukei");
+    if (target.kinmuFrTm == "" || target.kinmuToTm == "") {
+        kyukeiButton.prop("disabled", true);
+        console.log(false);
+    } else {
+        kyukeiButton.prop("disabled", false);
+
+        console.log(true);
+    }
+
+    // チェッククリア後
+    errorMessageRefresh();
 })
 
-// 二つの打刻オブジェクトの時間が重複していないかどうか計算します。
-function doubleCheck(mainObj, subObj) {
-    if (mainObj.kinmuFrDate < subObj.kinmuFrDate && subObj.kinmuFrDate > mainObj.kinmuToDate) {
-        console.log("gyo");
-        return true;
-    }
-    if (mainObj.kinmuFrDate < subObj.kinmuToDate && subObj.kinmuToDate > mainObj.kinmuToDate) {
-        console.log("a");
-        return true;
-    }
+function errorMessageRefresh() {
+    // 要素の取得
+    let elem = $(".errorMessage")
+    elem.css("color", "red");
 
-    return false;
+    let submitButton = $(".save-change");
+    // 値を変更
+    if (Object.keys(ErrorList).length > 0) {
+        elem.text("入力したデータが不正です。");
+        // 実行ボタンをdissableに
+        submitButton.prop("disabled", true);
+    } else {
+        elem.text("");
+        // 実行ボタンをアクティブに
+        submitButton.prop("disabled", false);
+    }
 }
 
 // 打刻オブジェクトを日付型に変換します
@@ -71,19 +61,16 @@ function formatToDate(kinmuDt, tm, kbn) {
     let day = kinmuDt.substr(6);
     let dateString = year + "-" + month + "-" + day + "T" + tm;
 
-    console.log("日付型への変換を試みます... + dateString");
     var date = new Date(dateString);
 
-    console.log("区分を適用します..." + kbn);
     let temp = date.getDate();
     if (kbn == "1") {
-        temp - 1;
+        temp -= 1;
     }
     if (kbn == "2") {
-        temp + 1;
+        temp += 1;
     }
     date.setDate(temp);
-    console.log("完了");
 
     return date;
 }
@@ -150,21 +137,44 @@ $("form .save-change").click(function () {
         return;
     }
 
+    // パラメーターの作成
+    let paramArray = {};
+    Object.keys(ChangeTracker).forEach(function (key) {
+        let target = ChangeTracker[key];
+        var res_cd = target.kinmuCd;
+        console.log(res_cd);
+        // C#で取り込み時にまとめてパースするためにくっつけます。
+        var res_dakoku_fr = target.kinmuDt + "," + target.dakokuFrTm + "," + target.dakokuFrKbn;
+        var res_dakoku_to = target.kinmuDt + "," + target.dakokuToTm + "," + target.dakokuToKbn
+        var res_kinmu_fr = target.kinmuDt + "," + target.kinmuFrTm + "," + target.kinmuFrKbn;
+        var res_kinmu_to = target.kinmuDt + "," + target.kinmuToTm + "," + target.kinmuToKbn;
+        var res_biko = target.biko;
+        var res_kinmuCd = target.kinmuCd;
+
+        // 連想配列を作成
+        var OneChange = {
+            kinmuCd: res_cd
+            , dakokuFr: res_dakoku_fr
+            , dakokuTo: res_dakoku_to
+            , kinmuFr: res_kinmu_fr
+            , kinmuTo: res_kinmu_to
+            , biko: res_biko
+            , kinmuCd: res_kinmuCd
+        }
+
+        paramArray[key] = OneChange;
+    })
+
     // チェンジトラッカーをjsonに変換
-    let ChangeTrackerJson = JSON.stringify(ChangeTracker);
+    let param = JSON.stringify(paramArray);
     // フォームに追加する
-    $(this).parent().append($("<input type=\"hidden\" name=\"json\"/>").val(ChangeTrackerJson));
+    $(this).parent().append($("<input type=\"hidden\" name=\"json\"/>").val(param));
     // 送信
     $(this).parent().submit();
 })
 
 // 休憩の登録処理
 function kyukeiSaveChange() {
-    var kakunin = window.confirm("データベースへ登録実行しますか？");
-    if (!kakunin) {
-        return;
-    }
-
     // 1行ずつコレクションで取得
     allRow = $(".kyukei-row-data");
     var resArray = {};
@@ -172,22 +182,40 @@ function kyukeiSaveChange() {
     var array = [];
     console.log(allRow);
 
-    allRow.each(function (index, element) {
-        let start = $(this).children(".start");
-        let end = $(this).children(".end");
+    try {
+        allRow.each(function (index, element) {
+            let start = $(this).children(".start");
+            let end = $(this).children(".end");
 
-        // 開始時間を取得
-        let dakokuFrKbn = start.children("select").val();
-        let dakokuFr = start.children("input").val();
+            // 開始時間を取得
+            let dakokuFrKbn = start.children("select").val();
+            let dakokuFr = start.children("input").val();
+            let dakokuFrDate = formatToDate(resArray.kinmuDt, dakokuFr, dakokuFrKbn);
 
-        // 終了時間を取得
-        let dakokuToKbn = end.children("select").val();
-        let dakokuTo = end.children("input").val();
+            // 終了時間を取得
+            let dakokuToKbn = end.children("select").val();
+            let dakokuTo = end.children("input").val();
+            let dakokuToDate = formatToDate(resArray.kinmuDt, dakokuTo, dakokuToKbn);
 
-        // 配列を作成し、２次配列resArrayに追加
-        array.push({ dakokuFrTm: dakokuFr, dakokuFrKbn: dakokuFrKbn, dakokuToTm: dakokuTo, dakokuToKbn: dakokuToKbn });
-    })
+            // 入力チェック
+            if (dakokuToDate < dakokuFrDate) {
+                throw new Error("入力が不正です。\n" + index + 1 + "件目");
+            }
+
+            // 配列を作成し、２次配列resArrayに追加
+            array.push({ dakokuFrTm: dakokuFr, dakokuFrKbn: dakokuFrKbn, dakokuToTm: dakokuTo, dakokuToKbn: dakokuToKbn });
+        })
+    } catch (e) {
+        alert(e);
+        return;
+    }
     resArray["list"] = array;
+
+    // 登録
+    var kakunin = window.confirm("データベースへ登録実行しますか？");
+    if (!kakunin) {
+        return;
+    }
     let form = $("#kyukeiForm")
     let kyukeiJsonParam = JSON.stringify(resArray);
     form.children(".kyukeiJson").val(kyukeiJsonParam);

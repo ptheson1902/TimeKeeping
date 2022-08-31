@@ -126,6 +126,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                             && e.KinmuDt == kinmuDt)
                         .ToList();
                     _kintaiDbContext.RemoveRange(kyukeis);
+                    _kintaiDbContext.SaveChanges();
 
                     // 勤務レコードを用意する
                     var kinmu = _kintaiDbContext.t_kinmus
@@ -136,6 +137,13 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     if (kinmu == null)
                     {
                         kinmu = new T_Kinmu(Target.KigyoCd, Target.ShainNo, kinmuDt);
+                    } else
+                    {
+                        // 集計の初期化処理
+                        if((kinmu.KinmuFrDate != null && kinmu.KinmuToDate != null))
+                        {
+                            kinmu.ClearInfo();
+                        }
                     }
 
                     // jsonをもとに新規作成して追加
@@ -185,6 +193,14 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                             kinmu.ShainNo = Target.ShainNo;
 
                             _kintaiDbContext.Add(kinmu);
+                        } else
+                        {
+                            
+                            // 集計の初期化を適宜行います
+                            if((value.kinmuCd != "" && kinmu.KinmuCd != value.kinmuCd) || (value.kinmuFr == null || value.kinmuTo == null))
+                            {
+                                kinmu.ClearInfo();
+                            }
                         }
 
 
@@ -319,8 +335,6 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 // 休憩
                 if (kinmu.Kyukei != null)
                     data.Kyukei = MinutesToString((int)kinmu.Kyukei);
-                else
-                    data.Kyukei = "00:00";
 
                 //総労働
                 if (kinmu.Sorodo != null)
@@ -369,17 +383,16 @@ namespace UNN_Ki_001.Pages.Attendance.Record
     {
         public Kinmuhyo(string kinmuDt)
         {
-            Day = KinmuCd
-                = DakokuStart
+            Day = DakokuStart
                 = DakokuEnd
                 = KinmuStart
                 = KinmuEnd
                 = Kyukei
                 = Sorodo
                 = Kojo
-                = Biko
-                = "";
-            Yote = "未設定";
+                = Yote
+                = "N/A";
+            Biko = KinmuCd = "";
             KinmuDt = kinmuDt;
         }
         public string KinmuCd { get; set; }
@@ -550,7 +563,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         {
             // パース
             var array = str.Split(",");
-            if (array.Length == 3 && array[0] != "" && array[1] != "" && array[2] != "")
+            if (array.Length == 3 && !array.Contains(null) && array[0] != "" && array[1] != "" && array[2] != "")
             {
                 array[1] = array[1].Replace(":", "");
                 DateControl dc = new DateControl(array[0], array[1], array[2]);
