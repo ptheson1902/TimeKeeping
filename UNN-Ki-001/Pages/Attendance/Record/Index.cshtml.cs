@@ -110,8 +110,6 @@ namespace UNN_Ki_001.Pages.Attendance.Record
             // 休憩jsonが指定されていればjsonの処理
             if(kyukeiJson != "")
             {
-
-
                 // デシリアライズする
                 var ChangeList = JsonConvert.DeserializeObject<KyukeiRecordJsonList>(kyukeiJson);
 
@@ -139,11 +137,12 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                         kinmu = new T_Kinmu(Target.KigyoCd, Target.ShainNo, kinmuDt);
                     } else
                     {
+                        /*
                         // 集計の初期化処理
                         if((kinmu.KinmuFrDate != null && kinmu.KinmuToDate != null))
                         {
                             kinmu.ClearInfo();
-                        }
+                        }*/
                     }
 
                     // jsonをもとに新規作成して追加
@@ -160,7 +159,6 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
                         // DBに追加
                         _kintaiDbContext.Add(kyukei);
-
                     }
                     _kintaiDbContext.SaveChanges();
                 }
@@ -195,11 +193,11 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                             _kintaiDbContext.Add(kinmu);
                         } else
                         {
-                            
                             // 集計の初期化を適宜行います
-                            if((value.kinmuCd != "" && kinmu.KinmuCd != value.kinmuCd) || (value.kinmuFr == null || value.kinmuTo == null))
+                            if((value.kinmuFr == null || value.kinmuTo == null) || (value.kinmuCd != kinmu.KinmuCd))
                             {
                                 kinmu.ClearInfo();
+                                Debug.WriteLine(_kintaiDbContext.Entry(kinmu).State);
                             }
                         }
 

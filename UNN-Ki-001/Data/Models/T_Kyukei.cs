@@ -33,7 +33,6 @@ namespace UNN_Ki_001.Data.Models
                     .ToList();
                 foreach(var item in list)
                 {
-                    Debug.WriteLine(context.Entry(item).State);
 
                     // 開始時間と終了時間、少なくともどちらかが重複している場合例外をスロー
                     if((DakokuFrDate < item.DakokuFrDate && item.DakokuFrDate < DakokuToDate) ||
