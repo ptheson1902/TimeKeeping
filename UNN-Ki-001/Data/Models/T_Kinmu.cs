@@ -183,6 +183,7 @@ namespace UNN_Ki_001.Data.Models
             var target = context.t_Kyukeis
                 .Where(e => e.KigyoCd.Equals(KigyoCd) && e.ShainNo.Equals(ShainNo) && e.KinmuDt.Equals(KinmuDt));
             context.RemoveRange(target);
+            context.SaveChanges();
 
 
             List<T_Kyukei> list = new List<T_Kyukei>();
@@ -223,6 +224,7 @@ namespace UNN_Ki_001.Data.Models
             }
 
             context.t_Kyukeis.AddRange(list);
+            context.SaveChanges();
         }
 
         /// <summary>
@@ -296,9 +298,6 @@ namespace UNN_Ki_001.Data.Models
         {
             Shotei = null;
             Kyukei = null;
-            Hoteigai = null;
-            Hoteinai = null;
-            Sorodo = null;
         }
 
         public void SetKinmuCd(string? kinmuCd)
