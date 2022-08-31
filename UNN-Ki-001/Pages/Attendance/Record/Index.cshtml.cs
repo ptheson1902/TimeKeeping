@@ -24,6 +24,11 @@ namespace UNN_Ki_001.Pages.Attendance.Record
         public ShainSearchRecord Target = new();
         public ShainSearchRecordList? TargetList = null;
         public string TargetListJson = "";
+        public string ShoteiTimes = "";
+        public string SorodoTimes = "";
+/*      public int? ShoteiDays = 0;
+        public int? YasumiDays = 0;
+        public int? YukyuDays = 0;*/
 
         public IndexModel(KintaiDbContext kintaiDbContext, UserManager<AppUser> userManager) : base(kintaiDbContext, userManager)
         {
@@ -199,6 +204,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
             // View表示する勤務表の内容を生成します。
             DataList = CreateData(Target, TargetList.CurrentDate);
+            
 
             // それに使う勤務マスタの名称を取得します。
             var mKinmuList = _kintaiDbContext.m_kinmus
@@ -245,6 +251,8 @@ namespace UNN_Ki_001.Pages.Attendance.Record
 
             // 存在しないデータも埋めて出力用の整形済みデータを作成する
             CultureInfo Japanese = new CultureInfo("ja-JP");
+            int? shoteiTimes = 0;
+            int? sorodoTimes = 0;
             foreach (var kinmuDt in kinmuDtList)
             {
                 var data = new Kinmuhyo(kinmuDt);
@@ -325,10 +333,26 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                 // 備考
                 if (kinmu.Biko != null)
                     data.Biko = kinmu.Biko;
-
+                // 所定時間
+                if (kinmu.Shotei != null && kinmu.KinmuFrDate != null && kinmu.KinmuToDate != null)
+                    shoteiTimes += kinmu.Shotei;
+                // 総労働
+                if (kinmu.Sorodo != null && kinmu.KinmuFrDate != null && kinmu.KinmuToDate != null)
+                    sorodoTimes += kinmu.Sorodo;
+                /*// 所定日数
+                if (kinmu.MKinmu != null)
+                {
+                    if(kinmu.MKinmu.KinmuBunrui ==)
+                }
+                else
+                {
+                    YasumiDays++;
+                }*/
                 // 作成完了・リストに追加
                 result.Add(data);
             }
+            ShoteiTimes = MinutesToString((int)shoteiTimes);
+            SorodoTimes = MinutesToString((int)sorodoTimes);
 
             return result;
         }
