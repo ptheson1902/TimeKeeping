@@ -48,7 +48,7 @@ namespace UNN_Ki_001.Data.Models
             if (KinmuFrDate != null)
             {
                 var tgt = context.t_kinmus
-                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuFrDate > KinmuFrDate && e.KinmuDt != KinmuDt)
+                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuFrDate > ((DateTime)KinmuFrDate).ToUniversalTime() && e.KinmuDt != KinmuDt)
                     .OrderBy(e => e.KinmuFrDate)
                     .AsNoTracking()
                     .ToList()
@@ -65,7 +65,7 @@ namespace UNN_Ki_001.Data.Models
             if (KinmuToDate != null)
             {
                 var tgt = context.t_kinmus
-                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuToDate < KinmuToDate && e.KinmuDt != KinmuDt)
+                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuToDate < ((DateTime)KinmuToDate).ToUniversalTime() && e.KinmuDt != KinmuDt)
                     .OrderByDescending(e => e.KinmuToDate)
                     .AsNoTracking()
                     .ToList()
@@ -243,23 +243,27 @@ namespace UNN_Ki_001.Data.Models
                 .AsNoTracking()
                 .ToList();
 
-            // チェンジトラッカーからも取得
+
+            // 上記に存在しない追加項目も取得
             var list2 = context.ChangeTracker.Entries<T_Kyukei>()
-                 .Where(e => e.Entity.KigyoCd.Equals(KigyoCd) && e.Entity.ShainNo.Equals(ShainNo) && e.Entity.KinmuDt.Equals(KinmuDt))
+                 .Where(e => e.Entity.KigyoCd.Equals(KigyoCd) && e.Entity.ShainNo.Equals(ShainNo) && e.Entity.KinmuDt.Equals(KinmuDt)
+                    && !list.Contains(e.Entity) && e.Entity.DakokuFrDate != null && e.Entity.DakokuToDate != null)
                  .ToList();
+
             foreach(var item in list2)
             {
                 list.Add(item.Entity);
             }
-
 
             int totalMinutes = 0;
 
             // 勤務時間の枠に押し込む
             foreach (var item in list)
             {
+                DateTime frDate = (DateTime)item.DakokuFrDate!;
+                DateTime toDate = (DateTime)item.DakokuToDate!;
                 // remove中なら計算に含めません
-                if(context.Entry(item).State == Microsoft.EntityFrameworkCore.EntityState.Deleted)
+                if (context.Entry(item).State == Microsoft.EntityFrameworkCore.EntityState.Deleted)
                 {
                     continue;
                 }
@@ -270,20 +274,20 @@ namespace UNN_Ki_001.Data.Models
                 }
 
                 // 休憩時間を勤務実績時間の枠に押し込める
-                if (item.DakokuToDate > kinmuToDate) // 休憩終わり時間
+                if (toDate > kinmuToDate) // 休憩終わり時間
                 {
-                    item.DakokuToDate = kinmuToDate;
+                    toDate = kinmuToDate;
                 }
-                if (item.DakokuFrDate < kinmuFrDate) // 休憩開始時間
+                if (frDate < kinmuFrDate) // 休憩開始時間
                 {
-                    item.DakokuFrDate = kinmuFrDate;
+                    frDate = kinmuFrDate;
                 }
 
                 // 結果として意味を喪失していないレコードのみを選択して休憩時間を計算
-                if (item.DakokuFrDate < item.DakokuToDate)
-                    totalMinutes += (int)((DateTime)item.DakokuToDate - (DateTime)item.DakokuFrDate).TotalMinutes;
+                if (frDate < toDate)
+                    totalMinutes += (int)(toDate - frDate).TotalMinutes;
                 else
-                    item.DakokuFrDate = item.DakokuToDate;
+                    toDate = frDate;
             }
             return totalMinutes;
         }
@@ -297,10 +301,27 @@ namespace UNN_Ki_001.Data.Models
             Sorodo = null;
         }
 
-        public void SetKinmuCd(string kinmuCd)
+        public void SetKinmuCd(string? kinmuCd)
         {
             ClearInfo();
             KinmuCd = kinmuCd;
+        }
+
+        public override bool Equals(object? target)
+        {
+            if (target == null || this.GetType() != target.GetType())
+            {
+                return false;
+            }
+
+            T_Kinmu kinmu = (T_Kinmu)target;
+
+            if (kinmu.KigyoCd == KigyoCd && kinmu.ShainNo == ShainNo && kinmu.KinmuDt == KinmuDt)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         [Key]
