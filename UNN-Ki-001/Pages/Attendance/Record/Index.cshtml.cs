@@ -126,6 +126,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                             && e.KinmuDt == kinmuDt)
                         .ToList();
                     _kintaiDbContext.RemoveRange(kyukeis);
+                    _kintaiDbContext.SaveChanges();
 
                     // 勤務レコードを用意する
                     var kinmu = _kintaiDbContext.t_kinmus
