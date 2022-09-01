@@ -13,7 +13,7 @@ namespace UNN_Ki_001.Data
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
-        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        public override int SaveChanges()
         {
             int count = 99;
             List<string> list = new List<string>();
@@ -30,7 +30,7 @@ namespace UNN_Ki_001.Data
                     }
                 }
             }
-            return base.SaveChanges(acceptAllChangesOnSuccess);
+            return base.SaveChanges();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

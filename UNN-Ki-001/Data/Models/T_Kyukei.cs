@@ -31,14 +31,32 @@ namespace UNN_Ki_001.Data.Models
                     .OrderBy(e => e.DakokuFrDate)
                     .AsNoTracking()
                     .ToList();
+
+                // チェンジトラッカーからも取得
+                var list2 = context.ChangeTracker.Entries<T_Kyukei>()
+                    .Where(e => e.Entity.KigyoCd.Equals(KigyoCd) && e.Entity.ShainNo.Equals(ShainNo) && e.Entity.KinmuDt.Equals(KinmuDt) && e.Entity.DakokuFrDate != null && e.Entity.DakokuToDate != null
+                    );
+
+                // 合体
+                foreach(var item in list2)
+                {
+                    list.Add(item.Entity);
+                }
+
                 foreach(var item in list)
                 {
+/*                    // 削除中なら無視
+                    if (context.Entry(item).State == EntityState.Deleted)
+                    {
+                        Debug.WriteLine(context.Entry(item).State);
+                        continue;
+                    }*/
 
                     // 開始時間と終了時間、少なくともどちらかが重複している場合例外をスロー
                     if((DakokuFrDate < item.DakokuFrDate && item.DakokuFrDate < DakokuToDate) ||
                         (DakokuFrDate < item.DakokuToDate && item.DakokuToDate < DakokuToDate))
                     {
-                        throw new Exception("休憩時間が既存のレコードと重複してしまいます。");
+                        throw new Exception("休憩時間が重複してしまいます。", new Exception(item.KinmuDt));
                     }
                 }
             }

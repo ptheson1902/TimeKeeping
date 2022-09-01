@@ -57,7 +57,7 @@ namespace UNN_Ki_001.Data.Models
                 {
                     if(tgt.KinmuFrDate < KinmuToDate)
                     {
-                        throw new Exception("直後の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。");
+                        throw new Exception("直後の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。", new Exception(KinmuDt));
                     }
                 }
             }
@@ -75,7 +75,7 @@ namespace UNN_Ki_001.Data.Models
                 {
                     if(tgt.KinmuToDate > KinmuFrDate)
                     {
-                        throw new Exception("直前の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。");
+                        throw new Exception("直前の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。", new Exception(KinmuDt));
                     }
                 }
             }
@@ -262,13 +262,10 @@ namespace UNN_Ki_001.Data.Models
             // 勤務時間の枠に押し込む
             foreach (var item in list)
             {
+
                 DateTime frDate = (DateTime)item.DakokuFrDate!;
                 DateTime toDate = (DateTime)item.DakokuToDate!;
-                // remove中なら計算に含めません
-                if (context.Entry(item).State == Microsoft.EntityFrameworkCore.EntityState.Deleted)
-                {
-                    continue;
-                }
+
                 // コンパイラにNULLじゃないことを保証します
                 if (item.DakokuToDate == null || item.DakokuFrDate == null)
                 {

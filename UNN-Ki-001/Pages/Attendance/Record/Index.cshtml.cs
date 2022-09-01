@@ -123,7 +123,18 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                             && e.ShainNo == Target.ShainNo
                             && e.KinmuDt == kinmuDt)
                         .ToList();
-                    _kintaiDbContext.RemoveRange(kyukeis);
+                    //_kintaiDbContext.RemoveRange(kyukeis);
+                    foreach(var item in kyukeis)
+                    {
+                        _kintaiDbContext.Remove(item);
+                        Debug.WriteLine(_kintaiDbContext.Entry(item).State);
+                    }
+                    var templist = _kintaiDbContext.ChangeTracker.Entries<T_Kyukei>().Where(e => e.State == EntityState.Deleted);
+                    var deletedData = new List<T_Kyukei>();
+                    foreach(var item in templist)
+                    {
+                        deletedData.Add(item.Entity);
+                    }
                     _kintaiDbContext.SaveChanges();
 
                     // 勤務レコードを用意する
@@ -137,12 +148,12 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                         kinmu = new T_Kinmu(Target.KigyoCd, Target.ShainNo, kinmuDt);
                     } else
                     {
-                        /*
                         // 集計の初期化処理
-                        if((kinmu.KinmuFrDate != null && kinmu.KinmuToDate != null))
+                        if ((kinmu.KinmuFrDate != null && kinmu.KinmuToDate != null))
                         {
-                            kinmu.ClearInfo();
-                        }*/
+                            //kinmu.ClearInfo();
+                            kinmu.Shotei = null;
+                        }
                     }
 
                     // jsonをもとに新規作成して追加
@@ -160,7 +171,24 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                         // DBに追加
                         _kintaiDbContext.Add(kyukei);
                     }
-                    _kintaiDbContext.SaveChanges();
+                    try
+                    {
+                        // 変更を適用
+                        _kintaiDbContext.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        var list = _kintaiDbContext.ChangeTracker.Entries<T_Kyukei>().Where(e => e.State == EntityState.Added);
+                        foreach(var item in list)
+                        {
+                            item.State = EntityState.Detached;
+                        }
+
+                        _kintaiDbContext.AddRange(deletedData);
+                        _kintaiDbContext.SaveChanges();
+                        return new JsonResult(new Dictionary<string, string>() { { "message", e.Message }, { "kinmuDt", e.InnerException == null ? "" : e.InnerException.Message } });
+                    }
+                    return new JsonResult("");
                 }
             }
 
@@ -209,10 +237,16 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                         kinmu.KinmuToDate = value.kinmuTo;
                         kinmu.KinmuCd = value.kinmuCd;
                         kinmu.Biko = value.biko;
-                    }   
-
-                    // 変更を適用
-                    _kintaiDbContext.SaveChanges();
+                    }
+                    try
+                    {
+                        // 変更を適用
+                        _kintaiDbContext.SaveChanges();
+                    }catch(Exception e)
+                    {
+                        return new JsonResult(new Dictionary<string, string>() { { "message",e.Message }, { "kinmuDt", e.InnerException == null ? "" : e.InnerException.Message } });
+                    }
+                    return new JsonResult("");
                 }
             }
 

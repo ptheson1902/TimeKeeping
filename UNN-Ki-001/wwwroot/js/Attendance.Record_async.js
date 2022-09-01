@@ -128,6 +128,7 @@ function kinmuRecord(kinmu) {
 // 各ボタン処理
 $("form .submit").click(function () {
     $(this).parent().submit();
+
 })
 
 // データベース更新処理
@@ -167,11 +168,68 @@ $("form .save-change").click(function () {
 
     // チェンジトラッカーをjsonに変換
     let param = JSON.stringify(paramArray);
+    $("input[name='json']").remove();
+
     // フォームに追加する
     $(this).parent().append($("<input type=\"hidden\" name=\"json\"/>").val(param));
     // 送信
-    $(this).parent().submit();
+    ajaxSubmit($(this).parent(), true);
 })
+
+
+function ajaxSubmit(elem, isTodoku) {
+    $.ajax({
+        method: "post",
+        data: elem.serialize(),
+        async: false,
+    }).done(function (data) {
+        if (data.message == null) {
+            window.location.reload();
+        } else {
+            if (isTodoku) {
+                $(".updatedErrorMessage").text(data.message)
+                let kinmuDt = data.kinmuDt;
+                if (kinmuDt != "") {
+
+                    $(".kinmu").each(function () {
+                        if ($(this).data("origin") == kinmuDt)
+                            $(this).addClass("bg-danger");
+                        else
+                            $(this).removeClass("bg-danger");
+                    })
+                }
+            }
+            else {
+                $(".kyukei-error-message").text(data.message);
+            }
+        }
+    })
+}
+
+function kyukeiCheck(elem) {
+    let start = elem.children(".start");
+    let end = elem.children(".end");
+    let kinmuDt = $(".kyukei-table").val();
+
+    // 開始時間を取得
+    let dakokuFrKbn = start.children("select").val();
+    let dakokuFr = start.children("input").val();
+    let dakokuFrDate = formatToDate(kinmuDt, dakokuFr, dakokuFrKbn);
+
+    // 終了時間を取得
+    let dakokuToKbn = end.children("select").val();
+    let dakokuTo = end.children("input").val();
+    let dakokuToDate = formatToDate(kinmuDt, dakokuTo, dakokuToKbn);
+
+    // 入力チェック
+    if (dakokuFrDate != null && dakokuToDate != null && dakokuToDate < dakokuFrDate) {
+        elem.addClass("bg-danger");
+        $(".kyukei-error-message").text("入力が不正です");
+    } else {
+        elem.removeClass("bg-danger");
+        $(".kyukei-error-message").empty();
+    }
+}
 
 // 休憩の登録処理
 function kyukeiSaveChange() {
@@ -180,35 +238,27 @@ function kyukeiSaveChange() {
     var resArray = {};
     resArray["kinmuDt"] = $(".kyukei-table").val();
     var array = [];
-    console.log(allRow);
 
-    try {
-        allRow.each(function (index, element) {
-            let start = $(this).children(".start");
-            let end = $(this).children(".end");
+    allRow.each(function () {
+        let start = $(this).children(".start");
+        let end = $(this).children(".end");
 
-            // 開始時間を取得
-            let dakokuFrKbn = start.children("select").val();
-            let dakokuFr = start.children("input").val();
-            let dakokuFrDate = formatToDate(resArray.kinmuDt, dakokuFr, dakokuFrKbn);
+        // 開始時間を取得
+        let dakokuFrKbn = start.children("select").val();
+        let dakokuFr = start.children("input").val();
 
-            // 終了時間を取得
-            let dakokuToKbn = end.children("select").val();
-            let dakokuTo = end.children("input").val();
-            let dakokuToDate = formatToDate(resArray.kinmuDt, dakokuTo, dakokuToKbn);
+        // 終了時間を取得
+        let dakokuToKbn = end.children("select").val();
+        let dakokuTo = end.children("input").val();
 
-            // 入力チェック
-            if (dakokuToDate < dakokuFrDate) {
-                throw new Error("入力が不正です。\n" + index + 1 + "件目");
-            }
-
-            // 配列を作成し、２次配列resArrayに追加
-            array.push({ dakokuFrTm: dakokuFr, dakokuFrKbn: dakokuFrKbn, dakokuToTm: dakokuTo, dakokuToKbn: dakokuToKbn });
+        array.push({
+            dakokuFrTm: dakokuFr,
+            dakokuFrKbn: dakokuFrKbn,
+            dakokuToTm: dakokuTo,
+            dakokuToKbn: dakokuToKbn
         })
-    } catch (e) {
-        alert(e);
-        return;
-    }
+    })
+
     resArray["list"] = array;
 
     // 登録
@@ -218,9 +268,9 @@ function kyukeiSaveChange() {
     }
     let form = $("#kyukeiForm")
     let kyukeiJsonParam = JSON.stringify(resArray);
-    form.children(".kyukeiJson").val(kyukeiJsonParam);
     console.log(kyukeiJsonParam);
-    form.submit();
+    form.children(".kyukeiJson").val(kyukeiJsonParam);
+    ajaxSubmit(form, false);
 }
 
 // 休憩ボタン押下時の処理
@@ -258,10 +308,12 @@ function deleteKyukei() {
 
 function addKyuke(data) {
     var target = $(".kyukei-table");
-
     // 行を追加
     $template = $(".kyukei-template .row-template").clone();
     $template.attr("class", "kyukei-row-data");
+    $template.focusout(function () {
+        kyukeiCheck($(this));
+    });
 
     if (data != null) {
         // 開始時刻
