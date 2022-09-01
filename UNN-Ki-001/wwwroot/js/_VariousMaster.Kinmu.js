@@ -35,12 +35,13 @@ $(".kinmuData tr").click(function () {
 })
 
 function KinmuData(e, isReadonly) {
+    console.log($(".KinmuModalForm .kyukei2ToKbn option[value='" + e.Kyukei2ToKbn + "']"))
     // 勤務コード
     $(".KinmuModalForm .kinmuCd").val(e.KinmuCd).attr("readonly", isReadonly)
     // 勤務名
     $(".KinmuModalForm .kinmuNm").val(e.KinmuNm)
     // 勤務分類
-    $(".KinmuModalForm .kinmuBunrui option[value='" + e.KinmuBunrui + "']").attr("selected", true)
+    $(".KinmuModalForm .kinmuBunrui option[value='" + e.KinmuBunrui + "']").attr("selected",true)
     // 勤務開始区分
     $(".KinmuModalForm .kinmuFrKbn option[value='" + e.KinmuFrKbn + "']").attr("selected", true)
     // 勤務開始タイム

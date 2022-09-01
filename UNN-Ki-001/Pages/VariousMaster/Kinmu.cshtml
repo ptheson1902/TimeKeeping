@@ -1,93 +1,89 @@
 ﻿@page
 @model UNN_Ki_001.Pages.VariousMaster.KinmuModel
 @{
+    ViewData["Title"] = "勤務マスタメンテナンス";
 }
 
 <div>
     <input type="hidden" id="data" value="@Model._searchListString" />
     <div class="container mt-3 mb-5">
-        <h3>勤務マスタメンテナンス</h3>
+        <h3>@ViewData["Title"]</h3>
         <div class="text-danger">@Model.Message</div>
-        <form class="card mb-4 SearchForm" method="Post">
-            <div class="card-header d-flex justify-content-between">
-                <div class="card-title">勤務検索条件</div>
-                <div class="minimizeBtn"><i class="fa-solid fa-minimize"></i></div>
-                <div class="maximizeBtn d-none"><i class="fa-solid fa-maximize"></i></div>
+        <form class="mb-4 SearchForm accordion border border-1" method="Post" id="accordionExample">
+            <div class="accordion-header　accordion-item d-flex justify-content-between" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">勤務検索条件</button>
             </div>
-            <div class="card-body">
-                <!-- 勤務コード -->
-                <div class="row g-3 align-items-center mb-3">
-                    <div class="col-3">
-                        <label asp-for="MKinmuSearch.KinmuCd" class="col-form-label">勤務コード</label>
+            <div class="accordion-collapse collapse show" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <!-- 勤務コード -->
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3">
+                            <label asp-for="MKinmuSearch.KinmuCd" class="col-form-label">勤務コード</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="text" asp-for="MKinmuSearch.KinmuCd" class="form-control">
+                        </div>
                     </div>
-                    <div class="col-auto">
-                        <input type="text" asp-for="MKinmuSearch.KinmuCd" class="form-control">
+                    <!-- 勤務名 -->
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3">
+                            <label asp-for="MKinmuSearch.KinmuNm" class="col-form-label">勤務名</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="text" asp-for="MKinmuSearch.KinmuNm" class="form-control">
+                        </div>
                     </div>
-                </div>
-                <!-- 勤務名 -->
-                <div class="row g-3 align-items-center mb-3">
-                    <div class="col-3">
-                        <label asp-for="MKinmuSearch.KinmuNm" class="col-form-label">勤務名</label>
+                    <!-- 勤務分類 -->
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3">
+                            <label asp-for="MKinmuSearch.KinmuBunrui" class="col-form-label">勤務分類</label>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select"
+                                    aria-label="Default select"
+                                    asp-for="MKinmuSearch.KinmuBunrui">
+                                <option></option>
+                                <option value="01">通常勤務</option>
+                                <option value="02">所定休日</option>
+                                <option value="03">法定休日</option>
+                                <option value="04">振替休日</option>
+                                <option value="05">代休</option>
+                                <option value="06">有給休暇</option>
+                                <option value="07">午前半休</option>
+                                <option value="08">午後半休</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-auto">
-                        <input type="text" asp-for="MKinmuSearch.KinmuNm" class="form-control">
+                    <!-- 有効/無効 -->
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3">
+                            <label asp-for="MKinmuSearch.ValidFlg" class="col-form-label">有効/無効</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="radio"
+                                   value="1"
+                                   id="ValidFlg1"
+                                   asp-for="MKinmuSearch.ValidFlg"
+                                   checked='@(Model.ValidFlg == "1" || Model.ValidFlg == null ? true : false)' />
+                            <label for="ValidFlg1">有効</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="radio"
+                                   value="0"
+                                   id="ValidFlg2"
+                                   asp-for="MKinmuSearch.ValidFlg"
+                                   checked='@(Model.ValidFlg == "0" ? true : false)' />
+                            <label for="ValidFlg2">無効</label>
+                        </div>
                     </div>
-                </div>
-                <!-- 勤務分類 -->
-                <div class="row g-3 align-items-center mb-3">
-                    <div class="col-3">
-                        <label asp-for="MKinmuSearch.KinmuBunrui" class="col-form-label">勤務分類</label>
+                    <div class="d-flex justify-content-end">
+                        <input type="hidden" value="search" name="action" />
+                        <button type="submit"
+                                class="search btn btn-primary me-5 px-4">
+                            <i class="fa-solid fa-magnifying-glass me-3"></i>
+                            検索
+                        </button>
                     </div>
-                    <div class="col-auto">
-                        <select class="form-select"
-                            aria-label="Default select"
-                            asp-for="MKinmuSearch.KinmuBunrui"
-                        >
-                            <option></option>
-                            <option value="01"> 通常勤務</option>
-                            <option value="02">所定休日</option>
-                            <option value="03">法定休日</option>
-                            <option value="04">振替休日</option>
-                            <option value="05">代休</option>
-                            <option value="06">有給休暇</option>
-                            <option value="07">午前半休</option>
-                            <option value="08">午後半休</option>
-                        </select>
-                    </div>
-                </div>
-                <!-- 有効/無効 -->
-                <div class="row g-3 align-items-center mb-3">
-                    <div class="col-3">
-                      <label asp-for="MKinmuSearch.ValidFlg" class="col-form-label">有効/無効</label>
-                    </div>
-                    <div class="col-auto">
-                        <input type="radio"
-                            value="1"
-                            id="ValidFlg1"
-                            asp-for="MKinmuSearch.ValidFlg"
-                            checked='@(Model.ValidFlg == "1" || Model.ValidFlg == null ? true : false)'
-                        />
-                        <label for="ValidFlg1">有効</label>
-                    </div>
-                    <div class="col-auto">
-                        <input type="radio"
-                            value="0"
-                            id="ValidFlg2"
-                               asp-for="MKinmuSearch.ValidFlg"
-                            checked='@(Model.ValidFlg == "0" ? true : false)'
-                        />
-                        <label for="ValidFlg2">無効</label>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <input type="hidden" value="search" name="action" />
-                    <button
-                        type="submit"
-                        class="search btn btn-primary me-5 px-4"
-                    >
-                        <i class="fa-solid fa-magnifying-glass me-3"></i>
-                        検索
-                    </button>
                 </div>
             </div>
         </form>
@@ -141,7 +137,32 @@
                                 data-bs-target="#KinmuModal">@kinmu.KinmuCd</div>
                         </td>
                         <td>@kinmu.KinmuNm</td>
-                        <td>@kinmu.KinmuBunrui</td>
+                        @if (kinmu.KinmuBunrui.Equals("01")){
+                            <td>通常勤務</td>
+                        }
+                        else if (kinmu.KinmuBunrui.Equals("02")){
+                            <td>所定休日</td>
+                        }
+                        else if (kinmu.KinmuBunrui.Equals("03")){
+                            <td>法定休日</td>
+                        }
+                        else if (kinmu.KinmuBunrui.Equals("04")){
+                            <td>振替休日</td>
+                        }
+                        else if (kinmu.KinmuBunrui.Equals("05")){
+                            <td>代休</td>
+                        }
+                        else if (kinmu.KinmuBunrui.Equals("06")){
+                            <td>A有給休暇</td>
+                        }
+                        else if (kinmu.KinmuBunrui.Equals("07")){
+                            <td>午前半休</td>
+                        }
+                        else if (kinmu.KinmuBunrui.Equals("08")){
+                            <td>午後半休</td>
+                        }else{
+                            <td>-------</td>
+                        }
                         <td class="text-center">@kinmu.KinmuFrTm - @kinmu.KinmuToTm</td>
                         <td class="text-center">@kinmu.Kyukei1FrTm - @kinmu.Kyukei1ToTm</td>
                         <td class="text-center">@kinmu.Kyukei2FrTm - @kinmu.Kyukei2ToTm</td>
@@ -332,8 +353,8 @@
                         </div>
                         <div class="col-4">
                             <div class="d-flex">
-                                <select class="form-select me-2"
-                                    aria-label="Default select kyukei2ToKbn"
+                                <select class="form-select me-2 kyukei2ToKbn"
+                                    aria-label="Default select"
                                     asp-for="MKinmuCRUD.Kyukei2ToKbn"
                                 >
                                     <option selected></option>
@@ -603,5 +624,4 @@
 @if(Model._searchListString != null){
     <script src="~/js/_VariousMaster.Kinmu.js" asp-append-version="true"></script>
 }
-<script src="~/js/VariousMasterCommon.js" asp-append-version="true"></script>
 

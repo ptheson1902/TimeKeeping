@@ -1,67 +1,68 @@
 ﻿@page
 @model UNN_Ki_001.Pages.VariousMaster.KoyokeitaiModel
 @{
+    ViewData["Title"] = "雇用形態マスタメンテナンス";
 }
 
 <div>
     <input type="hidden" id="data" value="@Model._searchListString" />
     <div class="container mt-3 mb-5" style="max-width: 700px;">
-        <h3>雇用形態マスタメンテナンス</h3>
+        <h3>@ViewData["Title"]</h3>
         <div class="text-danger my-3">@Model.Message</div>
-        <form class="card mb-4 SearchForm" method="Post">
-            <div class="card-header d-flex justify-content-between">
-                <div class="card-title">雇用形態検索条件</div>
-                <div class="minimizeBtn"><i class="fa-solid fa-minimize"></i></div>
-                <div class="maximizeBtn d-none"><i class="fa-solid fa-maximize"></i></div>
+        <form class="mb-4 border border-1 SearchForm accordion" method="Post" id="accordionExample">
+            <div class="accordion-header accordion-item d-flex justify-content-between" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">雇用形態検索条件</button>
             </div>
-            <div class="card-body">
-                <div class="row g-3 align-items-center mb-3">
-                    <div class="col-3">
-                        <label class="col-form-label" asp-for="SearchData.KoyokeitaiCd">雇用形態コード</label>
+            <div class="accordion-collapse collapse show" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3">
+                            <label class="col-form-label" asp-for="SearchData.KoyokeitaiCd">雇用形態コード</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="text" class="form-control" asp-for="SearchData.KoyokeitaiCd" />
+                        </div>
                     </div>
-                    <div class="col-auto">
-                        <input type="text" class="form-control" asp-for="SearchData.KoyokeitaiCd" />
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3">
+                            <label class="col-form-label" asp-for="SearchData.KoyokeitaiNm">雇用形態名</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="text" class="form-control" asp-for="SearchData.KoyokeitaiNm" />
+                        </div>
                     </div>
-                </div>
-                <div class="row g-3 align-items-center mb-3">
-                    <div class="col-3">
-                        <label class="col-form-label" asp-for="SearchData.KoyokeitaiNm">雇用形態名</label>
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-3">
+                            <label class="col-form-label" asp-for="SearchData.ValidFlg">有効/無効</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="radio"
+                                value="1"
+                                asp-for="SearchData.ValidFlg"
+                                id="ValidFlg1"
+                                checked='@(Model.ValidFlg == "1" || Model.ValidFlg == null ? true : false)'>
+                            <label class="col-form-label" for="ValidFlg1">有効</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="radio"
+                                value="0"
+                                id="ValidFlg2"
+                                asp-for="SearchData.ValidFlg"
+                                checked='@(Model.ValidFlg == "0" ? true : false)'>
+                            <label class="col-form-label" for="ValidFlg2">無効</label>
+                        </div>
                     </div>
-                    <div class="col-auto">
-                        <input type="text" class="form-control" asp-for="SearchData.KoyokeitaiNm" />
-                    </div>
-                </div>
-                <div class="row g-3 align-items-center mb-3">
-                    <div class="col-3">
-                        <label class="col-form-label" asp-for="SearchData.ValidFlg">有効/無効</label>
-                    </div>
-                    <div class="col-auto">
-                        <input type="radio"
-                            value="1"
-                            asp-for="SearchData.ValidFlg"
-                            id="ValidFlg1"
-                            checked='@(Model.ValidFlg == "1" || Model.ValidFlg == null ? true : false)'>
-                        <label class="col-form-label" for="ValidFlg1">有効</label>
-                    </div>
-                    <div class="col-auto">
-                        <input type="radio"
-                            value="0"
-                            id="ValidFlg2"
-                            asp-for="SearchData.ValidFlg"
-                            checked='@(Model.ValidFlg == "0" ? true : false)'>
-                        <label class="col-form-label" for="ValidFlg2">無効</label>
-                    </div>
-                </div>
 
-                <div class="d-flex justify-content-end mb-3">
-                    <button type="submit"
-                            class="btn btn-primary me-5 px-4"
-                            name="action"
-                            value="search"
-                    >
-                        <i class="fa-solid fa-magnifying-glass me-3"></i>
-                        検索
-                    </button>
+                    <div class="d-flex justify-content-end mb-3">
+                        <button type="submit"
+                                class="btn btn-primary me-5 px-4"
+                                name="action"
+                                value="search"
+                        >
+                            <i class="fa-solid fa-magnifying-glass me-3"></i>
+                            検索
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>
@@ -201,4 +202,3 @@
 {
     <script src="~/js/_VariousMaster.Kykt.js" asp-append-version="true"></script>
 }
-<script src="~/js/VariousMasterCommon.js" asp-append-version="true"></script>
