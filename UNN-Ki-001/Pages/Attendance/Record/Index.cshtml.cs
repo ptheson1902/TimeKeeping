@@ -336,7 +336,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     data.DakokuStart = datetime.ToString(TIME_FORMAT);
                     // ‹æ•ª‚ÌŒvZ
                     int targetYM = int.Parse(datetime.ToString("yyyyMMdd"));
-                    data.DakokuFrKbn = (targetYM == standardYM) ? 0 : (targetYM > standardYM) ? 1 : 2;
+                    data.DakokuFrKbn = (targetYM == standardYM) ? 0 : (targetYM > standardYM) ? 2 : 1;
                 }
                 if (kinmu.DakokuToDate != null)
                 {
@@ -344,7 +344,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     data.DakokuEnd = datetime.ToString(TIME_FORMAT);
                     // ‹æ•ª‚ÌŒvZ
                     int targetYM = int.Parse(datetime.ToString("yyyyMMdd"));
-                    data.DakokuToKbn = (targetYM == standardYM) ? 0 : (targetYM > standardYM) ? 1 : 2;
+                    data.DakokuToKbn = (targetYM == standardYM) ? 0 : (targetYM > standardYM) ? 2 : 1;
                 }
                 if (kinmu.KinmuFrDate != null)
                 {
@@ -353,7 +353,7 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     data.KinmuStart = datetime.ToString(TIME_FORMAT);
                     // ‹æ•ª‚ÌŒvZ
                     int targetYM = int.Parse(datetime.ToString("yyyyMMdd"));
-                    data.KinmuFrKbn = ( targetYM == standardYM) ? 0 : (targetYM > standardYM) ? 1 : 2;
+                    data.KinmuFrKbn = ( targetYM == standardYM) ? 0 : (targetYM > standardYM) ? 2 : 1;
                 }
                 if (kinmu.KinmuToDate != null)
                 {
@@ -361,8 +361,9 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                     data.KinmuEnd = datetime.ToString(TIME_FORMAT);
                     // ‹æ•ª‚ÌŒvZ
                     int targetYM = int.Parse(datetime.ToString("yyyyMMdd"));
-                    data.KinmuToKbn = (targetYM == standardYM) ? 0 : (targetYM > standardYM) ? 1 : 2;
+                    data.KinmuToKbn = (targetYM == standardYM) ? 0 : (targetYM > standardYM) ? 2 : 1;
                 }
+                
 
                 // ‹xŒe
                 if (kinmu.Kyukei != null)
