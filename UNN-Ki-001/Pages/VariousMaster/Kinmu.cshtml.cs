@@ -73,22 +73,7 @@ namespace UNN_Ki_001.Pages.VariousMaster
                 item.Kyukei2ToTm = Cal(item.Kyukei2ToTm);
                 item.Kyukei3FrTm = Cal(item.Kyukei3FrTm);
                 item.Kyukei3ToTm = Cal(item.Kyukei3ToTm);
-                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("01"))
-                    item.KinmuBunrui = "’Êí‹Î–±";
-                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("02"))
-                    item.KinmuBunrui = "Š’è‹x“ú";
-                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("03"))
-                    item.KinmuBunrui = "–@’è‹x“ú";
-                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("04"))
-                    item.KinmuBunrui = "U‘Ö‹x“ú";
-                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("05"))
-                    item.KinmuBunrui = "‘ã‹x";
-                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("06"))
-                    item.KinmuBunrui = "A—L‹‹‹x‰É";
-                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("07"))
-                    item.KinmuBunrui = "Œß‘O”¼‹x";
-                if (item.KinmuBunrui != null && item.KinmuBunrui.Equals("08"))
-                    item.KinmuBunrui = "ŒßŒã”¼‹x";
+
             }
             ValidFlg = MKinmuSearch.ValidFlg;
             _searchListString = JsonConvert.SerializeObject(_searchList);

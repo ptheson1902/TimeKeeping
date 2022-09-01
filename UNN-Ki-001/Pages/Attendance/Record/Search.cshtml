@@ -6,88 +6,86 @@
 <div>
     <div class="container mt-3 mb-5" style="max-width: 800px;">
        <h3 class="align-items-center">@ViewData["Title"]</h3>
-      <form class="card mb-4 SearchForm" method="Post" id="MainForm">
-        <div class="card-header d-flex justify-content-between">
-            <div class="card-title">社員検索条件</div>
-            <div class="minimizeBtn"><i class="fa-solid fa-minimize"></i></div>
-            <div class="maximizeBtn d-none"><i class="fa-solid fa-maximize"></i></div>
-        </div>
-         <div class="card-body">
-            <!-- 識別用 -->
-            <input type="hidden" name="command" value="main" />
-            <div class="row g-3 align-items-center mb-3">
-                <!-- 社員番号 -->
-                <div class="col-3">
-                    <label asp-for="Input.No" for="inputNo" class="col-form-label"></label>
-                </div>
-                <div class="col-auto">
-                    <input class="form-control" asp-for="Input.No" id="inputNo">
-                </div>
+        <form class="mb-4 border border-1 SearchForm accordion" method="Post" id="accordionExample">
+            <div class="accordion-header accordion-item d-flex justify-content-between" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">社員検索条件</button>
             </div>
-            <div class="row g-3 align-items-center mb-3">
-                <!-- 氏名 -->
-                <div class="col-3">
-                    <label asp-for="Input.Name" for="inputName" class="col-form-label"></label>
+            <div class="accordion-collapse collapse show" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                <!-- 識別用 -->
+                <div class="row g-3 align-items-center mb-3">
+                    <!-- 社員番号 -->
+                    <div class="col-3">
+                        <label asp-for="Input.No" for="inputNo" class="col-form-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <input class="form-control" asp-for="Input.No" id="inputNo">
+                    </div>
                 </div>
-                <div class="col-auto">
-                    <input class="form-control" asp-for="Input.Name" id="inputName">
+                <div class="row g-3 align-items-center mb-3">
+                    <!-- 氏名 -->
+                    <div class="col-3">
+                        <label asp-for="Input.Name" for="inputName" class="col-form-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <input class="form-control" asp-for="Input.Name" id="inputName">
+                    </div>
                 </div>
-            </div>
+                <div class="row g-3 align-items-center mb-3">
+                    <!-- 所属 -->
+                    <div class="col-3">
+                        <label asp-for="Input.ShozokuCd" for="inputShozokuName" class="col-form-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <select name="Input.ShozokuCd" class="form-select"
+                                aria-label="Default select">
+                            <option></option>
+                            @foreach (var item in @Model.Shozoku)
+                            {
+                                <option value="@item.ShozokuCd" selected="@(Model.ShozokuCd!=null && Model.ShozokuCd!.Equals(item.ShozokuCd)  ? true : false)">@item.ShozokuNm</option>
+                            }
+                        </select>
+                    </div>
+                </div>
 
-            <div class="row g-3 align-items-center mb-3">
-                <!-- 所属 -->
-                <div class="col-3">
-                    <label asp-for="Input.ShozokuCd" for="inputShozokuName" class="col-form-label"></label>
+                <div class="row g-3 align-items-center mb-3">
+                    <!-- 職種 -->
+                    <div class="col-3">
+                        <label asp-for="Input.ShokushuCd" class="col-form-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <select name="Input.ShokushuCd" class="form-select"
+                                aria-label="Default select">
+                            <option></option>
+                            @foreach (var item in @Model.Shokushu)
+                            {
+                                <option value="@item.ShokushuCd" selected="@(Model.ShokushuCd!=null && Model.ShokushuCd!.Equals(item.ShokushuCd)  ? true : false)">@item.ShokushuNm</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-                <div class="col-auto">
-                    <select name="Input.ShozokuCd" class="form-select"
-                            aria-label="Default select">
-                        <option></option>
-                        @foreach (var item in @Model.Shozoku)
-                        {
-                            <option value="@item.ShozokuCd" selected="@(Model.ShozokuCd!=null && Model.ShozokuCd!.Equals(item.ShozokuCd)  ? true : false)">@item.ShozokuNm</option>
-                        }
-                    </select>
+                <div class="row g-3 align-items-center mb-3">
+                    <!-- 雇用形態 -->
+                    <div class="col-3">
+                        <label asp-for="Input.KoyokeitaiCd" class="col-form-label"></label>
+                    </div>
+                    <div class="col-auto">
+                        <select name="Input.KoyokeitaiCd" class="form-select"
+                                aria-label="Default select">
+                            <option></option>
+                            @foreach (var item in @Model.Koyokeitai)
+                            {
+                                <option value="@item.KoyokeitaiCd" selected="@(Model.KoyokeitaiCd!=null && Model.KoyokeitaiCd!.Equals(item.KoyokeitaiCd)  ? true : false)">@item.KoyokeitaiNm</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-            </div>
-
-            <div class="row g-3 align-items-center mb-3">
-                <!-- 職種 -->
-                <div class="col-3">
-                    <label asp-for="Input.ShokushuCd" class="col-form-label"></label>
-                </div>
-                <div class="col-auto">
-                    <select name="Input.ShokushuCd" class="form-select"
-                            aria-label="Default select">
-                        <option></option>
-                        @foreach (var item in @Model.Shokushu)
-                        {
-                            <option value="@item.ShokushuCd" selected="@(Model.ShokushuCd!=null && Model.ShokushuCd!.Equals(item.ShokushuCd)  ? true : false)">@item.ShokushuNm</option>
-                        }
-                    </select>
-                </div>
-            </div>
-            <div class="row g-3 align-items-center mb-3">
-                <!-- 雇用形態 -->
-                <div class="col-3">
-                    <label asp-for="Input.KoyokeitaiCd" class="col-form-label"></label>
-                </div>
-                <div class="col-auto">
-                    <select name="Input.KoyokeitaiCd" class="form-select"
-                            aria-label="Default select">
-                        <option></option>
-                        @foreach (var item in @Model.Koyokeitai)
-                        {
-                            <option value="@item.KoyokeitaiCd" selected="@(Model.KoyokeitaiCd!=null && Model.KoyokeitaiCd!.Equals(item.KoyokeitaiCd)  ? true : false)">@item.KoyokeitaiNm</option>
-                        }
-                    </select>
-                </div>
-            </div>
-            <div class="d-flex justify-content-end mt-3">
-                <button type="submit" class="search btn btn-primary me-5 px-4" value="search" name="action">
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="search btn btn-primary me-5 px-4"name="command">
                         <i class="fa-solid fa-magnifying-glass me-3"></i>
-                    検索
-                </button>
+                        検索
+                    </button>
+                </div>
             </div>
         </div>
       </form>
@@ -149,4 +147,3 @@
     <input type="hidden" name="index" value="" />
 </form>
 <script src="~/js/Attendance.Record.Search.js"></script>
-<script src="~/js/VariousMasterCommon.js"></script>
