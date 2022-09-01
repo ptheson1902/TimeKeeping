@@ -160,7 +160,11 @@ namespace UNN_Ki_001.Pages.Attendance.Record
                         // DB‚É’Ç‰Á
                         _kintaiDbContext.Add(kyukei);
                     }
-                    _kintaiDbContext.SaveChanges();
+                    try { 
+                        _kintaiDbContext.SaveChanges();
+                    }catch (Exception ex){
+                        Console.WriteLine(ex.Message);
+                    }
                 }
             }
 

@@ -21,7 +21,6 @@ namespace UNN_Ki_001.Data.Models
             ShainNo = shainNo;
             KinmuDt = kinmuDt;
         }
-
         
         protected override void Reload(KintaiDbContext context)
         {
