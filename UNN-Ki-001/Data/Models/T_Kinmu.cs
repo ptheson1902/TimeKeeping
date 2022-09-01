@@ -296,6 +296,8 @@ namespace UNN_Ki_001.Data.Models
         public void ClearInfo()
         {
             Shotei = null;
+            Sorodo = null;
+            Kojo = null;
             Kyukei = null;
         }
 
