@@ -25,11 +25,8 @@ $(".kinmu").focusout(function () {
     let kyukeiButton = $(this).find(".btn-kyukei");
     if (target.kinmuFrTm == "" || target.kinmuToTm == "") {
         kyukeiButton.prop("disabled", true);
-        console.log(false);
     } else {
         kyukeiButton.prop("disabled", false);
-
-        console.log(true);
     }
 
     // チェッククリア後
