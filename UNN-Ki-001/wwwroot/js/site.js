@@ -15,3 +15,14 @@ function select(active) {
 }
 
 select(active);
+
+$(".TESTBTN").click(function () {
+    $.ajax({
+        url: "/Attendance/GetData",
+        method: "POST",
+        data: $(".TESTFORM").serialize(),
+        success: function (e) {
+            console.log(e);
+        }
+    })
+})

@@ -9,7 +9,7 @@
 @if (Model.Message != null && Model.Message != "true")
 {
     <script>
-        if (confirm(@Model.Message))
+        if (confirm("@Model.Message"))
             location.assign("/Attendance/Index")
     </script>
 }
