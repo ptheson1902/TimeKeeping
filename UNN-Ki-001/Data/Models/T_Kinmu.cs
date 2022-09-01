@@ -47,8 +47,8 @@ namespace UNN_Ki_001.Data.Models
             if (KinmuToDate != null)
             {
                 var tgt = context.t_kinmus
-                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuDt != null && e.KinmuToDate >= ((DateTime)KinmuToDate).ToUniversalTime() && e.KinmuDt != KinmuDt)
-                    .OrderBy(e => e.KinmuFrDate)
+                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuDt != null && Convert.ToInt32(e.KinmuDt) > Convert.ToInt32(KinmuDt))
+                    .OrderBy(e => e.KinmuDt)
                     .AsNoTracking()
                     .ToList()
                     .FirstOrDefault();
@@ -64,8 +64,8 @@ namespace UNN_Ki_001.Data.Models
             if (KinmuFrDate != null)
             {
                 var tgt = context.t_kinmus
-                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuDt != null && e.KinmuFrDate <= ((DateTime)KinmuFrDate).ToUniversalTime() && e.KinmuDt != KinmuDt)
-                    .OrderByDescending(e => e.KinmuToDate)
+                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuDt != null && Convert.ToInt32(e.KinmuDt) < Convert.ToInt32(KinmuDt))
+                    .OrderByDescending(e => e.KinmuDt)
                     .AsNoTracking()
                     .ToList()
                     .FirstOrDefault();
