@@ -4,30 +4,236 @@
     ViewData["Title"] = "Register";
 }
 
+<link rel="stylesheet" href="~/css/Register.css" asp-append-version="true" />
+<div class="container mt-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-9 col-xl-7">
+            <div class="card px-3">
+                <div class="card-body">
+                    <h3 class="mb-3">社員新規登録（ユーザー登録含む）</h3>
+                    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                        <div class="row g-3">
+                            <div class="col-3 mb-3 d-flex align-items-center">
+                                <label class="form-label" asp-for="Input.UserName"></label>
+                            </div>
+                            <div class="col-9 mb-3">
 
-<div class="container text-center">
-    <h1>@ViewData["Title"]</h1>
-    <div class=" d-flex justify-content-center">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" style="min-width: 500px">
-            <h2>社員新規登録</h2>
-            <hr />
-            <div class="form-floating mb-3">
-                <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.UserName"></label>
-                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                                <div class="form-outline">
+                                    <input type="text" asp-for="Input.UserName" class="form-control" aria-required="true" />
+                                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-3 mb-3 d-flex align-items-center">
+                                <label class="form-label" asp-for="Input.Password"></label>
+                            </div>
+                            <div class="col-9 mb-3">
+
+                                <div class="form-outline">
+                                    <input type="text" asp-for="Input.Password" class="form-control" aria-required="true" />
+                                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-3 mb-3 d-flex align-items-center">
+                                <label class="form-label" asp-for="Input.ConfirmPassword"></label>
+                            </div>
+
+                            <div class="col-9 mb-3">
+
+                                <div class="form-outline">
+                                    <input type="text" asp-for="Input.ConfirmPassword" class="form-control" aria-required="true" />
+                                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                               
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+
+                                <div class="form-outline row">
+                                    <div class="col-4 d-flex align-items-center">
+                                        <label class="form-label">性（漢字）</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 mb-3">
+
+                                <div class="form-outline row">
+                                    <div class="col-4 d-flex align-items-center">
+                                        <label class="form-label">名（漢字）</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+
+                                <div class="form-outline row">
+                                    <div class="col-4 d-flex align-items-center">
+                                        <label class="form-label">性（カナ）</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 mb-3">
+
+                                <div class="form-outline row">
+                                    <div class="col-4 d-flex align-items-center">
+                                        <label class="form-label">名（カナ）</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+
+                                <div class="form-outline row">
+                                    <div class="col-4 d-flex align-items-center">
+                                        <label class="form-label">入社日</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input type="date" class="form-control" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 mb-3">
+
+                                <div class="form-outline row">
+                                    <div class="col-4 d-flex align-items-center">
+                                        <label class="form-label">退職日</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input type="date" class="form-control" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-3 d-flex align-items-center">
+                                <label class="form-label select-label">所属</label>
+                            </div>
+
+                            <div class="col-auto">
+
+                                <select class="select form-select" aria-label="Default select example">
+                                    <option>テストデータ</option>
+                                    <option>テストデータ</option>
+                                    <option>テストデータ</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-3 d-flex align-items-center">
+                                <label class="form-label select-label">職種</label>
+                            </div>
+
+                            <div class="col-auto">
+
+                                <select class="select form-select" aria-label="Default select example">
+                                    <option>テストデータ</option>
+                                    <option>テストデータ</option>
+                                    <option>テストデータ</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-3 d-flex align-items-center">
+                                <label class="form-label select-label">雇用形態</label>
+                            </div>
+
+                            <div class="col-auto">
+
+                                <select class="select form-select" aria-label="Default select example">
+                                    <option>テストデータ</option>
+                                    <option>テストデータ</option>
+                                    <option>テストデータ</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-3 d-flex align-items-center">
+                                <label class="form-label select-label">勤務予定</label>
+                            </div>
+                            <div class="col-auto">
+
+                                <button class="btn btn-success" type="button">設定</button>
+
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-3 d-flex align-items-center">
+                                <label class="form-label">社員区分</label>
+                            </div>
+                            <div class="col-auto d-flex align-items-center">
+                                <input type="radio" class="form-check me-3" value="0" />
+                                <label class="form-label">一般</label>
+                            </div>
+                            <div class="col-auto d-flex align-items-center">
+                                <input type="radio" class="form-check me-3" value="1" />
+                                <label class="form-label">管理者</label>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-3 d-flex align-items-center">
+                                <label class="form-label">有効/無効</label>
+                            </div>
+                            <div class="col-auto d-flex align-items-center">
+                                <input type="radio" class="form-check me-3" value="1" />
+                                <label class="form-label">有効</label>
+                            </div>
+                            <div class="col-auto d-flex align-items-center">
+                                <input type="radio" class="form-check me-3" value="0" />
+                                <label class="form-label">無効</label>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 pt-2">
+                            <button id="registerSubmit" class="btn btn-primary" type="submit">登録</button>
+                        </div>
+
+                    </form>
+                </div>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.Password"></label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.ConfirmPassword"></label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="mt-5 px-5 btn btn-lg btn-primary">登録</button>
-        </form>
+        </div>
     </div>
 </div>
 
