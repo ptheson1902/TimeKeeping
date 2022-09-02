@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Models\T_Kinmu-Original.cs" />
     <Compile Remove="Data\Models\T_KinmuOld.cs" />
   </ItemGroup>
 

@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
 using System.Diagnostics;
 
 namespace UNN_Ki_001.Data.Models
@@ -21,10 +20,6 @@ namespace UNN_Ki_001.Data.Models
             KigyoCd = kigyoCd;
             ShainNo = shainNo;
             KinmuDt = kinmuDt;
-        }
-        private int DateToInt(string date, int days)
-        {
-            return int.Parse(DateTime.ParseExact(date, "yyyyMMdd", null).AddDays(days).ToString("yyyyMMdd"));
         }
         
         protected override void Reload(KintaiDbContext context)
@@ -47,174 +42,41 @@ namespace UNN_Ki_001.Data.Models
                 KinmuToDate = CalcKinmuTo(master, (DateTime)DakokuToDate);
             }
 
-            // 直前の勤務レコードと重複していないかどうかの確認
-            if (KinmuFrDate != null)
-            {
-                var tgt1 = context.ChangeTracker.Entries<T_Kinmu>()
-                    .Where(e => e.Entity.KigyoCd!.Equals(KigyoCd)
-                    && e.Entity.ShainNo!.Equals(ShainNo)
-                    && e.Entity.KinmuFrDate != null
-                    && e.Entity.KinmuToDate != null
-                    && e.State == EntityState.Modified)
-                    .ToList();
-                if (tgt1.Count > 1)
-                {
-                    foreach (var item in tgt1)
-                    {
-                        int t = DateToInt(item.Entity.KinmuDt, -3);
-                        var tgt = context.t_kinmus
-                            .Where(e => e.KigyoCd!.Equals(KigyoCd)
-                            && e.ShainNo!.Equals(ShainNo)
-                            && e.KinmuFrDate != null
-                            && e.KinmuToDate != null
-                            && e.KinmuDt != null
-                            && Convert.ToInt32(e.KinmuDt) > Convert.ToInt32(item.Entity.KinmuDt)
-                            && Convert.ToInt32(e.KinmuDt) < t
-                        )
-                        .ToList();
-                        var tgt2 = context.ChangeTracker.Entries<T_Kinmu>()
-                            .Where(e => e.Entity.KigyoCd!.Equals(KigyoCd)
-                            && e.Entity.ShainNo!.Equals(ShainNo)
-                            && e.Entity.KinmuFrDate != null
-                            && e.Entity.KinmuToDate != null
-                            && e.State == EntityState.Modified
-                            && Convert.ToInt32(e.Entity.KinmuDt) < Convert.ToInt32(item.Entity.KinmuDt)
-                            && Convert.ToInt32(e.Entity.KinmuDt) > t
-                        )
-                        .ToList();
-                        foreach (var item1 in tgt2)
-                        {
-                            foreach (var item2 in tgt.ToList())
-                            {
-                                if (item2.KinmuDt.Equals(item1.Entity.KinmuDt))
-                                {
-                                    tgt.Remove(item2);
-                                }
-                            }
-                            tgt.Add(item1.Entity);
-                        }
-                        if (tgt.Count != 0)
-                        {
-                            foreach (var item1 in tgt)
-                            {
-                                if (item1.KinmuToDate > item.Entity.KinmuFrDate)
-                                {
-                                    throw new Exception("直前の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。", new Exception(item.Entity.KinmuDt));
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    int t = DateToInt(KinmuDt, -3);
-                    var tgt = context.t_kinmus
-                        .Where(e => e.KigyoCd!.Equals(KigyoCd)
-                        && e.ShainNo!.Equals(ShainNo)
-                        && e.KinmuFrDate != null
-                        && e.KinmuToDate != null
-                        && e.KinmuDt != null
-                        && Convert.ToInt32(e.KinmuDt) < Convert.ToInt32(KinmuDt)
-                        && Convert.ToInt32(e.KinmuDt) > t
-                     )
-                    .ToList();
-                    if (tgt.Count != 0)
-                    {
-                        foreach (var item1 in tgt)
-                        {
-                            if (item1.KinmuToDate > KinmuFrDate)
-                            {
-                                throw new Exception("直前の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。", new Exception(KinmuDt));
-                            }
-                        }
-                    }
-                }
-            }
 
             // 直後の勤務レコードと重複していないかどうかの確認
             if (KinmuToDate != null)
             {
-                var tgt1 = context.ChangeTracker.Entries<T_Kinmu>()
-                    .Where(e => e.Entity.KigyoCd!.Equals(KigyoCd) 
-                    && e.Entity.ShainNo!.Equals(ShainNo) 
-                    && e.Entity.KinmuFrDate != null 
-                    && e.Entity.KinmuToDate != null 
-                    && e.State == EntityState.Modified)
-                    .ToList();
-                if(tgt1.Count > 1)
+                var tgt = context.t_kinmus
+                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuDt != null && Convert.ToInt32(e.KinmuDt) > Convert.ToInt32(KinmuDt))
+                    .OrderBy(e => e.KinmuDt)
+                    .AsNoTracking()
+                    .ToList()
+                    .FirstOrDefault();
+                if (tgt != null)
                 {
-                    foreach(var item in tgt1)
+                    if (tgt.KinmuFrDate < KinmuToDate)
                     {
-                        int t = DateToInt(item.Entity.KinmuDt, 3);
-                        var tgt = context.t_kinmus
-                            .Where(e => e.KigyoCd!.Equals(KigyoCd)
-                            && e.ShainNo!.Equals(ShainNo)
-                            && e.KinmuFrDate != null
-                            && e.KinmuToDate != null
-                            && e.KinmuDt != null
-                            && Convert.ToInt32(e.KinmuDt) > Convert.ToInt32(item.Entity.KinmuDt)
-                            && Convert.ToInt32(e.KinmuDt) < t
-                        )
-                        .ToList();
-                        var tgt2 = context.ChangeTracker.Entries<T_Kinmu>()
-                            .Where(e => e.Entity.KigyoCd!.Equals(KigyoCd)
-                            && e.Entity.ShainNo!.Equals(ShainNo)
-                            && e.Entity.KinmuFrDate != null
-                            && e.Entity.KinmuToDate != null
-                            && e.State == EntityState.Modified
-                            && Convert.ToInt32(e.Entity.KinmuDt) > Convert.ToInt32(item.Entity.KinmuDt)
-                            && Convert.ToInt32(e.Entity.KinmuDt) < t
-                        )
-                        .ToList();
-                        foreach(var item1 in tgt2)
-                        {
-                            foreach(var item2 in tgt.ToList())
-                            {
-                                if(item2.KinmuDt.Equals(item1.Entity.KinmuDt))
-                                {
-                                    tgt.Remove(item2);
-                                }
-                            }
-                            tgt.Add(item1.Entity);
-                        }
-                        if(tgt.Count != 0)
-                        {
-                            foreach (var item1 in tgt)
-                            {
-                                if (item1.KinmuFrDate < item.Entity.KinmuToDate)
-                                {
-                                    throw new Exception("直後の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。", new Exception(item.Entity.KinmuDt));
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    int t = DateToInt(KinmuDt, 3);
-                    var tgt = context.t_kinmus
-                        .Where(e => e.KigyoCd!.Equals(KigyoCd)
-                        && e.ShainNo!.Equals(ShainNo)
-                        && e.KinmuFrDate != null
-                        && e.KinmuToDate != null
-                        && e.KinmuDt != null
-                        && Convert.ToInt32(e.KinmuDt) > Convert.ToInt32(KinmuDt)
-                        && Convert.ToInt32(e.KinmuDt) < t
-                     )
-                    .ToList();
-                    if (tgt.Count != 0)
-                    {
-                        foreach (var item1 in tgt)
-                        {
-                            if (item1.KinmuFrDate < KinmuToDate)
-                            {
-                                throw new Exception("直後の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。", new Exception(KinmuDt));
-                            }
-                        }
+                        throw new Exception("直後の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。", new Exception(KinmuDt));
                     }
                 }
             }
-           
+            // 直前の勤務レコードと重複していないかどうかの確認
+            if (KinmuFrDate != null)
+            {
+                var tgt = context.t_kinmus
+                    .Where(e => e.KigyoCd!.Equals(KigyoCd) && e.ShainNo!.Equals(ShainNo) && e.KinmuFrDate != null && e.KinmuToDate != null && e.KinmuDt != null && Convert.ToInt32(e.KinmuDt) < Convert.ToInt32(KinmuDt))
+                    .OrderByDescending(e => e.KinmuDt)
+                    .AsNoTracking()
+                    .ToList()
+                    .FirstOrDefault();
+                if (tgt != null)
+                {
+                    if (tgt.KinmuToDate > KinmuFrDate)
+                    {
+                        throw new Exception("直前の勤務記録と重複してしまいます。\n丸め処理等を改めるか、打刻時間等を見直す必要があります。", new Exception(KinmuDt));
+                    }
+                }
+            }
 
 
             // 実績時間の整合性を確認・修正

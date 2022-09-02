@@ -33,7 +33,7 @@
                             </div>
                             @if(User.IsInRole("Admin")){
                                 <div class="nav-item mx-2">
-                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">ユーザー登録</a>
+                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">社員マスタ</a>
                             </div>
                             <div class="nav-item mx-2">
                                 <a class="nav-link" asp-page="/Setting">基本設定</a>
@@ -156,7 +156,7 @@
                             @if (User.IsInRole("Admin"))
                             {
                                 <div class="nav-item mx-2">
-                                    <a class="nav-link" asp-page="/Register">ユーザー登録</a>
+                                    <a class="nav-link" asp-page="/Register">社員マスタ</a>
                                 </div>
                                 <div class="nav-item mx-2">
                                     <a class="nav-link" asp-page="/Setting">基本設定</a>

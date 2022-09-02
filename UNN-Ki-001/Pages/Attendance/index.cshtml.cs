@@ -66,13 +66,13 @@ namespace UNN_Ki_001.Pages.Attendance
             }
         }
 
-        public void OnPost()
+        public IActionResult OnPost()
         {
             shain = GetCurrentUserShainAsync().Result;
             if (shain == null)
             {
                 Message = "ユーザーに社員が登録されていません。";
-                return; //RedirectToPage("/");
+                return RedirectToPage("/");
             }
             var action = Request.Form["action"];
             switch (action)
@@ -96,7 +96,7 @@ namespace UNN_Ki_001.Pages.Attendance
                 Debug.WriteLine(e.Message);
                 Message = "打刻に失敗しました。";
             }
-            //return RedirectToPage("/Attendance/Index");
+            return RedirectToPage("/Attendance/Index");
         }
 
         private void End(M_Shain shain)

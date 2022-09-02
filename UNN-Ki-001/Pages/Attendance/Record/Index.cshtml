@@ -109,7 +109,7 @@
 
             <div class="info">
                  <div class="row mb-3 align-items-center p-3">
-                    <table id="main-contents" class="Nesting table table-striped overflow-scroll">
+                    <table id="main-contents" class="Nesting table table-striped overflow-scroll table-bordered">
                         <tr class="table-primary text-center">
                             <th>日付</th>
                             <th>勤務予定</th>
@@ -127,11 +127,11 @@
 
                             <tr class="kinmu align-items-center" data-origin="@item.KinmuDt">
                                 <!-- 勤務日 -->
-                                <td class="kinmu_dt">
+                                <td class="kinmu_dt align-middle">
                                     @item.Day
                                 </td>
                                 <!-- 勤務内容 -->
-                                <td class="mkinmu">
+                                <td class="mkinmu align-middle">
                                     <select>                            
                                         <option></option>
                                         @foreach (var info in Model.MKinmuInfoList)
@@ -143,7 +143,7 @@
                                     </select>
                                 </td>
                                 <!-- 打刻開始 -->
-                                <td class="kinmu_dakoku_fr">
+                                <td class="kinmu_dakoku_fr align-middle">
                                     <select disabled>
                                         <option value="1" selected="@(item.DakokuFrKbn == 1 ? true : false)">前日</option>
                                         <option value="0" selected="@(item.DakokuFrKbn == 0 ? true : false)">当日</option>
@@ -152,7 +152,7 @@
                                     <input type="time" value="@item.DakokuStart" disabled>
                                 </td>
                                 <!-- 打刻終了 -->
-                                <td class="kinmu_dakoku_to">
+                                <td class="kinmu_dakoku_to align-middle">
                                     <select disabled>
                                         <option value="1" selected="@(item.DakokuToKbn == 1 ? true : false)">前日</option>
                                         <option value="0" selected="@(item.DakokuToKbn == 0 ? true : false)">当日</option>
@@ -161,37 +161,37 @@
                                     <input type="time" value="@item.DakokuEnd" disabled>
                                 </td>
                                 <!-- 勤務開始 -->
-                                <td class="kinmu_kinmu_fr">
+                                <td class="kinmu_kinmu_fr align-middle">
                                     <select disabled="@isNotAdmin">
                                         <option value="1" selected="@(item.KinmuFrKbn == 1 ? true : false)">前日</option>
                                         <option value="0" selected="@(item.KinmuFrKbn == 0 ? true : false)">当日</option>
                                         <option value="2" selected="@(item.KinmuFrKbn == 2 ? true : false)">翌日</option>
                                     </select>
-                                    <input type="time" class="KinmuStart" value="@item.KinmuStart" disabled="@isNotAdmin">
+                                    <input type="time" class="KinmuStart" value="@item.KinmuStart" disabled="@isNotAdmin" step="1800">
                                 </td>
                                 <!-- 勤務終了 -->
-                                <td class="kinmu_kinmu_to">
+                                <td class="kinmu_kinmu_to align-middle">
                                     <select disabled="@isNotAdmin">
                                         <option value="1" selected="@(item.KinmuToKbn == 1 ? true : false)">前日</option>
                                         <option value="0" selected="@(item.KinmuToKbn == 0 ? true : false)">当日</option>
                                         <option value="2" selected="@(item.KinmuToKbn == 2 ? true : false)">翌日</option>
                                     </select>
-                                    <input type="time" value="@item.KinmuEnd" disabled="@isNotAdmin">
+                                    <input type="time" value="@item.KinmuEnd" disabled="@isNotAdmin" step="300">
                                 </td>
                                 <!-- 休憩 -->
-                                <td class="kinmu_kyukei text-end">
+                                <td class="kinmu_kyukei text-end align-middle">
                                     @item.Kyukei
                                     <button  hidden="@isNotAdmin" disabled="@(item.KinmuStart == "N/A" || item.KinmuEnd == "N/A")" type="button" class="btn-kyukei btn btn-sm btn-secondary kyukei-dakoku" onclick="openKyukei('@item.KinmuDt', '@Model.Target.ShainNo', '@Model.Target.KigyoCd');" data-bs-toggle="modal" data-bs-target="#kyukei-modal">詳細</button>
                                 <!-- 控除 -->
-                                <td class="kinmu_kojo">
+                                <td class="kinmu_kojo align-middle">
                                     @item.Kojo
                                 </td>
                                 <!-- 総労働 -->
-                                <td class="kinmu_sorodo">
+                                <td class="kinmu_sorodo align-middle">
                                     @item.Sorodo
                                 </td>
                                 <!-- 備考 -->
-                                <td class="kinmu_biko">
+                                <td class="kinmu_biko align-middle">
                                     <textarea class="w-100"rows="1"  disabled="@isNotAdmin">@item.Biko</textarea>
                                 </td>
                             </tr>

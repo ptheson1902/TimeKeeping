@@ -6,19 +6,7 @@
 
     var Date = DateTime.Now.ToString("yyyy年MM月dd日(dddd)");
 }
-@if (Model.Message != null && Model.Message != "true")
-{
-    <script>
-        if (confirm("@Model.Message"))
-            location.assign("/Attendance/Index")
-    </script>
-}
-else if (Model.Message == "true")
-{
-    <script>
-        location.assign("/Attendance/Index")
-    </script>
-}
+
 <div class="main d-flex justify-content-center align-items-center">
     <div
         class="container-fluid d-flex align-items-start my-5 justify-content-center"
@@ -31,14 +19,15 @@ else if (Model.Message == "true")
             <div class="button my-5 row">
                 <form method="post" class="col-6">
                     <input type="hidden" value="start" name="action" />
-                        <button type="submit" class="border-0 in me-3" @Model.Shukin>出勤</button>
+                    <button type="submit" class="border-0 in me-3" @Model.Shukin>出勤</button>
                 </form>
                 <form method="post" class="col-6">
                     <input type="hidden" value="end" name="action" />
-                        <button type="submit" class="border-0 out" @Model.Taikin>退勤</button>
+                    <button type="submit" class="border-0 out" @Model.Taikin>退勤</button>
                 </form>
             </div>
         </div>
+        <div class="text-danger">@Model.Message</div>
         <div class="right mx-5" style="min-width: 25rem; max-width: 25rem;">
             <div
                 id="calendar"
