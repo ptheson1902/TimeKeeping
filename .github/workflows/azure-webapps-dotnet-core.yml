@@ -37,7 +37,7 @@ jobs:
     - uses: actions/checkout@v2
         # sets up .NET Core SDK 3.1
     - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6
             # publishes Blazor project to the release-folder
